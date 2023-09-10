@@ -8,6 +8,7 @@
         "default_popup": "index.html",
         "default_title": "سرديّة"
     },
+    
     "permissions": [
         "tabs",
         "activeTab",
@@ -15,5 +16,11 @@
         "scripting",
         "http://*/",
         "https://*/"
-    ]
+    ],
+    "content_scripts": [
+        {
+          "matches": ["<all_urls>"],
+          "js": ["content.js"]
+        }
+      ]
 }
