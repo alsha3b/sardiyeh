@@ -12,10 +12,7 @@
     "permissions": [
         "tabs",
         "activeTab",
-        "currentTab",
-        "scripting",
-        "http://*/",
-        "https://*/"
+        "scripting"
     ],
     "content_scripts": [
         {

@@ -8,13 +8,11 @@ toggleSwitch.addEventListener("change", async () => {
 
     var tab = await getCurrentTab();
     await getDomElements(tab);
-    // walker();
-    // replaceText();
-    // crawlInChrome();
-    // replaceText();
   } else {
     // Handle the switch being turned off
     console.log("Switch is OFF");
+    var tab = await getCurrentTab();
+    await getDomElements(tab);
   }
 });
 
