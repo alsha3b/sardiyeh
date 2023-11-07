@@ -1,0 +1,26 @@
+{
+    "name": "سرديّة",
+    "version": "1.0.0",
+    "description": "نروي السرديّة الفلسطينية",
+    "manifest_version": 3,
+    "author": "الشعب",
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action":{
+        "default_popup": "index.html",
+        "default_title": "سرديّة"
+    },
+    "host_permissions": ["https://*/*"],
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "scripting"
+    ],
+    "content_scripts": [
+        {
+          "matches": ["<all_urls>"],
+          "js": ["content.js"]
+        }
+      ]
+}
