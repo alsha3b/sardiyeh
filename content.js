@@ -84,9 +84,9 @@
     return replacement;
   };
 
+  const regex = new RegExp("\\b(" + Object.keys(textToChange).join("|")  + ")\\b", "gi");
   const replaceTextInNodes = (el) => {
     if (el.nodeType === Node.TEXT_NODE) {
-      const regex = new RegExp("\\b(" + Object.keys(textToChange).join("|") + ")\\b", "gi");
       el.textContent = el.textContent.replace(regex, getReplacementText);
     } else {
       for (let child of el.childNodes) {
@@ -95,7 +95,6 @@
     }
   };
 
-  // Run once on startup
   replaceTextInNodes(document.querySelector("body"));
 
   let lastRun = performance.now()
