@@ -1,4 +1,3 @@
-
 (() => {
   const textToChange = {
     "@telaviv": "@alsheikhmowannes",
@@ -85,17 +84,38 @@
   };
 
   const regex = new RegExp("\\b(" + Object.keys(textToChange).join("|")  + ")\\b", "gi");
-  const replaceTextInNodes = (el) => {
+  const replaceText = (el) => {
     if (el.nodeType === Node.TEXT_NODE) {
-      el.textContent = el.textContent.replace(regex, getReplacementText);
+      if (regex.test(el.textContent)) {
+        el.textContent = el.textContent.replace(regex, getReplacementText);
+      }
     } else {
       for (let child of el.childNodes) {
-        replaceTextInNodes(child);
+        replaceText(child);
       }
     }
   };
 
-  replaceTextInNodes(document.querySelector("body"));
+  // const xpathExpression = '/html/body//[not(ancestor::@role=textbox)]/text()'
+  const anyChildOfBody = '/html/body//'
+  const doesNotContainAncestorWithRoleTextbox = 'div[not(ancestor-or-self::*[@role=textbox])]/'
+  const isTextButNotPartOfJsScript = 'text()[not(parent::script)]'
+  const xpathExpression = anyChildOfBody
+    + doesNotContainAncestorWithRoleTextbox
+    + isTextButNotPartOfJsScript
+  const replaceTextInNodes = () => {
+    const result = document.evaluate(
+      xpathExpression,
+      document,
+      null,
+      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+      null
+    )
+    console.log(result)
+    for (let i = 0; i < result.snapshotLength; i++) {
+      replaceText(result.snapshotItem(i));
+    }
+  }
 
   let lastRun = performance.now()
   let timeout
@@ -104,11 +124,11 @@
     if (performance.now() - lastRun < 1000) {
       clearTimeout(timeout)
       timeout = setTimeout(() => {
-        replaceTextInNodes(document.querySelector("body"))
+        replaceTextInNodes()
         lastRun = performance.now()
       }, 200)
     } else {
-      replaceTextInNodes(document.querySelector("body"))
+      replaceTextInNodes()
       lastRun = performance.now()
     }
   });
