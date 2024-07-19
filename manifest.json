@@ -4,9 +4,6 @@
     "description": "نروي السرديّة الفلسطينية",
     "manifest_version": 3,
     "author": "الشعب",
-    "background": {
-      "service_worker": "background.js"
-    },
     "action":{
         "default_popup": "index.html",
         "default_title": "سرديّة"
@@ -15,7 +12,8 @@
     "permissions": [
         "tabs",
         "activeTab",
-        "scripting"
+        "scripting",
+        "storage"
     ],
     "content_scripts": [
         {

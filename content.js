@@ -204,6 +204,118 @@
     "yas'ur": "El-Birwa",
   };
 
+  const regex = new RegExp(
+    "\\b(" + Object.keys(textToChange).join("|") + ")\\b",
+    "gi"
+  );
+  chrome.storage.sync.get(["ext_on"], function (items) {
+    // if (chrome.runtime.lastError) {
+    //   console.error(chrome.runtime.lastError);
+    //   return;
+    // }
+
+    // Check if 'ext_on' is false
+    // if (items.ext_on === false) {
+    //   console.log("Extension is turned off. Reverting back.");
+    //   // Code to revert back or stop execution
+    //   return;
+    // }
+
+    // Continue with your code if 'ext_on' is true
+    console.log("Extension is turned on. Continuing execution.");
+
+    const replacedWords = [];
+    const replacedSet = new Set();
+
+    chrome.storage.sync.get(["dictionary"], function (items) {
+      // message("items is", items);
+
+      // const textToChange = items.dictionary;
+
+      // replaceTextInNodes(document.querySelector("body"), replacedWords, replacedSet);
+
+      if (replacedWords.length > 0) {
+        chrome.storage.local.set({
+          replacedWords: replacedWords,
+          replacedSet: replacedSet,
+        });
+      }
+
+      let timeout;
+      let lastRun = performance.now();
+
+      const observer = new MutationObserver((mutations) => {
+        const shouldUpdate = mutations.some((mutation) => {
+          return (
+            mutation.type === "childList" && mutation.addedNodes.length > 0
+          );
+        });
+
+        if (!shouldUpdate) {
+          return;
+        }
+
+        if (performance.now() - lastRun < 3000) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            // const replacedWords = [];
+            // const replacedSet = new Set();
+            replaceTextInNodes(
+              document.querySelector("body"),
+              replacedWords,
+              replacedSet
+            );
+            chrome.storage.local.set({
+              replacedWords: replacedWords,
+              replacedSet: replacedSet,
+            });
+            lastRun = performance.now();
+          }, 600);
+        } else {
+          // const replacedWords = [];
+          // const replacedSet = new Set();
+          replaceTextInNodes(
+            document.querySelector("body"),
+            replacedWords,
+            replacedSet
+          );
+          chrome.storage.local.set({
+            replacedWords: replacedWords,
+            replacedSet: replacedSet,
+          });
+          lastRun = performance.now();
+        }
+      });
+
+      observer.observe(document, {
+        childList: true,
+        subtree: true,
+        attributes: false,
+        characterData: false,
+        characterDataOldValue: false,
+      });
+
+      // Additional logic to filter mutations in chat windows
+      document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("focusin", (event) => {
+          const target = event.target;
+          var nodeName = target.nodeName;
+          if (nodeName === "INPUT") {
+            observer.disconnect(); // Disconnect the observer when focusing in a chat window
+          } else {
+            observer.observe(document, {
+              childList: true,
+              subtree: true,
+              attributes: false,
+              characterData: false,
+              characterDataOldValue: false,
+            });
+          }
+        });
+      });
+    });
+  });
+
   const getReplacementText = (text) => {
     let replacement = textToChange[text.toLowerCase()];
     if (!replacement) {
@@ -218,37 +330,30 @@
     return replacement;
   };
 
-  const replaceTextInNodes = (el) => {
+  var replaceTextInNodes = (el, replacedWords, replacedSet) => {
+    // Read it using the storage API
+
     if (el.nodeType === Node.TEXT_NODE) {
-      const regex = new RegExp(
-        "\\b(" + Object.keys(textToChange).join("|") + ")\\b",
-        "gi"
-      );
-      el.textContent = el.textContent.replace(regex, getReplacementText);
+      // const regex = new RegExp("\\b(" + Object.keys(textToChange).join("|") + ")\\b", "gi");
+      el.textContent = el.textContent.replace(regex, (matched) => {
+        const replacement = getReplacementText(matched);
+        // if (replacement !== matched) {
+
+        // replacedWords.push({ original: matched, replacement: replacement });
+        // }
+        if (
+          replacement !== matched &&
+          !replacedSet.has(matched.toLowerCase())
+        ) {
+          replacedWords.push({ original: matched, replacement: replacement });
+          replacedSet.add(matched.toLowerCase());
+        }
+        return replacement;
+      });
     } else {
       for (let child of el.childNodes) {
-        replaceTextInNodes(child);
+        replaceTextInNodes(child, replacedWords, replacedSet);
       }
     }
   };
-
-  // Run once on startup
-  replaceTextInNodes(document.querySelector("body"));
-
-  let lastRun = performance.now();
-  let timeout;
-  // set a function so that it waits at most 1 after each mutation
-  const observer = new MutationObserver((mutations) => {
-    if (performance.now() - lastRun < 1000) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        replaceTextInNodes(document.querySelector("body"));
-        lastRun = performance.now();
-      }, 200);
-    } else {
-      replaceTextInNodes(document.querySelector("body"));
-      lastRun = performance.now();
-    }
-  });
-  observer.observe(document, { childList: true, subtree: true });
 })();
