@@ -72,6 +72,7 @@
     } else {
       for (let child of el.childNodes) {
         replaceText(child);
+        replaceText(child);
       }
     }
   };
