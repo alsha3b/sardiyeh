@@ -39,13 +39,6 @@ const getDomElements = async (tab, shouldReplace) => {
     return;
   }
   try {
-    await chrome.scripting.executeScript({
-      target: {
-        tabId: tab.id,
-      },
-      files: ["dictionary.js"],
-    });
-
     let fileName = shouldReplace === true ? "content.js" : "revert.js";
 
     await chrome.scripting.executeScript({
