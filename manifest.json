@@ -14,14 +14,10 @@
           "128": "icons/icon128.png"
         }
     },
-    "host_permissions": ["https://*/*"],
-    "permissions": [
-        "tabs",
+"permissions": [
         "activeTab",
         "scripting",
-        "storage",
-        "unlimitedStorage"
-        
+        "storage"
     ],
     "content_scripts": [
         {

@@ -42,9 +42,7 @@ const getDomElements = async (tab, shouldReplace) => {
     let fileName = shouldReplace === true ? "content.js" : "revert.js";
 
     await chrome.scripting.executeScript({
-      target: {
-        tabId: tab.id,
-      },
+      target: { tabId: tab.id, allFrames: true },
       files: [fileName],
     });
   } catch (error) {
