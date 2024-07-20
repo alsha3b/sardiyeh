@@ -1,76 +1,27 @@
 const toggleSwitch = document.getElementById("toggleSwitch");
 
-var ext_on = true;
-
-chrome.storage.sync.get(["ext_on"], function (items) {
+chrome.storage.sync.get(["ext_on"], async function (items) {
   if (chrome.runtime.lastError) {
     console.error(chrome.runtime.lastError);
     return;
   }
 
-  ext_on = items.ext_on;
+  toggleSwitch.checked = items.ext_on != false;
 
-  // Check if 'ext_on' is false
-  if (items.ext_on === false) {
-    console.log("Extension is turned off. Reverting back.");
-    // Code to revert back or stop execution
-    toggleSwitch.checked = false;
-  } else {
-    toggleSwitch.checked = true;
-  }
+  var tab = await getCurrentTab();
+  await getDomElements(tab, toggleSwitch.checked);
 });
 
 toggleSwitch.addEventListener("change", async () => {
   const isChecked = toggleSwitch.checked;
+  var tab = await getCurrentTab();
+  await getDomElements(tab, isChecked);
 
-  ext_on = isChecked;
-
-  // Retrieve the saved toggle switch value on page load
   chrome.storage.sync.set({
     ext_on: isChecked,
-    async function() {
-      console.log("Settings saved");
-      if (isChecked) {
-        // Handle the switch being turned on
-        console.log("Switch is ON");
-
-        var tab = await getCurrentTab();
-        await getDomElements(tab);
-      } else {
-        // Handle the switch being turned off
-        console.log("Switch is OFF");
-        //TODO: undo changes
-      }
-    },
+    function() {},
   });
 });
-
-// let checkInterval = setInterval(checkTabStatus, 500);
-
-// Check if the current tab is fully loaded.
-// If it it is, we display the toggle button.
-// This way all the data that is loaded via js, will be fully loaded
-// and we would be able to manipulate the page data.
-// function checkTabStatus() {
-// var savedToggleValue = localStorage.getItem("toggleSwitchValue");
-// if (savedToggleValue != true || savedToggleValue != "true") {
-//   return;
-// }
-// if(ext_on === false){
-//   return;
-// }
-// chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-//   const currentTab = tabs[0];
-//   if (currentTab.status === "loading") {
-//     document.getElementById("loadingBar").style.display = "block";
-// document.querySelector(".container").style.display = "none";
-//   } else {
-//     document.getElementById("loadingBar").style.display = "none";
-// document.querySelector(".container").style.display = "block";
-//     clearInterval(checkInterval);
-//   }
-// });
-// }
 
 async function getCurrentTab() {
   let queryOptions = { active: true, currentWindow: true };
@@ -83,20 +34,10 @@ async function getCurrentTab() {
   }
 }
 
-const getDomElements = async (tab) => {
-  // if (ext_on === false) {
-  //   return;
-  // }
-
+const getDomElements = async (tab, shouldReplace) => {
   if (!tab && !tab.id) {
     return;
   }
-
-  // var savedToggleValue = localStorage.getItem("toggleSwitchValue");
-
-  // console.log("**** cache value FROM DOM ELEMENTS ****");
-  // console.log(savedToggleValue);
-
   try {
     await chrome.scripting.executeScript({
       target: {
@@ -105,16 +46,13 @@ const getDomElements = async (tab) => {
       files: ["dictionary.js"],
     });
 
-    // const textToChange = chrome.storage.local.get(["dictionary"]);
-
-    // console.log("text to change is ", textToChange);
+    let fileName = shouldReplace === true ? "content.js" : "revert.js";
 
     await chrome.scripting.executeScript({
       target: {
         tabId: tab.id,
       },
-      files: ["content.js"],
-      // args: [{}],
+      files: [fileName],
     });
   } catch (error) {
     console.log(error);

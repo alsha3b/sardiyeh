@@ -208,31 +208,85 @@
     "\\b(" + Object.keys(textToChange).join("|") + ")\\b",
     "gi"
   );
+
+  const replacedWords = [];
+  const replacedSet = new Set();
+
+  const getReplacementText = (text) => {
+    let replacement = textToChange[text.toLowerCase()];
+    if (!replacement) {
+      // if the text matches what we wanted, but we don't have the right
+      // case, the code will error out. So, we just return the original
+      // text
+      return text;
+    }
+    if (text.charAt(0) === text.charAt(0).toUpperCase()) {
+      replacement = replacement.charAt(0).toUpperCase() + replacement.slice(1);
+    }
+    return replacement;
+  };
+
+  const replaceText = (el) => {
+    if (el.nodeType === Node.TEXT_NODE) {
+      if (regex.test(el.textContent)) {
+        el.textContent = el.textContent.replace(regex, (matched) => {
+          const replacement = getReplacementText(matched);
+          if (
+            replacement !== matched &&
+            !replacedSet.has(matched.toLowerCase())
+          ) {
+            replacedWords.push({ original: matched, replacement: replacement });
+            replacedSet.add(matched.toLowerCase());
+          }
+          return replacement;
+        });
+      }
+    } else {
+      for (let child of el.childNodes) {
+        replaceText(child);
+      }
+    }
+  };
+
+  const anyChildOfBody = "/html/body//";
+  // const doesNotContainAncestorWithRoleTextbox =
+  //   "div[not(ancestor-or-self::*[@role=textbox])]/";
+  const isTextButNotPartOfJsScript = "text()[not(parent::script)]";
+  const xpathExpression =
+    anyChildOfBody +
+    //  + doesNotContainAncestorWithRoleTextbox;
+    isTextButNotPartOfJsScript;
+
+  const replaceTextInNodes = () => {
+    const result = document.evaluate(
+      xpathExpression,
+      document,
+      null,
+      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+      null
+    );
+    console.log(result);
+    for (let i = 0; i < result.snapshotLength; i++) {
+      replaceText(result.snapshotItem(i));
+    }
+    chrome.storage.local.set({
+      replacedWords: replacedWords,
+      replacedSet: replacedSet,
+    });
+  };
+
   chrome.storage.sync.get(["ext_on"], function (items) {
     // if (chrome.runtime.lastError) {
     //   console.error(chrome.runtime.lastError);
     //   return;
     // }
 
-    // Check if 'ext_on' is false
-    // if (items.ext_on === false) {
-    //   console.log("Extension is turned off. Reverting back.");
-    //   // Code to revert back or stop execution
-    //   return;
-    // }
-
-    // Continue with your code if 'ext_on' is true
-    console.log("Extension is turned on. Continuing execution.");
-
-    const replacedWords = [];
-    const replacedSet = new Set();
+    if (items.ext_on === false) {
+      return;
+    }
 
     chrome.storage.sync.get(["dictionary"], function (items) {
-      // message("items is", items);
-
       // const textToChange = items.dictionary;
-
-      // replaceTextInNodes(document.querySelector("body"), replacedWords, replacedSet);
 
       if (replacedWords.length > 0) {
         chrome.storage.local.set({
@@ -260,29 +314,21 @@
           timeout = setTimeout(() => {
             // const replacedWords = [];
             // const replacedSet = new Set();
-            replaceTextInNodes(
-              document.querySelector("body"),
-              replacedWords,
-              replacedSet
-            );
-            chrome.storage.local.set({
-              replacedWords: replacedWords,
-              replacedSet: replacedSet,
-            });
+            replaceTextInNodes();
+            // document.querySelector("body"),
+            // replacedWords,
+            // replacedSet
+
             lastRun = performance.now();
           }, 600);
         } else {
           // const replacedWords = [];
           // const replacedSet = new Set();
-          replaceTextInNodes(
-            document.querySelector("body"),
-            replacedWords,
-            replacedSet
-          );
-          chrome.storage.local.set({
-            replacedWords: replacedWords,
-            replacedSet: replacedSet,
-          });
+          replaceTextInNodes();
+          // document.querySelector("body"),
+          // replacedWords,
+          // replacedSet
+
           lastRun = performance.now();
         }
       });
@@ -294,66 +340,6 @@
         characterData: false,
         characterDataOldValue: false,
       });
-
-      // Additional logic to filter mutations in chat windows
-      document.addEventListener("DOMContentLoaded", () => {
-        document.addEventListener("focusin", (event) => {
-          const target = event.target;
-          var nodeName = target.nodeName;
-          if (nodeName === "INPUT") {
-            observer.disconnect(); // Disconnect the observer when focusing in a chat window
-          } else {
-            observer.observe(document, {
-              childList: true,
-              subtree: true,
-              attributes: false,
-              characterData: false,
-              characterDataOldValue: false,
-            });
-          }
-        });
-      });
     });
   });
-
-  const getReplacementText = (text) => {
-    let replacement = textToChange[text.toLowerCase()];
-    if (!replacement) {
-      // if the text matches what we wanted, but we don't have the right
-      // case, the code will error out. So, we just return the original
-      // text
-      return text;
-    }
-    if (text.charAt(0) === text.charAt(0).toUpperCase()) {
-      replacement = replacement.charAt(0).toUpperCase() + replacement.slice(1);
-    }
-    return replacement;
-  };
-
-  var replaceTextInNodes = (el, replacedWords, replacedSet) => {
-    // Read it using the storage API
-
-    if (el.nodeType === Node.TEXT_NODE) {
-      // const regex = new RegExp("\\b(" + Object.keys(textToChange).join("|") + ")\\b", "gi");
-      el.textContent = el.textContent.replace(regex, (matched) => {
-        const replacement = getReplacementText(matched);
-        // if (replacement !== matched) {
-
-        // replacedWords.push({ original: matched, replacement: replacement });
-        // }
-        if (
-          replacement !== matched &&
-          !replacedSet.has(matched.toLowerCase())
-        ) {
-          replacedWords.push({ original: matched, replacement: replacement });
-          replacedSet.add(matched.toLowerCase());
-        }
-        return replacement;
-      });
-    } else {
-      for (let child of el.childNodes) {
-        replaceTextInNodes(child, replacedWords, replacedSet);
-      }
-    }
-  };
 })();
