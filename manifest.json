@@ -1,6 +1,6 @@
 {
     "name": "سرديّة",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "نروي السرديّة الفلسطينية",
     "manifest_version": 3,
     "author": "الشعب",
@@ -15,8 +15,7 @@
         }
     },
 "permissions": [
-        "activeTab",
-        "scripting",
+        
         "storage"
     ],
     "content_scripts": [
