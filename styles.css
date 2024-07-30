@@ -1,65 +1,3 @@
-/* Toggle switch container */
-.switch {
-  position: relative;
-  display: block;
-  width: 60px;
-  height: 34px;
-}
-
-/* Hide default checkbox input */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* Slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 34px;
-}
-
-/* Rounded slider handle */
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
-}
-
-/* When the checkbox is checked, move the slider to the right */
-input:checked + .slider {
-  background-color: #2196f3;
-}
-
-/* When the checkbox is checked, move the slider handle to the right */
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-.hidden {
-  display: none;
-}
-
-img {
-  height: 50px;
-  width: 50px;
-}
-
-
-
 /* styles.css */
 body {
   font-family: 'Montserrat', sans-serif;
@@ -69,16 +7,17 @@ body[dir="rtl"] {
   font-family: 'Beiruti', sans-serif;
 }
 
-
-
 .plugin-window {
-  width: 300px;
+  width: 360px;
+  height: 400px;
+  max-height: 100vh;
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
   margin: 20px;
+  position: relative;
 }
 
 .header {
@@ -87,20 +26,28 @@ body[dir="rtl"] {
   padding: 10px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   border-radius: 10px 10px 0 0;
   font-weight: 700;
   flex-direction: row;
   transition: flex-direction 0.3s ease;
 }
 
+.header[dir="rtl"] {
+  flex-direction: row-reverse;
+}
 
-.header .icon {
-  margin-right: 10px;
+.header .header-icon {
+  margin-right: 9px;
+}
+
+.header[dir="rtl"] .header-icon {
+  margin-right: 0;
+  margin-left: 9px;
 }
 
 .header-text {
   flex-grow: 1;
+  text-align: start;
 }
 
 .switch {
@@ -126,6 +73,7 @@ body[dir="rtl"] {
   background-color: #ccc;
   transition: .4s;
   border-radius: 20px;
+  border: 1px solid white;
 }
 
 .slider:before {
@@ -135,13 +83,13 @@ body[dir="rtl"] {
   width: 12px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: #FF0090;
   transition: .4s;
   border-radius: 50%;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: white;
 }
 
 input:checked + .slider:before {
@@ -150,16 +98,29 @@ input:checked + .slider:before {
 
 .content {
   padding: 10px;
+  align-items: center;
+}
+
+.content[dir="rtl"]{
+flex-flow: row-reverse;
 }
 
 .title-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+}
+
+.edit-button {
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+  font-size: 20px;
 }
 
 .add-button {
-  background-color: #2196F3;
+  background-color: #FF0090;
   color: white;
   border: none;
   border-radius: 5px;
@@ -171,20 +132,29 @@ input:checked + .slider:before {
   background-color: #1e88e5;
 }
 
+.replaced-words-title {
+  flex-grow: 1;
+}
+
 .replaced-words-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  table-layout: fixed; /* Ensure table layout is fixed */
 }
 
 .replaced-words-table th, .replaced-words-table td {
   padding: 8px;
-  text-align: left;
+  text-align: left;    
+  /* border-bottom: 1px solid #ccc; Add bottom border for separation */
+
 }
 
 .replaced-words-table thead {
-  background-color: darkgrey;
-  color: white;
+  background-color: #bcbcbc;
+  color: black;
+  position: sticky; /* Make header sticky */
+  top: 0; /* Stick to the top */
+  z-index: 1; /* Ensure header is above the rows */
 }
 
 /* .replaced-words-table tbody tr:nth-child(odd) {
@@ -192,30 +162,34 @@ input:checked + .slider:before {
 } */
 
 .replaced-words-table tbody td:first-child {
-  color: blue;
+  color: #FF0090;
 }
 
 .replaced-words-table tbody td:last-child {
   color: black;
 }
 
+
 .input-dialog {
   display: none;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
+  right: 0;
+  margin: auto;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
   justify-content: center;
   align-items: center;
 }
 
 .dialog-content {
-  background-color: #F7FAFA;
+  background-color: lightgrey;
   padding: 20px;
   border-radius: 10px;
-  width: 300px;
+  width: 80%;
+  max-width: 280px;
+  margin: auto;
   text-align: center;
 }
 
@@ -225,6 +199,50 @@ input:checked + .slider:before {
   right: 10px;
   font-size: 20px;
   cursor: pointer;
+}
+
+.dialog-content label {
+  display: block;
+  margin: auto;
+  font-weight: bold;
+}
+
+.dialog-content input {
+  width: calc(100% - 22px);
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: stretch;
+}
+
+.dialog-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.dialog-submit {
+  background-color: #FF0090; /* Green */
+  color: white;
+  margin: auto;
+}
+
+.dialog-close {
+  background-color: white; /* Red */
+  color: black;
+  margin: auto;
+}
+
+.error-message {
+  color: black;
+  font-weight: bold;
 }
 
 /* Additional styles for RTL support */
@@ -243,4 +261,10 @@ body[dir="rtl"] .title-row {
 
 body[dir="rtl"] .replaced-words-table th, body[dir="rtl"] .replaced-words-table td {
   text-align: right;
+}
+
+.table-container {
+  max-height: 300px; /* Set a maximum height for the scrollable area */
+  overflow-y: auto; /* Enable vertical scrolling */
+  margin-top: 15px; /* Increased margin */
 }

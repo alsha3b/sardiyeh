@@ -1,4 +1,41 @@
 (() => {
+  // Function to get dictionary from local storage
+  function getDictionaryFromLocalStorage() {
+    const dictionary = localStorage.getItem("dictionary");
+    const timestamp = localStorage.getItem("dictionaryTimestamp");
+    if (dictionary && timestamp) {
+      return {
+        data: JSON.parse(dictionary),
+        timestamp: new Date(timestamp),
+      };
+    }
+    return null;
+  }
+
+  // Function to save dictionary to local storage
+  function saveDictionaryToLocalStorage(dictionary) {
+    const timestamp = new Date();
+    localStorage.setItem("dictionary", JSON.stringify(dictionary));
+    localStorage.setItem("dictionaryTimestamp", timestamp.toISOString());
+  }
+
+  // Function to check if a week has passed since the last update
+  function isWeekPassed(timestamp) {
+    const now = new Date();
+    const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+    return now - timestamp > weekInMilliseconds;
+  }
+
+  // Main function to get dictionary
+  async function getDictionary() {
+    let dictionaryData = getDictionaryFromLocalStorage();
+    if (dictionaryData && !isWeekPassed(dictionaryData.timestamp)) {
+      return dictionaryData.data;
+    } else {
+      return await fetchDictionary();
+    }
+  }
+
   async function fetchDictionary() {
     try {
       response = await fetch(
@@ -23,15 +60,11 @@
         return;
       }
 
-      textToChange = dictionary;
-
-      regex = new RegExp(
-        "\\b(" + Object.keys(textToChange).join("|") + ")\\b",
-        "gi"
-      );
-
       await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
       await chrome.storage.local.set({ dictionary: dictionary });
+
+      saveDictionaryToLocalStorage(dictionary);
+      return dictionary;
     } catch (error) {
       console.error("Error fetching dictionary:", error);
     }
@@ -123,7 +156,16 @@
     }
 
     if (textToChange == null || typeof textToChange === "undefined") {
-      await fetchDictionary();
+      textToChange = await getDictionary();
+
+      if (textToChange == null || typeof textToChange === "undefined") {
+        return;
+      }
+
+      regex = new RegExp(
+        "\\b(" + Object.keys(textToChange).join("|") + ")\\b",
+        "gi"
+      );
     }
 
     if (replacedWords.length > 0) {

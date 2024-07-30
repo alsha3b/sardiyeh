@@ -3,4 +3,10 @@ const en = {
   replacedWords: "Replaced words",
   word: "Word",
   replacement: "Replacement",
+  wordLabel: "Word",
+  replacementLabel: "Replacement",
+  submitButton: "Submit",
+  cancelButton: "Cancel",
+  errorEmptyFields: "Both fields are required.",
+  errorSubmissionFailed: "Failed to submit the data. Please try again.",
 };
