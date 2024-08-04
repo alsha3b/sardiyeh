@@ -1,5 +1,7 @@
+// toggle switch to (de)activate extension
 const toggleSwitch = document.getElementById("toggleSwitch");
 
+// getting the saved state of the toggle
 chrome.storage.sync.get(["ext_on"], async function (items) {
   if (chrome.runtime.lastError) {
     console.error(chrome.runtime.lastError);
@@ -12,6 +14,7 @@ chrome.storage.sync.get(["ext_on"], async function (items) {
   await getDomElements(tab, toggleSwitch.checked);
 });
 
+// listening to changes to the toggle switch
 toggleSwitch.addEventListener("change", async () => {
   const isChecked = toggleSwitch.checked;
   var tab = await getCurrentTab();
@@ -23,6 +26,7 @@ toggleSwitch.addEventListener("change", async () => {
   });
 });
 
+// get the current active tab to run script on it
 async function getCurrentTab() {
   let queryOptions = { active: true, currentWindow: true };
   // `tab` will either be a `tabs.Tab` instance or `undefined`.
@@ -34,6 +38,7 @@ async function getCurrentTab() {
   }
 }
 
+// runs the content.js or revert.js file on the current tab
 const getDomElements = async (tab, shouldReplace) => {
   if (!tab && !tab.id) {
     return;

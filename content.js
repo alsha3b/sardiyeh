@@ -1,3 +1,5 @@
+// Main script that works on chrome pages
+
 (() => {
   // Function to get dictionary from local storage
   function getDictionaryFromLocalStorage() {

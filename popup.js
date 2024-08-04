@@ -1,3 +1,5 @@
+// file responsible for the extension popup
+
 document.addEventListener("DOMContentLoaded", function () {
   initLanguage();
   populateReplacedWords();
@@ -33,12 +35,6 @@ function initForm() {
         }
       );
 
-      console.log(response);
-
-      console.log(response.result);
-
-      console.log(response.json);
-
       if (response.ok) {
         addWord(wordInput.value, replacementInput.value);
         closeDialog();
@@ -72,7 +68,6 @@ function initLanguage() {
 
 function populateReplacedWords() {
   chrome.storage.local.get("replacedWords", function (data) {
-    // const replacedWordsList = document.getElementById("replaced-words-list");
     if (data.replacedWords && data.replacedWords.length > 0) {
       data.replacedWords.forEach((word) => {
         const tableBody = document.getElementById("table-body");
@@ -84,13 +79,7 @@ function populateReplacedWords() {
         row.appendChild(wordCell);
         row.appendChild(replacementCell);
         tableBody.appendChild(row);
-
-        // const listItem = document.createElement("li");
-        // listItem.textContent = `${word.original} -> ${word.replacement}`;
-        // replacedWordsList.appendChild(listItem);
       });
-    } else {
-      // replacedWordsList.textContent = "No words replaced.";
     }
   });
 }
@@ -124,7 +113,6 @@ function submitForm() {
 
   errorMessage.textContent = "";
 
-  // Replace 'your-google-sheet-url' with your actual Google Sheets script URL
   fetch(sheetUrl, {
     method: "POST",
     headers: {
@@ -209,10 +197,6 @@ function getLocalizedString(key) {
 }
 
 document.getElementById("edit-button").addEventListener("click", openDialog);
-
-// document.getElementById("dialog-close").addEventListener("click", closeDialog);
-
-// document.getElementById("dialog-submit").addEventListener("click", submitForm);
 
 document
   .getElementById("language-select")

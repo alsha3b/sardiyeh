@@ -54,10 +54,12 @@ We welcome contributions from the community! Here's how you can help:
 
 Here are a couple of ideas for new features for the extension, feel free to think of new ones:
 
+- **Reverts:** Revert to the original text in DOM elements when switching the extension off.
 - **Underline Replaced Words:** Visually indicate replaced words in the browser by underlining them.
 - **Word Selection Tooltip:** Show a tooltip with replacement text-input when a word is selected in the browser.
 - **Google Maps Canvas Support:** Enable the extension to work on Google Maps canvas elements.
 - **Performance Optimizations:** Improve overall performance through code optimizations.
+
 
 ## Ports to Safari and Firefox
 
