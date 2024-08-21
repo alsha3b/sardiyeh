@@ -20,6 +20,10 @@ Welcome to the official repository of Sardiya! This open-source project is desig
    - Click on the extension icon in the Chrome toolbar.
    - Turn on the extension through the popup and see a table of the original names.
    - Browse the web and see the native names of places.
+  
+3. **Video**
+   - [Load extension](https://streamable.com/udlmwc)
+   - [Pin extension](https://streamable.com/vxtxub)
 
 ## How to Contribute
 
