@@ -103,6 +103,8 @@
           }
           return replacement;
         });
+
+        createTooltip(el);
       }
     } else {
       for (let child of el.childNodes) {
@@ -210,4 +212,33 @@
       characterDataOldValue: false,
     });
   });
+
+  const createTooltip = (el) => {
+    const newElement = document.createElement("div");
+
+    newElement.innerText = "Tooltip text";
+    newElement.style.position = "absolute";
+    newElement.style.backgroundColor = "black";
+    newElement.style.color = "white";
+    newElement.style.padding = "5px";
+    newElement.style.borderRadius = "5px";
+    newElement.style.fontSize = "12px";
+    newElement.style.visibility = "hidden";
+    newElement.style.zIndex = "1000";
+
+    document.body.appendChild(newElement);
+
+    const parentNode =  el.parentNode;
+
+    parentNode.addEventListener("mouseenter", function () {
+      const rect = parentNode.getBoundingClientRect(); // Get the element's position
+      newElement.style.left = `${rect.left + window.scrollX}px`;
+      newElement.style.top = `${rect.top + window.scrollY - newElement.offsetHeight}px`; 
+      newElement.style.visibility = "visible";
+    });
+
+    parentNode.addEventListener("mouseleave", function () {
+      newElement.style.visibility = "hidden";
+    });
+  }
 })();
