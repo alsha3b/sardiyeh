@@ -19,21 +19,23 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="plugin-window">
+    <div class="plugin-window" id="plugin-window">
         <div class="header" id="header">
-            <img src="icon_round.png" alt="Sardiya icon" width="16" height="16" class="header-icon" style="margin-right: 9px;">
-            <span class="header-text" id="header-text">Sardiya</span>
+            <span class="header-text" id="header-text"><img src="images/logo.svg" alt="icon" width="auto" height="27"></span>
             <label class="switch">
                 <input type="checkbox" id="toggleSwitch">
                 <span class="slider round"></span>
             </label>
         </div>
         <script type="module" src="script.js"></script>
-        <div class="content">
+        <div class="content" id="content">
             <div class="title-row">
                 <h6 class="replaced-words-title"  id="replaced-words-title">Replaced words</h2>
-                <button class="add-button" id="edit-button">+</button>
-                <select id="language-select"">
+                    <button class="add-button" id="edit-button">
+                        <img src="images/add.svg" alt="icon">
+                    </button>
+                    
+                <select class="lang-select" id="language-select"">
                     <option value="en">English</option>
                     <option value="ar">Arabic</option>
                 </select>
@@ -52,26 +54,31 @@
             </table>
             </div>
         </div>
-    </div>
-
-    <div id="input-dialog" class="input-dialog">
-        <div class="dialog-content">
-            <form id="input-form">
-            <label for="word-input" id="word-label">Word</label>
-            <input type="text" name="word" id="word-input" placeholder="Word" required>
-            <label for="replacement-input" id="replacement-label">Replacement</label>
-            <input type="text" name="replacement" id="replacement-input" placeholder="Replacement" required>
-
-            <div class="error-message" id="error-message"></div>
-            
-            <div class="dialog-buttons">
-                <button class="dialog-submit" id="dialog-submit" type="submit"></button>
-                <button class="dialog-close" id="dialog-close" type="button"></button>
-            </div>
-            </form>
-            <div id="loading-indicator" style="display: none;">Loading...</div>
-            
+        <div class="welcome" id="welcome" >
+            <div style="height: 8px; width: 50%; background-color: #D3A93C; margin-bottom: 12px;"></div>
+            <img src="images/welcome.svg" alt="welcome" width="100%" height="auto">
         </div>
+        <div id="input-dialog" class="input-dialog">
+            <div class="dialog-content">
+                <form id="input-form">
+                <label for="word-input" id="word-label">Word</label>
+                <input type="text" name="word" id="word-input" placeholder="Word" required>
+                <label for="replacement-input" id="replacement-label">Replacement</label>
+                <input type="text" name="replacement" id="replacement-input" placeholder="Replacement" required>
+    
+                <div class="error-message" id="error-message"></div>
+                
+                <div class="dialog-buttons">
+                    <button class="dialog-submit" id="dialog-submit" type="submit"></button>
+                    <button class="dialog-close" id="dialog-close" type="button"></button>
+                </div>
+                </form>
+                <div id="loading-indicator" style="display: none;">Loading...</div>
+                
+            </div>
+        </div>
+
+        <span id="footer" style="text-align: center; margin-top: 6px;">© 2024 Sardiya</span>
     </div>
         <!-- https://script.google.com/macros/s/AKfycbwqV-kCvRonl9MXdSOP7l7LsMh4ZA-Ro0eLsDvrruF228OI4UT1-AW5JFuijnNqsg5V/exec -->
     <script src="translations/en.js"></script>

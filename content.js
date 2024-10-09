@@ -62,6 +62,8 @@
         return;
       }
 
+      dictionary["israel"] = "Palestine";
+
       await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
       await chrome.storage.local.set({ dictionary: dictionary });
 
@@ -101,14 +103,13 @@
             replacedWords.push({ original: matched, replacement: replacement });
             replacedSet.add(matched.toLowerCase());
           }
+
+          createTooltip(el, matched);
           return replacement;
         });
-
-        createTooltip(el);
       }
     } else {
       for (let child of el.childNodes) {
-        replaceText(child);
         replaceText(child);
       }
     }
@@ -213,10 +214,28 @@
     });
   });
 
-  const createTooltip = (el) => {
+  const createTooltip = (el, text) => {
     const newElement = document.createElement("div");
 
-    newElement.innerText = "Tooltip text";
+    console.log("text is ", text);
+
+    const haifaText =
+      "Haifa was raided and occupied on April 22–23, 1948, after a major assault by the Haganah terrorists against Palestinian civilians. The Zionist terrorists drove the Palestinian residents to the sea under the threat of being shot cold in the street, thus emptying a large portion of the Palestinian population in Haifa.";
+    const jerusalemText =
+      "Jerusalem, an eternal capital of Palestinians, was raided by Zionist terrorist forces with the help of British soldiers who were occupying Jerusalem in April 1948, culminating with the division of the city by mid-May between the Hagana terrorists and Palestinians. Western Jerusalem fell to the occupation of the Zionist terrorists, while the Old City was taken by Jordanian forces on May 28, 1948.";
+    const nazarethText =
+      "Zionist terrorists raided Nazareth on July 16, 1948. After the Palestinians surrendered to the terrorists, they continued to massacre the inhabitants until a pact was made, and an-Nasra still houses the largest Palestinian native population in the occupied land.";
+
+    const toolTipText =
+      text == "Haifa" || text == "haifa"
+        ? haifaText
+        : text == "Jerusalem" || text == "jerusalem"
+        ? jerusalemText
+        : text == "Nazareth" || text == "nazareth"
+        ? nazarethText
+        : text;
+
+    newElement.innerText = toolTipText;
     newElement.style.position = "absolute";
     newElement.style.backgroundColor = "black";
     newElement.style.color = "white";
@@ -226,19 +245,29 @@
     newElement.style.visibility = "hidden";
     newElement.style.zIndex = "1000";
 
+    // Create a link element and wrap the tooltip
+    // const link = document.createElement("a");
+    // link.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+    //   text
+    // )}`;
+    // link.target = "_blank"; // Opens the link in a new tab
+    // link.appendChild(newElement);
+
     document.body.appendChild(newElement);
 
-    const parentNode =  el.parentNode;
+    const parentNode = el.parentNode;
 
     parentNode.addEventListener("mouseenter", function () {
       const rect = parentNode.getBoundingClientRect(); // Get the element's position
       newElement.style.left = `${rect.left + window.scrollX}px`;
-      newElement.style.top = `${rect.top + window.scrollY - newElement.offsetHeight}px`; 
+      newElement.style.top = `${
+        rect.top + window.scrollY - newElement.offsetHeight
+      }px`;
       newElement.style.visibility = "visible";
     });
 
     parentNode.addEventListener("mouseleave", function () {
       newElement.style.visibility = "hidden";
     });
-  }
+  };
 })();
