@@ -142,10 +142,10 @@ function addWord(word, replacement) {
   }
 }
 
-// const sheetUrl =
-//   "https://script.google.com/macros/s/AKfycbwqV-kCvRonl9MXdSOP7l7LsMh4ZA-Ro0eLsDvrruF228OI4UT1-AW5JFuijnNqsg5V/exec";
+const sheetUrl =
+  "https://script.google.com/macros/s/AKfycbwqV-kCvRonl9MXdSOP7l7LsMh4ZA-Ro0eLsDvrruF228OI4UT1-AW5JFuijnNqsg5V/exec";
 
-async function postSuggestion(data) {
+async function postSuggestion(params) {
   const url =
     "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/prod/suggestion";
 
@@ -155,7 +155,7 @@ async function postSuggestion(data) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(params),
     });
 
     if (!response.ok) {
@@ -183,27 +183,20 @@ function submitForm() {
 
   errorMessage.textContent = "";
 
-  // fetch(
-  //   "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/test/suggestion",
-  //   {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body:
-  //       // JSON.stringify(
-  //       {
-  //         translate_to: wordInput,
-  //         suggestion: replacementInput,
-  //         is_accepted: false,
-  //       },
-  //     // ),
-  //   }
-  // )
-  postSuggestion({
-    translate_to: wordInput,
-    suggestion: replacementInput,
-    is_accepted: false,
+  // postSuggestion({
+  //   translate_to: wordInput,
+  //   suggestion: replacementInput,
+  //   is_accepted: false,
+  // })
+  fetch(sheetUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      word: wordInput,
+      replacement: replacementInput,
+    }),
   })
     .then((response) => {
       console.log("response is ", response);

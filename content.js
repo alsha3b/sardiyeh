@@ -41,9 +41,17 @@
   async function fetchDictionary() {
     try {
       response = await fetch(
-        "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/prod/translation",
+        // "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/prod/translation",
+        // {
+        //   method: "GET",
+        // }
+        "https://api.jsonbin.io/v3/b/669bb785e41b4d34e41497e4",
         {
           method: "GET",
+          headers: {
+            "X-Access-Key":
+              "$2a$10$D40ON/o9o/wDGqEu281T5e/t.DQ8NipDJAXRYc/conOeNaUuvxIRS",
+          },
         }
       );
 
