@@ -10,13 +10,36 @@ chrome.storage.sync.get(["ext_on"], async function (items) {
 
   toggleSwitch.checked = items.ext_on != false;
 
+  toggleContent(toggleSwitch.checked);
+
   var tab = await getCurrentTab();
   await getDomElements(tab, toggleSwitch.checked);
 });
 
+const toggleContent = (isChecked) => {
+  const pluginWindow = document.getElementById("plugin-window");
+  const content = document.getElementById("content");
+  const welcome = document.getElementById("welcome");
+  const footer = document.getElementById("footer");
+
+  if (isChecked) {
+    pluginWindow.style.backgroundColor = "#fafafa";
+    content.style.display = "block";
+    welcome.style.display = "none";
+  } else {
+    pluginWindow.style.backgroundColor = "#004D23";
+    content.style.display = "none";
+    welcome.style.display = "flex";
+    footer.style.color = "#ffffff";
+  }
+};
+
 // listening to changes to the toggle switch
 toggleSwitch.addEventListener("change", async () => {
   const isChecked = toggleSwitch.checked;
+
+  toggleContent(isChecked);
+
   var tab = await getCurrentTab();
   await getDomElements(tab, isChecked);
 

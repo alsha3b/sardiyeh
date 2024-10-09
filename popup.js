@@ -72,10 +72,36 @@ function populateReplacedWords() {
       data.replacedWords.forEach((word) => {
         const tableBody = document.getElementById("table-body");
         const row = document.createElement("tr");
+
         const wordCell = document.createElement("td");
+        const wordLink = document.createElement("a");
+        wordLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+          word.original
+        )}`;
+        wordLink.target = "_blank"; // Open link in new tab
+        wordLink.textContent = word.original;
+        wordLink.style.color = "#97700B";
+        wordLink.style.textDecoration = "none";
+        wordCell.appendChild(wordLink);
+        // wordCell.innerHTML = wordLink;
+
         const replacementCell = document.createElement("td");
-        wordCell.textContent = word.original;
-        replacementCell.textContent = word.replacement;
+        const replacementLink = document.createElement("a");
+        replacementLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+          word.replacement
+        )}`;
+        replacementLink.target = "_blank";
+        replacementLink.textContent = word.replacement;
+        replacementLink.style.color = "#000000";
+        replacementLink.style.textDecoration = "none";
+        replacementCell.appendChild(replacementLink);
+        // replacementCell.innerHTML = replacementLink;
+
+        // const wordCell = document.createElement("td");
+        // const replacementCell = document.createElement("td");
+        // wordCell.textContent = word.original;
+        // replacementCell.textContent = word.replacement;
+
         row.appendChild(wordCell);
         row.appendChild(replacementCell);
         tableBody.appendChild(row);
@@ -87,11 +113,29 @@ function populateReplacedWords() {
 function addWord(word, replacement) {
   if (word && replacement) {
     const tableBody = document.getElementById("table-body");
+
     const row = document.createElement("tr");
+
     const wordCell = document.createElement("td");
+    const wordLink = document.createElement("a");
+    wordLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+      word
+    )}`;
+    wordLink.target = "_blank"; // Open link in new tab
+    wordLink.textContent = word;
+    wordCell.appendChild(wordLink);
+    // wordCell.innerHTML = wordLink;
+
     const replacementCell = document.createElement("td");
-    wordCell.textContent = word;
-    replacementCell.textContent = replacement;
+    const replacementLink = document.createElement("a");
+    replacementLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+      replacement
+    )}`;
+    replacementLink.target = "_blank";
+    replacementLink.textContent = replacement;
+    replacementCell.appendChild(replacementLink);
+    // replacementCell.innerHTML = replacementLink;
+
     row.appendChild(wordCell);
     row.appendChild(replacementCell);
     tableBody.appendChild(row);
@@ -100,6 +144,32 @@ function addWord(word, replacement) {
 
 const sheetUrl =
   "https://script.google.com/macros/s/AKfycbwqV-kCvRonl9MXdSOP7l7LsMh4ZA-Ro0eLsDvrruF228OI4UT1-AW5JFuijnNqsg5V/exec";
+
+async function postSuggestion(params) {
+  const url =
+    "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/prod/suggestion";
+
+  try {
+    const response = await fetch(url, {
+      method: "POST", // HTTP method
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    console.log("Success:", data);
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
 
 function submitForm() {
   const wordInput = document.getElementById("word-input").value;
@@ -113,6 +183,11 @@ function submitForm() {
 
   errorMessage.textContent = "";
 
+  // postSuggestion({
+  //   translate_to: wordInput,
+  //   suggestion: replacementInput,
+  //   is_accepted: false,
+  // })
   fetch(sheetUrl, {
     method: "POST",
     headers: {
@@ -124,6 +199,7 @@ function submitForm() {
     }),
   })
     .then((response) => {
+      console.log("response is ", response);
       if (response.ok) {
         closeDialog();
         addWord(wordInput, replacementInput);
@@ -138,13 +214,20 @@ function submitForm() {
 }
 
 function openDialog() {
-  document.getElementById("input-dialog").style.display = "flex";
-  document.querySelector(".table-container").style.display = "none";
+  const inputDialog = document.getElementById("input-dialog");
+  const content = document.getElementById("content");
+
+  inputDialog.style.display = "block";
+  content.style.display = "none";
 }
 
 function closeDialog() {
-  document.getElementById("input-dialog").style.display = "none";
-  document.querySelector(".table-container").style.display = "block";
+  const inputDialog = document.getElementById("input-dialog");
+  const content = document.getElementById("content");
+
+  inputDialog.style.display = "none";
+  content.style.display = "block";
+
   const form = document.getElementById("input-form");
   form.reset(); // Reset the form inputs
   document.getElementById("error-message").textContent = ""; // Clear error message
@@ -173,9 +256,8 @@ function setLanguage(language) {
     document.body.style.fontFamily = "'Beiruti', sans-serif";
   }
 }
-
 function loadLanguage(lang) {
-  document.getElementById("header-text").textContent = lang.pluginName;
+  // document.getElementById("header-text").textContent = lang.pluginName;
   document.getElementById("replaced-words-title").textContent =
     lang.replacedWords;
   document.getElementById("word-header").textContent = lang.word;

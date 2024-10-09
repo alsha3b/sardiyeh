@@ -60,7 +60,7 @@ Here are a couple of ideas for new features for the extension, feel free to thin
 
 - **Reverts:** Revert to the original text in DOM elements when switching the extension off.
 - **Underline Replaced Words:** Visually indicate replaced words in the browser by underlining them.
-- **Word Selection Tooltip:** Show a tooltip with contextual information when a word is selected/hovered in the browser.
+- **Word Selection Tooltip:** [x] Show a tooltip with replacement text-input when a word is selected in the browser. KUDOS TO [SammyAbukmeil](https://github.com/SammyAbukmeil)
 - **Submit Information:** Show a dialog to allow the user to choose a word from the list and submit contextual information about the place.
 - **Google Maps Canvas Support:** Enable the extension to work on Google Maps canvas elements.
 - **Performance Optimizations:** Improve overall performance through code optimizations.
