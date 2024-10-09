@@ -123,8 +123,8 @@ function addWord(word, replacement) {
     )}`;
     wordLink.target = "_blank"; // Open link in new tab
     wordLink.textContent = word;
-    // wordCell.appendChild(wordLink);
-    wordCell.innerHTML = wordLink;
+    wordCell.appendChild(wordLink);
+    // wordCell.innerHTML = wordLink;
 
     const replacementCell = document.createElement("td");
     const replacementLink = document.createElement("a");
@@ -133,8 +133,8 @@ function addWord(word, replacement) {
     )}`;
     replacementLink.target = "_blank";
     replacementLink.textContent = replacement;
-    // replacementCell.appendChild(replacementLink);
-    replacementCell.innerHTML = replacementLink;
+    replacementCell.appendChild(replacementLink);
+    // replacementCell.innerHTML = replacementLink;
 
     row.appendChild(wordCell);
     row.appendChild(replacementCell);
@@ -142,8 +142,34 @@ function addWord(word, replacement) {
   }
 }
 
-const sheetUrl =
-  "https://script.google.com/macros/s/AKfycbwqV-kCvRonl9MXdSOP7l7LsMh4ZA-Ro0eLsDvrruF228OI4UT1-AW5JFuijnNqsg5V/exec";
+// const sheetUrl =
+//   "https://script.google.com/macros/s/AKfycbwqV-kCvRonl9MXdSOP7l7LsMh4ZA-Ro0eLsDvrruF228OI4UT1-AW5JFuijnNqsg5V/exec";
+
+async function postSuggestion(data) {
+  const url =
+    "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/prod/suggestion";
+
+  try {
+    const response = await fetch(url, {
+      method: "POST", // HTTP method
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    console.log("Success:", data);
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
 
 function submitForm() {
   const wordInput = document.getElementById("word-input").value;
@@ -157,17 +183,30 @@ function submitForm() {
 
   errorMessage.textContent = "";
 
-  fetch(sheetUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      word: wordInput,
-      replacement: replacementInput,
-    }),
+  // fetch(
+  //   "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/test/suggestion",
+  //   {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body:
+  //       // JSON.stringify(
+  //       {
+  //         translate_to: wordInput,
+  //         suggestion: replacementInput,
+  //         is_accepted: false,
+  //       },
+  //     // ),
+  //   }
+  // )
+  postSuggestion({
+    translate_to: wordInput,
+    suggestion: replacementInput,
+    is_accepted: false,
   })
     .then((response) => {
+      console.log("response is ", response);
       if (response.ok) {
         closeDialog();
         addWord(wordInput, replacementInput);

@@ -41,13 +41,9 @@
   async function fetchDictionary() {
     try {
       response = await fetch(
-        "https://api.jsonbin.io/v3/b/669bb785e41b4d34e41497e4",
+        "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/prod/translation",
         {
           method: "GET",
-          headers: {
-            "X-Access-Key":
-              "$2a$10$D40ON/o9o/wDGqEu281T5e/t.DQ8NipDJAXRYc/conOeNaUuvxIRS",
-          },
         }
       );
 
@@ -216,8 +212,6 @@
 
   const createTooltip = (el, text) => {
     const newElement = document.createElement("div");
-
-    console.log("text is ", text);
 
     const haifaText =
       "Haifa was raided and occupied on April 22–23, 1948, after a major assault by the Haganah terrorists against Palestinian civilians. The Zionist terrorists drove the Palestinian residents to the sea under the threat of being shot cold in the street, thus emptying a large portion of the Palestinian population in Haifa.";
