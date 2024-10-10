@@ -122,11 +122,11 @@
   const anyChildOfBody = "/html/body//";
   // const doesNotContainAncestorWithRoleTextbox =
   //   "div[not(ancestor-or-self::*[@role=textbox])]/";
-  const isTextButNotPartOfJsScript = "text()[not(parent::script)]";
+  const isTextButNotPartOfJsScriptOrTooltip = "text()[not(parent::script) and not(ancestor::*[contains(@class, 'tooltip')])]";
   const xpathExpression =
     anyChildOfBody +
     //  + doesNotContainAncestorWithRoleTextbox;
-    isTextButNotPartOfJsScript;
+    isTextButNotPartOfJsScriptOrTooltip;
 
   const replaceTextInNodes = () => {
     if (regex == null || typeof regex === "undefined") {
@@ -238,6 +238,7 @@
         : text;
 
     newElement.innerText = toolTipText;
+    newElement.classList.add("tooltip");
     newElement.style.position = "absolute";
     newElement.style.backgroundColor = "black";
     newElement.style.color = "white";
