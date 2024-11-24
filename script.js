@@ -16,21 +16,27 @@ chrome.storage.sync.get(["ext_on"], async function (items) {
   await getDomElements(tab, toggleSwitch.checked);
 });
 
+
 const toggleContent = (isChecked) => {
   const pluginWindow = document.getElementById("plugin-window");
   const content = document.getElementById("content");
   const welcome = document.getElementById("welcome");
   const footer = document.getElementById("footer");
+  const inputDialog = document.getElementById("input-dialog");
+
 
   if (isChecked) {
     pluginWindow.style.backgroundColor = "#fafafa";
     content.style.display = "block";
     welcome.style.display = "none";
+    footer.style.color = "#000000";
+    inputDialog.style.display = "none";
   } else {
     pluginWindow.style.backgroundColor = "#004D23";
     content.style.display = "none";
     welcome.style.display = "flex";
     footer.style.color = "#ffffff";
+    inputDialog.style.display = "none";
   }
 };
 
