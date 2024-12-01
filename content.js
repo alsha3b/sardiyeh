@@ -97,29 +97,71 @@
     return replacement;
   };
 
-  const replaceText = (el) => {
-    if (el.nodeType === Node.TEXT_NODE) {
-      if (regex.test(el.textContent)) {
-        el.textContent = el.textContent.replace(regex, (matched) => {
-          const replacement = getReplacementText(matched);
-          if (
-            replacement !== matched &&
-            !replacedSet.has(matched.toLowerCase())
-          ) {
-            replacedWords.push({ original: matched, replacement: replacement });
-            replacedSet.add(matched.toLowerCase());
-          }
-
-          createTooltip(el, matched);
-          return replacement;
-        });
+  class BloomFilter {
+    constructor(size, numHashFunctions) {
+      if (size <= 0 || numHashFunctions <= 0) {
+        throw new Error("Size and number of hash functions must be positive integers.");
       }
-    } else {
-      for (let child of el.childNodes) {
-        replaceText(child);
+      this.size = size;
+      this.numHashFunctions = numHashFunctions;
+      this.bitArray = new Array(size).fill(false);
+    }
+  
+    // Improved hash function with better distribution
+    hash(value, i) {
+      const hash1 = this.simpleHash(value, i);
+      const hash2 = this.simpleHash(value.split("").reverse().join(""), i + 1);
+      return (hash1 + i * hash2) % this.size;
+    }
+  
+    // Simple hash function for demonstration
+    simpleHash(value, salt) {
+      let hash = 0;
+      for (let char of value) {
+        hash = (hash * salt + char.charCodeAt(0)) % this.size;
+      }
+      return hash;
+    }
+  
+    // Add an item to the Bloom filter
+    add(value) {
+      for (let i = 0; i < this.numHashFunctions; i++) {
+        const index = this.hash(value, i);
+        this.bitArray[index] = true;
       }
     }
-  };
+  
+    // Check if an item might be in the Bloom filter
+    contains(value) {
+      for (let i = 0; i < this.numHashFunctions; i++) {
+        const index = this.hash(value, i);
+        if (!this.bitArray[index]) {
+          return false; // Must be in all positions to return true
+        }
+      }
+      return false
+  }
+}
+
+const replaceText = (el ) => {
+  if (el.nodeType === Node.TEXT_NODE) {
+    const words = el.textContent.split(/\b/); 
+    const updatedText = words
+      .map((word) => {
+        const key = word.toLowerCase();
+        if (textToChange[key]) {
+          return textToChange[key]; 
+        }
+        return word; 
+      })
+      .join(""); 
+    el.textContent = updatedText;
+  } else {
+    for (let child of el.childNodes) {
+      replaceText(child); 
+    }
+  }
+};
 
   const anyChildOfBody = "/html/body//";
   // const doesNotContainAncestorWithRoleTextbox =
@@ -134,6 +176,10 @@
     if (regex == null || typeof regex === "undefined") {
       return;
     }
+    const times = [];
+    // Initialize the Bloom Filter
+    const bloom= new BloomFilter(1440,1)      // Adjust size and number of hash functions
+    Object.keys(textToChange || {}).forEach((word) => bloom.add(word));
 
     const result = document.evaluate(
       xpathExpression,
@@ -144,8 +190,33 @@
     );
     console.log(result);
     for (let i = 0; i < result.snapshotLength; i++) {
+      const start = performance.now();
+      
+      // Call the replaceText function
       replaceText(result.snapshotItem(i));
+      
+      const end = performance.now();
+      const timeTaken = end - start;
+    
+      // Store the time taken for each call
+      times.push(timeTaken);
+      
+      // Log the execution time for this specific iteration
+      console.log(`Node ${i + 1}: ${timeTaken.toFixed(3)} ms`);
     }
+    // Calculate metrics after the loop
+      const totalTime = times.reduce((sum, time) => sum + time, 0);
+      const averageTime = totalTime / times.length;
+      const minTime = Math.min(...times);
+      const maxTime = Math.max(...times);
+
+      // Log summary metrics
+      console.log(`Performance Summary:`);
+      console.log(`Total Time: ${totalTime.toFixed(3)} ms`);
+      console.log(`Average Time: ${averageTime.toFixed(3)} ms`);
+      console.log(`Min Time: ${minTime.toFixed(3)} ms`);
+      console.log(`Max Time: ${maxTime.toFixed(3)} ms`);
+
     chrome.storage.local.set({
       replacedWords: replacedWords,
       replacedSet: replacedSet,
