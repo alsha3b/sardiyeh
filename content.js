@@ -151,7 +151,7 @@ const replaceText = (el,bloom) => {
         const key = word.toLowerCase();
 
         // Use the Bloom filter for pre-check
-        if (bloom.contains(key)) {
+        if (!bloom.contains(key)) {
           // Proceed to the actual map lookup
           return textToChange[key] || word;
         }
