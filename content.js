@@ -143,22 +143,26 @@
   }
 }
 
-const replaceText = (el ) => {
+const replaceText = (el,bloom) => {
   if (el.nodeType === Node.TEXT_NODE) {
-    const words = el.textContent.split(/\b/); 
+    const words = el.textContent.split(/\b/);
     const updatedText = words
       .map((word) => {
         const key = word.toLowerCase();
-        if (textToChange[key]) {
-          return textToChange[key]; 
+
+        // Use the Bloom filter for pre-check
+        if (bloom.contains(key)) {
+          // Proceed to the actual map lookup
+          return textToChange[key] || word;
         }
-        return word; 
+
+        return word; // Skip replacement if Bloom filter says it's not present
       })
-      .join(""); 
+      .join("");
     el.textContent = updatedText;
   } else {
     for (let child of el.childNodes) {
-      replaceText(child); 
+      replaceText(child,bloom);
     }
   }
 };
@@ -193,7 +197,7 @@ const replaceText = (el ) => {
       const start = performance.now();
       
       // Call the replaceText function
-      replaceText(result.snapshotItem(i));
+      replaceText(result.snapshotItem(i),bloom);
       
       const end = performance.now();
       const timeTaken = end - start;
