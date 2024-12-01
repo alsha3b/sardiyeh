@@ -4,6 +4,10 @@
 
 Welcome to the official repository of Sardiya! This open-source project is designed to enhance your browsing experience by displaying the original native names of occupied and colonialised territories around the world. Our goal is to reclaim our native narrative through the digital space.
 
+### DEMO
+   - [Load extension](https://streamable.com/udlmwc)
+   - [Pin extension](https://streamable.com/vxtxub)
+
 ## How to Use
 
 1. **Install the Extension:**
@@ -20,10 +24,6 @@ Welcome to the official repository of Sardiya! This open-source project is desig
    - Click on the extension icon in the Chrome toolbar.
    - Turn on the extension through the popup and see a table of the original names.
    - Browse the web and see the native names of places.
-  
-3. **Video**
-   - [Load extension](https://streamable.com/udlmwc)
-   - [Pin extension](https://streamable.com/vxtxub)
 
 ## How to Contribute
 
@@ -60,9 +60,11 @@ Here are a couple of ideas for new features for the extension, feel free to thin
 
 - **Reverts:** Revert to the original text in DOM elements when switching the extension off.
 - **Underline Replaced Words:** Visually indicate replaced words in the browser by underlining them.
-- **Word Selection Tooltip:** Show a tooltip with replacement text-input when a word is selected in the browser.
+- **Word Selection Tooltip:** [x] Show a tooltip with replacement text-input when a word is selected in the browser. KUDOS TO [SammyAbukmeil](https://github.com/SammyAbukmeil)
+- **Submit Information:** Show a dialog to allow the user to choose a word from the list and submit contextual information about the place.
 - **Google Maps Canvas Support:** Enable the extension to work on Google Maps canvas elements.
 - **Performance Optimizations:** Improve overall performance through code optimizations.
+- **UI Improvements:** Implement the latest design, font and colors from the [Figma design file](https://www.figma.com/design/ndKl3LDidvzb7Qsw71fKS6/Sardiya?node-id=0-1&t=IanwZq5CH0UgPuwn-1).
 
 
 ## Ports to Safari and Firefox
