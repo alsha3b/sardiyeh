@@ -5,7 +5,7 @@ const ar = {
   replacement: "الأصل",
   wordLabel: "الكلمة",
   replacementLabel: "الأصل",
-  submitButton: "إرسال",
+  submitButton: "حفظ الكلمة",
   cancelButton: "إلغاء",
   errorEmptyFields: "يجب ملء كلا الحقلين.",
   errorSubmissionFailed: "فشل في إرسال البيانات. يرجى المحاولة مرة أخرى.",

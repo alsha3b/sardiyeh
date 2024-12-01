@@ -25,36 +25,26 @@ body[dir="rtl"] {
 }
 
 .header {
+  display: flex;
+  flex-direction: row; /* Default for LTR */
+  justify-content: space-between;
+  align-items: center; /* Ensure items align vertically */
   background-color: #004D23;
   color: white;
   padding: 10px;
-  display: flex;
-  flex-direction: row;
-  border: #ffffff;
-  border-width: 1px;
-  border-color: #fff;
-  justify-content: space-between;
-  /* align-items: center; */
   border-radius: 12px;
   font-weight: 700;
   transition: flex-direction 0.3s ease;
+  gap: 10px;
 }
+
 
 .header[dir="rtl"] {
   flex-direction: row-reverse;
 }
 
-.header .header-icon {
-  margin-right: 9px;
-}
-
-.header[dir="rtl"] .header-icon {
-  margin-right: 0;
-  margin-left: 9px;
-}
-
 .header-text {
-  flex-grow: 1;
+  padding-left: 20px;
   text-align: start;
 }
 
@@ -78,7 +68,7 @@ body[dir="rtl"] {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #27CA40;
+  background-color: #D3A93C;
   transition: .4s;
   border-radius: 20px;
   border: 1px solid white;
@@ -91,8 +81,8 @@ body[dir="rtl"] {
   width: 12px;
   top: 10px;
   left: 10px;
-  right: 10px;
-  bottom: 10px;
+  /* right: 10px;
+  bottom: 10px; */
   background-color: white;
   transition: .4s;
   border-radius: 50%;
@@ -106,7 +96,7 @@ input:checked+.slider {
 
 input:checked+.slider:before {
   transform: translateX(24px);
-  background-color: black;
+  background-color: #004D23;
 }
 
 .content {
@@ -153,16 +143,15 @@ input:checked+.slider:before {
 
 .lang-select {
   border-radius: 12px;
-  border-color: #1C1B1F;
-  border-width: 2px;
-  padding-left: 12px;
-  padding-right: 12px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  border: 2px solid #1C1B1F;
+  padding: 4px 12px;
+  background-color: white; /* Ensure consistent background */
+  color: black; /* Uniform text color */
 }
 
 .replaced-words-title {
   flex-grow: 1;
+  font-size: 18px;
 }
 
 .replaced-words-table {
@@ -216,6 +205,48 @@ input:checked+.slider:before {
   align-items: center;
 }
 
+.loader {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+  margin:15px auto;
+  position: relative;
+  color: #004D23;
+  left: -100px;
+  box-sizing: border-box;
+  animation: shadowRolling 2s linear infinite;
+}
+@keyframes shadowRolling {
+  0% {
+    box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+  12% {
+    box-shadow: 100px 0 #004D23, 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+  25% {
+    box-shadow: 110px 0 #004D23, 100px 0 #004D23, 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+  36% {
+    box-shadow: 120px 0 #004D23, 110px 0 #004D23, 100px 0 #004D23, 0px 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    box-shadow: 130px 0 #004D23, 120px 0 #004D23, 110px 0 #004D23, 100px 0 #004D23;
+  }
+  62% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 #004D23, 120px 0 #004D23, 110px 0 #004D23;
+  }
+  75% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 #004D23, 120px 0 #004D23;
+  }
+  87% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 #004D23;
+  }
+  100% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+  }
+}
+
 .dialog-content {
   background-color: lightgrey;
   padding: 20px;
@@ -225,6 +256,11 @@ input:checked+.slider:before {
   margin: auto;
   text-align: center;
 }
+
+#loading-indicator{
+  display: none;
+}
+
 
 .dialog-content .close {
   position: absolute;
@@ -291,7 +327,7 @@ body[dir="rtl"] .header {
 }
 
 body[dir="rtl"] .title-row {
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 
 body[dir="rtl"] .replaced-words-table th,
@@ -300,7 +336,7 @@ body[dir="rtl"] .replaced-words-table td {
 }
 
 .welcome {
-  display: none;
+  /* display: none; */
   width: 100%;
   background: #004D23;
   height: 350px;
@@ -309,6 +345,17 @@ body[dir="rtl"] .replaced-words-table td {
   justify-content: center;
   flex-direction: column;
 }
+
+hr:not([size]) {
+  height: 8px;
+}
+hr{
+  width: 50%;
+  height: 50px;
+  color: #D3A93C;
+  opacity: 2.5;
+}
+
 
 .table-container {
   height: 300px;
@@ -322,4 +369,12 @@ body[dir="rtl"] .replaced-words-table td {
   background-color: #fff;
 
   border-radius: 12px;
+}
+
+#footer{
+  text-align: center;
+  margin-top: 6px;
+}
+body[dir="rtl"] #footer {
+  direction: rtl; /* Proper alignment for RTL */
 }

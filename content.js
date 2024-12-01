@@ -14,6 +14,8 @@
     return null;
   }
 
+
+
   // Function to save dictionary to local storage
   function saveDictionaryToLocalStorage(dictionary) {
     const timestamp = new Date();
