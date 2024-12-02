@@ -150,13 +150,14 @@ const replaceText = (el,bloom) => {
       .map((word) => {
         const key = word.toLowerCase();
 
-        // Use the Bloom filter for pre-check
         if (!bloom.contains(key)) {
-          // Proceed to the actual map lookup
-          return textToChange[key] || word;
+          if(textToChange[key]){
+            createTooltip(el,word)
+            return textToChange[key] 
+          }
         }
 
-        return word; // Skip replacement if Bloom filter says it's not present
+        return word; 
       })
       .join("");
     el.textContent = updatedText;
