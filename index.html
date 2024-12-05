@@ -77,19 +77,25 @@
             <section id="input-dialog" class="input-dialog">
                 <div class="dialog-content">
                     <form id="input-form">
-                        <label for="word-input" id="word-label">Word</label>
-                        <input type="text" name="word" id="word-input" placeholder="Word" required>
-                        <label for="replacement-input" id="replacement-label">Replacement</label>
-                        <input type="text" name="replacement" id="replacement-input" placeholder="Replacement" required>
-            
-                        <div class="error-message" id="error-message"></div>
+                        <div class="formStyle">
+                            <label for="word-input" id="word-label"></label>
+                            <input type="text" name="word" id="word-input" placeholder="The word you want to replace" required>
+                            <label for="replacement-input" id="replacement-label"></label>
+                            <input type="text" name="replacement" id="replacement-input" placeholder="The replacement for the word" required>  
+                        </div>
                         
+                
+                        <div class="error-message" id="error-message">
+                            <span class="error-icon">!</span>
+                            <span id="error-text"></span>
+                        </div>
+                                        
                         <div class="dialog-buttons">
-                            <button class="dialog-submit" id="dialog-submit" type="submit"></button>
-                            <button class="dialog-close" id="dialog-close" type="button"></button>
+                            <button class="dialog-submit" id="dialog-submit" type="submit">Save</button>
+                            <button class="dialog-close" id="dialog-close" type="button">Cancel</button>
                         </div>
                     </form>
-
+                
                     <div id="loading-indicator" style="display: none;">
                         <span class="loader"></span>
                     </div>

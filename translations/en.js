@@ -6,7 +6,7 @@ const en = {
   wordLabel: "Word",
   replacementLabel: "Replacement",
   submitButton: "Save",
-  cancelButton: "Go back",
+  cancelButton: "Cancel",
   errorEmptyFields: "Both fields are required.",
   errorSubmissionFailed: "Failed to submit the data. Please try again.",
 };

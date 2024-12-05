@@ -10,7 +10,9 @@ body {
 
 body[dir="rtl"] {
   font-family: 'Beiruti', sans-serif;
-}
+} 
+
+
 
 .plugin-window {
   width: 360px;
@@ -248,14 +250,34 @@ input:checked+.slider:before {
 }
 
 .dialog-content {
-  background-color: lightgrey;
+  background-color: #004D232E;
   padding: 20px;
   border-radius: 10px;
-  width: 80%;
+  width: 272px;
+  height: 272px;
   max-width: 280px;
   margin: auto;
   text-align: center;
 }
+
+.dialog-content input.input-error {
+  border: 1px solid red;
+  color: red;
+}
+
+.dialog-content label.label-focused {
+  opacity: 1;
+  font-size: 0.875rem;
+  color: #004d23;
+}
+
+.dialog-submit:disabled {
+  background-color: #84B599;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+
 
 #loading-indicator{
   display: none;
@@ -277,25 +299,54 @@ input:checked+.slider:before {
 }
 
 .dialog-content input {
-  width: calc(100% - 22px);
+  width: 224px;
   padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  margin-bottom: 15px;
+  border-radius: 12px;
+  border: 1px solid #000;
 }
 
+
+
+
+#word-input::placeholder,
+#replacement-input::placeholder{
+  font-size: 12px;
+}
+
+#word-input,
+#replacement-input{
+  width: 100%;
+  /* padding: 10px 15px; */
+  margin-bottom: 20px;
+  border: 1px solid #004d00; /* Default border color */
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #004d00;
+  background-color: #fff; /* Light green background */
+  transition: all 0.3s ease;
+}
 .dialog-buttons {
   display: flex;
   justify-content: stretch;
+  margin-top: 20px;
 }
+
+.formStyle{
+  margin-top: 20px;
+}
+
 
 .dialog-buttons button {
   padding: 10px 20px;
   border: none;
+  width: 102px;
+  height: 38px;
   border-radius: 9px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 400;
+  font-size: 15px;
 }
+
 
 .dialog-submit {
   background-color: #004D23;
@@ -312,9 +363,24 @@ input:checked+.slider:before {
 }
 
 .error-message {
-  color: black;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: red;
+  font-size: 0.875rem; /* Smaller text size */
+  font-weight: 400;
+  margin-top: 10px;
+  text-align: left;
 }
+
+.error-message.error-visible {
+  visibility: visible; /* Show when error occurs */
+}
+.error-icon {
+  font-size: 1rem;
+  color: red;
+}
+
 
 /* Additional styles for RTL support */
 body[dir="rtl"] .header .icon {
