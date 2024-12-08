@@ -328,7 +328,7 @@ input:checked+.slider:before {
 .dialog-buttons {
   display: flex;
   justify-content: stretch;
-  margin-top: 20px;
+  margin-top: 60px;
 }
 
 .formStyle{
@@ -439,8 +439,18 @@ hr{
 
 #footer{
   text-align: center;
-  margin-top: 6px;
+  margin-top: 9px;
 }
+
+
 body[dir="rtl"] #footer {
   direction: rtl; /* Proper alignment for RTL */
+}
+
+
+/*Error message style*/
+.error-message {
+  color: rgb(223, 0, 0);
+  display: none;
+  margin-top: 1.2px;
 }

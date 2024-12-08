@@ -142,6 +142,7 @@ function initLanguage() {
   });
 }
 
+
 function changeLanguage() {
   const languageSelect = document.getElementById("language-select");
   const selectedLanguage = languageSelect.value;
@@ -167,11 +168,28 @@ function setLanguage(language) {
 }
 
 function loadLanguage(lang) {
+
+  // Update titles and headers
   document.getElementById("replaced-words-title").textContent = lang.replacedWords;
   document.getElementById("word-header").textContent = lang.word;
   document.getElementById("replacement-header").textContent = lang.replacement;
+
+  // Update buttons
   document.getElementById("dialog-submit").textContent = lang.submitButton;
   document.getElementById("dialog-close").textContent = lang.cancelButton;
+
+  // Update form labels
+  document.getElementById("word-label").textContent = lang.wordLabel;
+  document.getElementById("replacement-label").textContent = lang.replacementLabel;
+
+  // Update error messages
+  document.getElementById("error-message").textContent = lang.errorSubmissionFailed;
+
+
+  // Update input placeholders
+  document.getElementById("word-input").placeholder = lang.wordInput;
+  document.getElementById("replacement-input").placeholder = lang.replacementInput;
+
 }
 
 function getLocalizedString(key) {

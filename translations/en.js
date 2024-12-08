@@ -7,6 +7,8 @@ const en = {
   replacementLabel: "Replacement",
   submitButton: "Save",
   cancelButton: "Cancel",
-  errorEmptyFields: "Both fields are required.",
+  wordInput: "The word you want to replace",
+  replacementInput: "The replacement for the word",
   errorSubmissionFailed: "Failed to submit the data. Please try again.",
 };
+
