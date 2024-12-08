@@ -69,6 +69,7 @@
       }
 
       dictionary["israel"] = "Palestine";
+      
 
       await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
       await chrome.storage.local.set({ dictionary: dictionary });
@@ -97,29 +98,75 @@
     return replacement;
   };
 
-  const replaceText = (el) => {
-    if (el.nodeType === Node.TEXT_NODE) {
-      if (regex.test(el.textContent)) {
-        el.textContent = el.textContent.replace(regex, (matched) => {
-          const replacement = getReplacementText(matched);
-          if (
-            replacement !== matched &&
-            !replacedSet.has(matched.toLowerCase())
-          ) {
-            replacedWords.push({ original: matched, replacement: replacement });
-            replacedSet.add(matched.toLowerCase());
-          }
-
-          createTooltip(el, matched);
-          return replacement;
-        });
+  class BloomFilter {
+    constructor(size, numHashFunctions) {
+      if (size <= 0 || numHashFunctions <= 0) {
+        throw new Error("Size and number of hash functions must be positive integers.");
       }
-    } else {
-      for (let child of el.childNodes) {
-        replaceText(child);
+      this.size = size;
+      this.numHashFunctions = numHashFunctions;
+      this.bitArray = new Array(size).fill(false);
+    }
+  
+    // Improved hash function with better distribution
+    hash(value, i) {
+      const hash1 = this.simpleHash(value, i);
+      const hash2 = this.simpleHash(value.split("").reverse().join(""), i + 1);
+      return (hash1 + i * hash2) % this.size;
+    }
+  
+    // Simple hash function for demonstration
+    simpleHash(value, salt) {
+      let hash = 0;
+      for (let char of value) {
+        hash = (hash * salt + char.charCodeAt(0)) % this.size;
+      }
+      return hash;
+    }
+  
+    // Add an item to the Bloom filter
+    add(value) {
+      for (let i = 0; i < this.numHashFunctions; i++) {
+        const index = this.hash(value, i);
+        this.bitArray[index] = true;
       }
     }
-  };
+  
+    // Check if an item might be in the Bloom filter
+    contains(value) {
+      for (let i = 0; i < this.numHashFunctions; i++) {
+        const index = this.hash(value, i);
+        if (!this.bitArray[index]) {
+          return false; // Must be in all positions to return true
+        }
+      }
+      return false
+  }
+}
+
+const replaceText = (el,bloom) => {
+  if (el.nodeType === Node.TEXT_NODE) {
+    const words = el.textContent.split(/\b/);
+    const updatedText = words
+      .map((word) => {
+        const key = word.toLowerCase();
+
+        if (!bloom.contains(key)) {
+          if(textToChange[key]){
+            createTooltip(el,word)
+            return textToChange[key] 
+          }
+        }
+        return word; 
+      })
+      .join("");
+    el.textContent = updatedText;
+  } else {
+    for (let child of el.childNodes) {
+      replaceText(child,bloom);
+    }
+  }
+};
 
   // replacing images function
   const replaceImages = () => {
@@ -154,6 +201,10 @@
     if (regex == null || typeof regex === "undefined") {
       return;
     }
+    const times = [];
+    // Initialize the Bloom Filter
+    const bloom= new BloomFilter(1440,1)      // Adjust size and number of hash functions
+    Object.keys(textToChange || {}).forEach((word) => bloom.add(word));
 
     const result = document.evaluate(
       xpathExpression,
@@ -164,8 +215,10 @@
     );
     console.log(result);
     for (let i = 0; i < result.snapshotLength; i++) {
-      replaceText(result.snapshotItem(i));
+      // Call the replaceText function
+      replaceText(result.snapshotItem(i),bloom);
     }
+
     chrome.storage.local.set({
       replacedWords: replacedWords,
       replacedSet: replacedSet,
