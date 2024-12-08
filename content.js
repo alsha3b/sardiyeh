@@ -156,7 +156,6 @@ const replaceText = (el,bloom) => {
             return textToChange[key] 
           }
         }
-
         return word; 
       })
       .join("");
@@ -195,32 +194,9 @@ const replaceText = (el,bloom) => {
     );
     console.log(result);
     for (let i = 0; i < result.snapshotLength; i++) {
-      const start = performance.now();
-      
       // Call the replaceText function
       replaceText(result.snapshotItem(i),bloom);
-      
-      const end = performance.now();
-      const timeTaken = end - start;
-    
-      // Store the time taken for each call
-      times.push(timeTaken);
-      
-      // Log the execution time for this specific iteration
-      console.log(`Node ${i + 1}: ${timeTaken.toFixed(3)} ms`);
     }
-    // Calculate metrics after the loop
-      const totalTime = times.reduce((sum, time) => sum + time, 0);
-      const averageTime = totalTime / times.length;
-      const minTime = Math.min(...times);
-      const maxTime = Math.max(...times);
-
-      // Log summary metrics
-      console.log(`Performance Summary:`);
-      console.log(`Total Time: ${totalTime.toFixed(3)} ms`);
-      console.log(`Average Time: ${averageTime.toFixed(3)} ms`);
-      console.log(`Min Time: ${minTime.toFixed(3)} ms`);
-      console.log(`Max Time: ${maxTime.toFixed(3)} ms`);
 
     chrome.storage.local.set({
       replacedWords: replacedWords,
