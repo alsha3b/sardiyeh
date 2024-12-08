@@ -69,7 +69,7 @@
       }
 
       dictionary["israel"] = "Palestine";
-      dictionary["Tel Aviv"]="Yafa"
+      
 
       await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
       await chrome.storage.local.set({ dictionary: dictionary });
