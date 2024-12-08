@@ -121,6 +121,26 @@
     }
   };
 
+  // replacing images function
+  const replaceImages = () => {
+    // Locate the container of the flag by its class or other attributes
+    const flagContainer = document.querySelector("div.MRI68d");
+  
+    if (flagContainer) {
+      // Locate the <img> element inside the container
+      const flagImage = flagContainer.querySelector("img");
+  
+      if (flagImage) {
+        // Replace the image source with your custom image
+        const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png");
+        flagImage.src = newImageUrl; // Update the image source
+        flagImage.alt = "Replaced Flag"; // Optionally update the alt text
+      }
+    }
+  };
+  
+  
+
   const anyChildOfBody = "/html/body//";
   // const doesNotContainAncestorWithRoleTextbox =
   //   "div[not(ancestor-or-self::*[@role=textbox])]/";
@@ -151,6 +171,13 @@
       replacedSet: replacedSet,
     });
   };
+
+  // integrating the 'replaceTextInNodes' and 'replaceImages' functions
+  const replaceTextAndImages = () => {
+    replaceTextInNodes(); // Call text replacement function
+    replaceImages(); // Call image replacement function
+  };
+
 
   chrome.storage.sync.get(["ext_on"], async function (items) {
     if (chrome.runtime.lastError) {
@@ -201,12 +228,11 @@
       if (performance.now() - lastRun < 3000) {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-          replaceTextInNodes();
+          replaceTextAndImages();
           lastRun = performance.now();
         }, 600);
       } else {
-        replaceTextInNodes();
-
+        replaceTextAndImages();
         lastRun = performance.now();
       }
     });
@@ -218,6 +244,20 @@
       characterData: false,
       characterDataOldValue: false,
     });
+
+    chrome.storage.sync.get(["ext_on"], async function (items) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+        return;
+      }
+  
+      if (items.ext_on === false) {
+        return;
+      }
+  
+      replaceTextAndImages(); // Initial replacement when the extension is active
+    });
+
   });
 
   const createTooltip = (el, text) => {
