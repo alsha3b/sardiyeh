@@ -20,7 +20,7 @@
     ],
     "content_scripts": [
         {
-          "matches": ["https://*.google.com/*"],
+          "matches": ["<all_urls>"],
           "js": ["content.js"],
           "run_at":"document_end"
         }
@@ -28,7 +28,7 @@
       "web_accessible_resources": [
     {
       "resources": ["images/Palestine_Flag.png"],
-      "matches": ["https://*.google.com/*"] 
+      "matches": ["<all_urls>"] 
     }
   ],
   "icons": {
