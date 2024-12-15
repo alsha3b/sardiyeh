@@ -145,7 +145,7 @@
 
 const replaceText = (el,bloom) => {
   if (el.nodeType === Node.TEXT_NODE) {
-    const words = el.textContent.split(/\b/);
+    const words = el.textContent.split(regex);
     const updatedText = words
       .map((word) => {
         const key = word.toLowerCase();
