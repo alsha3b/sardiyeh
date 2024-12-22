@@ -88,6 +88,14 @@ body[dir="rtl"] {
   border-radius: 50%;
 }
 
+.replaced-word {
+  text-decoration: underline;
+  text-decoration-color: #D3A93C; /* Custom color for visibility */
+  text-decoration-thickness: 2px; /* Makes underline thicker */
+  cursor: pointer; /* Optional: Indicates interaction */
+  color: inherit; /* Keeps original text color */
+}
+
 
 
 input:checked+.slider {
