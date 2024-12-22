@@ -168,24 +168,23 @@ const replaceText = (el,bloom) => {
   }
 };
 
-  // replacing images function
-  const replaceImages = () => {
-    // Locate the container of the flag by its class or other attributes
-    const flagContainer = document.querySelector("div.MRI68d");
-  
-    if (flagContainer) {
-      // Locate the <img> element inside the container
-      const flagImage = flagContainer.querySelector("img");
-  
-      if (flagImage) {
-        // Replace the image source with your custom image
-        const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png");
-        flagImage.src = newImageUrl; // Update the image source
-        flagImage.alt = "Replaced Flag"; // Optionally update the alt text
-      }
-    }
-  };
-  
+
+
+  // Replacing images function
+const replaceImages = () => {
+  // Locate the container of the flag by its class or other attributes
+  const flagContainer = document.querySelector("div.MRI68d");
+  if (!flagContainer) return; 
+
+  // Locate the <img> element inside the container
+  const flagImage = flagContainer.querySelector("img");
+  if (!flagImage) return; 
+
+  const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png");
+  flagImage.src = newImageUrl; 
+  flagImage.alt = "Replaced Flag"; 
+};
+
   
 
   const anyChildOfBody = "/html/body//";
