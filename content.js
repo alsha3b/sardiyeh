@@ -120,6 +120,7 @@
       this.numHashFunctions = numHashFunctions;
       this.bitArray = new Array(size).fill(false);
     }
+    //dwdwe
   
     // Improved hash function with better distribution
     hash(value, i) {
@@ -159,7 +160,7 @@
 
 const replaceText = (el,bloom) => {
   if (el.nodeType === Node.TEXT_NODE) {
-    const words = el.textContent.split(/\b/);
+    const words = el.textContent.split(regex);
     const updatedText = words
       .map((word) => {
         const key = word.toLowerCase();
