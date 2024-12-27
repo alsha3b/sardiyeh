@@ -14,8 +14,6 @@
     return null;
   }
 
-
-
   // Function to save dictionary to local storage
   function saveDictionaryToLocalStorage(dictionary) {
     const timestamp = new Date();
@@ -69,7 +67,6 @@
       }
 
       dictionary["israel"] = "Palestine";
-      
 
       await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
       await chrome.storage.local.set({ dictionary: dictionary });
@@ -101,20 +98,22 @@
   class BloomFilter {
     constructor(size, numHashFunctions) {
       if (size <= 0 || numHashFunctions <= 0) {
-        throw new Error("Size and number of hash functions must be positive integers.");
+        throw new Error(
+          "Size and number of hash functions must be positive integers."
+        );
       }
       this.size = size;
       this.numHashFunctions = numHashFunctions;
       this.bitArray = new Array(size).fill(false);
     }
-  
+
     // Improved hash function with better distribution
     hash(value, i) {
       const hash1 = this.simpleHash(value, i);
       const hash2 = this.simpleHash(value.split("").reverse().join(""), i + 1);
       return (hash1 + i * hash2) % this.size;
     }
-  
+
     // Simple hash function for demonstration
     simpleHash(value, salt) {
       let hash = 0;
@@ -123,7 +122,7 @@
       }
       return hash;
     }
-  
+
     // Add an item to the Bloom filter
     add(value) {
       for (let i = 0; i < this.numHashFunctions; i++) {
@@ -131,7 +130,7 @@
         this.bitArray[index] = true;
       }
     }
-  
+
     // Check if an item might be in the Bloom filter
     contains(value) {
       for (let i = 0; i < this.numHashFunctions; i++) {
@@ -140,57 +139,64 @@
           return false; // Must be in all positions to return true
         }
       }
-      return false
-  }
-}
-
-const replaceText = (el,bloom) => {
-  if (el.nodeType === Node.TEXT_NODE) {
-    const words = el.textContent.split(/\b/);
-    const updatedText = words
-      .map((word) => {
-        const key = word.toLowerCase();
-
-        if (!bloom.contains(key)) {
-          if(textToChange[key]){
-            createTooltip(el,word)
-            return textToChange[key] 
-          }
-        }
-        return word; 
-      })
-      .join("");
-    el.textContent = updatedText;
-  } else {
-    for (let child of el.childNodes) {
-      replaceText(child,bloom);
+      return false;
     }
   }
-};
 
+  const replaceText = (el, bloom) => {
+    if (el.nodeType === Node.TEXT_NODE) {
+      const words = el.textContent.split(/\b/);
+      const updatedText = words
+        .map((word) => {
+          const key = word.toLowerCase();
 
+          if (!bloom.contains(key)) {
+            if (textToChange[key]) {
+              createTooltip(el, word);
+              return textToChange[key];
+            }
+          }
+          return word;
+        })
+        .join("");
+      el.textContent = updatedText;
+    } else {
+      for (let child of el.childNodes) {
+        replaceText(child, bloom);
+      }
+    }
+  };
 
   // Replacing images function
-const replaceImages = () => {
-  // Locate the container of the flag by its class or other attributes
-  const flagContainer = document.querySelector("div.MRI68d");
-  if (!flagContainer) return; 
+  const replaceImages = () => {
+    // Locate the container of the flag by its class or other attributes
+    const flagContainer = document.querySelector("div.MRI68d");
 
-  // Locate the <img> element inside the container
-  const flagImage = flagContainer.querySelector("img");
-  if (!flagImage) return; 
+    console.log("did not find flag container ? ", flagContainer);
+    if (!flagContainer) return;
 
-  const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png");
-  flagImage.src = newImageUrl; 
-  flagImage.alt = "Replaced Flag"; 
-};
+    console.log("foiund the container");
 
-  
+    // Locate the <img> element inside the container
+    const flagImage = flagContainer.querySelector("img");
+
+    console.log("img child element is ", flagImage);
+    if (!flagImage) return;
+
+    console.log("flag image is now present");
+
+    const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png");
+    flagImage.src = newImageUrl;
+    flagImage.alt = "Palestine Flag";
+
+    console.log("replace successful");
+  };
 
   const anyChildOfBody = "/html/body//";
   // const doesNotContainAncestorWithRoleTextbox =
   //   "div[not(ancestor-or-self::*[@role=textbox])]/";
-  const isTextButNotPartOfJsScriptOrTooltip = "text()[not(parent::script) and not(ancestor::*[contains(@class, 'tooltip')])]";
+  const isTextButNotPartOfJsScriptOrTooltip =
+    "text()[not(parent::script) and not(ancestor::*[contains(@class, 'tooltip')])]";
   const xpathExpression =
     anyChildOfBody +
     //  + doesNotContainAncestorWithRoleTextbox;
@@ -202,7 +208,7 @@ const replaceImages = () => {
     }
     const times = [];
     // Initialize the Bloom Filter
-    const bloom= new BloomFilter(1440,1)      // Adjust size and number of hash functions
+    const bloom = new BloomFilter(1440, 1); // Adjust size and number of hash functions
     Object.keys(textToChange || {}).forEach((word) => bloom.add(word));
 
     const result = document.evaluate(
@@ -215,7 +221,7 @@ const replaceImages = () => {
     console.log(result);
     for (let i = 0; i < result.snapshotLength; i++) {
       // Call the replaceText function
-      replaceText(result.snapshotItem(i),bloom);
+      replaceText(result.snapshotItem(i), bloom);
     }
 
     chrome.storage.local.set({
@@ -229,7 +235,6 @@ const replaceImages = () => {
     replaceTextInNodes(); // Call text replacement function
     replaceImages(); // Call image replacement function
   };
-
 
   chrome.storage.sync.get(["ext_on"], async function (items) {
     if (chrome.runtime.lastError) {
@@ -302,14 +307,13 @@ const replaceImages = () => {
         console.error(chrome.runtime.lastError);
         return;
       }
-  
+
       if (items.ext_on === false) {
         return;
       }
-  
+
       replaceTextAndImages(); // Initial replacement when the extension is active
     });
-
   });
 
   const createTooltip = (el, text) => {
