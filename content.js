@@ -1,44 +1,6 @@
 // Main script that works on chrome pages
 
 (() => {
-  // Function to get dictionary from local storage
-  function getDictionaryFromLocalStorage() {
-    const dictionary = localStorage.getItem("dictionary");
-    const timestamp = localStorage.getItem("dictionaryTimestamp");
-    if (dictionary && timestamp) {
-      return {
-        data: JSON.parse(dictionary),
-        timestamp: new Date(timestamp),
-      };
-    }
-    return null;
-  }
-
-
-
-  // Function to save dictionary to local storage
-  function saveDictionaryToLocalStorage(dictionary) {
-    const timestamp = new Date();
-    localStorage.setItem("dictionary", JSON.stringify(dictionary));
-    localStorage.setItem("dictionaryTimestamp", timestamp.toISOString());
-  }
-
-  // Function to check if a week has passed since the last update
-  function isWeekPassed(timestamp) {
-    const now = new Date();
-    const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-    return now - timestamp > weekInMilliseconds;
-  }
-
-  // Main function to get dictionary
-  async function getDictionary() {
-    let dictionaryData = getDictionaryFromLocalStorage();
-    if (dictionaryData && !isWeekPassed(dictionaryData.timestamp)) {
-      return dictionaryData.data;
-    } else {
-      return await fetchDictionary();
-    }
-  }
 
   async function fetchDictionary() {
     try {
@@ -80,6 +42,57 @@
       console.error("Error fetching dictionary:", error);
     }
   }
+
+  // Function to save dictionary to local storage
+  function saveDictionaryToLocalStorage(dictionary) {
+    const timestamp = new Date();
+    localStorage.setItem("dictionary", JSON.stringify(dictionary));
+    localStorage.setItem("dictionaryTimestamp", timestamp.toISOString());
+  }
+
+  // Function to check if a week has passed since the last update
+  function isWeekPassed(timestamp) {
+    const now = new Date();
+    const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+    let x=0
+    if (now -timestamp>weekInMilliseconds){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
+  // Function to get dictionary from local storage
+  function getDictionaryFromLocalStorage() {
+    const dictionary = localStorage.getItem("dictionary");
+    const timestamp = localStorage.getItem("dictionaryTimestamp");
+    if (dictionary && timestamp) {
+      return {
+        data: JSON.parse(dictionary),
+        timestamp: new Date(timestamp),
+      };
+    }
+    return null;
+  }
+
+  // Main function to get dictionary
+  async function getDictionary() {
+    let dictionaryData = getDictionaryFromLocalStorage();
+    if (dictionaryData && !isWeekPassed(dictionaryData.timestamp)) {
+      console.log("not fetching")
+      return dictionaryData.data;
+    } 
+      console.log("fetchingg")
+      const newDictionary= await fetchDictionary();
+      if(newDictionary){
+        saveDictionaryToLocalStorage(newDictionary)
+      }
+      return newDictionary
+    
+  }
+
+  
 
   let textToChange;
   let regex;
@@ -168,6 +181,26 @@ const replaceText = (el,bloom) => {
   }
 };
 
+  // replacing images function
+  const replaceImages = () => {
+    // Locate the container of the flag by its class or other attributes
+    const flagContainer = document.querySelector("div.MRI68d");
+  
+    if (flagContainer) {
+      // Locate the <img> element inside the container
+      const flagImage = flagContainer.querySelector("img");
+  
+      if (flagImage) {
+        // Replace the image source with your custom image
+        const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png");
+        flagImage.src = newImageUrl; // Update the image source
+        flagImage.alt = "Replaced Flag"; // Optionally update the alt text
+      }
+    }
+  };
+  
+  
+
   const anyChildOfBody = "/html/body//";
   // const doesNotContainAncestorWithRoleTextbox =
   //   "div[not(ancestor-or-self::*[@role=textbox])]/";
@@ -204,6 +237,13 @@ const replaceText = (el,bloom) => {
       replacedSet: replacedSet,
     });
   };
+
+  // integrating the 'replaceTextInNodes' and 'replaceImages' functions
+  const replaceTextAndImages = () => {
+    replaceTextInNodes(); // Call text replacement function
+    replaceImages(); // Call image replacement function
+  };
+
 
   chrome.storage.sync.get(["ext_on"], async function (items) {
     if (chrome.runtime.lastError) {
@@ -254,12 +294,11 @@ const replaceText = (el,bloom) => {
       if (performance.now() - lastRun < 3000) {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-          replaceTextInNodes();
+          replaceTextAndImages();
           lastRun = performance.now();
         }, 600);
       } else {
-        replaceTextInNodes();
-
+        replaceTextAndImages();
         lastRun = performance.now();
       }
     });
@@ -271,6 +310,20 @@ const replaceText = (el,bloom) => {
       characterData: false,
       characterDataOldValue: false,
     });
+
+    chrome.storage.sync.get(["ext_on"], async function (items) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+        return;
+      }
+  
+      if (items.ext_on === false) {
+        return;
+      }
+  
+      replaceTextAndImages(); // Initial replacement when the extension is active
+    });
+
   });
 
   const createTooltip = (el, text) => {
