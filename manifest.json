@@ -1,27 +1,30 @@
 {
-    "name": "سرديّة",
-    "version": "1.0.2",
-    "description": "نروي السرديّة الفلسطينية",
-    "manifest_version": 3,
-    "author": "الشعب",
-    "action":{
-        "default_popup": "index.html",
-        "default_title": "سرديّة",
-        "default_icon": {
-          "16": "icons/icon16.png",
-          "32": "icons/icon32.png",
-          "48": "icons/icon48.png",
-          "128": "icons/icon128.png"
-        }
-    },
-"permissions": [
-        
-        "storage"
-    ],
-    "content_scripts": [
-        {
-          "matches": ["<all_urls>"],
-          "js": ["content.js"]
-        }
-      ]
+  "name": "سرديّة",
+  "description": "نروي السرديّة الفلسطينية",
+  "version": "1.0.3",
+  "manifest_version": 3,
+  "author": "الشعب",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "سرديّة",
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "permissions": ["storage"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "sardiya@alsha3b.ps",
+      "strict_min_version": "109.0"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
 }
