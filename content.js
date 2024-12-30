@@ -141,6 +141,7 @@
       return false
   }
 }
+
 const replaceText = (el, bloom) => {
   if (el.nodeType === Node.TEXT_NODE) {
     const words = el.textContent.split(regex);
@@ -192,10 +193,11 @@ const replaceText = (el, bloom) => {
   // const doesNotContainAncestorWithRoleTextbox =
   //   "div[not(ancestor-or-self::*[@role=textbox])]/";
   const isTextButNotPartOfJsScriptOrTooltip = "text()[not(parent::script) and not(ancestor::*[contains(@class, 'tooltip')])]";
-  const xpathExpression =
-    anyChildOfBody +
-    //  + doesNotContainAncestorWithRoleTextbox;
-    isTextButNotPartOfJsScriptOrTooltip;
+  const xpathExpression = `
+  ${anyChildOfBody}
+  ${isTextButNotPartOfJsScriptOrTooltip}
+  | //input | //textarea
+`;
 
     
   const replaceTextInNodes = () => {
