@@ -142,21 +142,18 @@
   }
 }
 const replaceText = (el, bloom) => {
-  if (el.nodeType === Node.TEXT_NODE) { 
+  if (el.nodeType === Node.TEXT_NODE) {
     const words = el.textContent.split(regex);
     const updatedNodes = words.map((word) => {
       const key = word.toLowerCase();
 
       if (!bloom.contains(key) && textToChange[key]) {
         const replacement = textToChange[key];
-
-        // Collect replaced words for popup display
         if (!replacedSet.has(word)) {
           replacedSet.add(word);
           replacedWords.push({ word, replacement });
         }
 
-        // Create styled replacement span
         const span = document.createElement("span");
         span.textContent = replacement;
         span.style.textDecoration = "underline";
@@ -166,27 +163,35 @@ const replaceText = (el, bloom) => {
         return span;
       }
 
-      // Return original text if no replacement
       return document.createTextNode(word);
     });
 
-    // Replace the original text content
     const parent = el.parentNode;
     if (parent) {
       updatedNodes.forEach((node) => parent.insertBefore(node, el));
       parent.removeChild(el);
     }
-  }else {
+  } else if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+    const value = el.value;
+    const words = value.split(regex);
+    const updatedValue = words
+      .map((word) =>
+        textToChange[word.toLowerCase()] ? textToChange[word.toLowerCase()] : word
+      )
+      .join("");
+    el.value = updatedValue;
+  } else {
     for (let child of el.childNodes) {
       replaceText(child, bloom);
     }
   }
 };
 
+
   const anyChildOfBody = "/html/body//";
   // const doesNotContainAncestorWithRoleTextbox =
   //   "div[not(ancestor-or-self::*[@role=textbox])]/";
-  const isTextButNotPartOfJsScriptOrTooltip = "text()[not(parent::script) and not(ancestor::*[contains(@class, 'tooltip')])] | //input | //textarea";
+  const isTextButNotPartOfJsScriptOrTooltip = "text()[not(parent::script) and not(ancestor::*[contains(@class, 'tooltip')])]";
   const xpathExpression =
     anyChildOfBody +
     //  + doesNotContainAncestorWithRoleTextbox;
