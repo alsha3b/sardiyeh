@@ -9,4 +9,7 @@ const en = {
   cancelButton: "Go back",
   errorEmptyFields: "Both fields are required.",
   errorSubmissionFailed: "Failed to submit the data. Please try again.",
+
+  turnOffMessage: "If you want to turn off the extension, please reload the page.",
+  reloadButton: "Reload",
 };

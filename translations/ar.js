@@ -9,4 +9,7 @@ const ar = {
   cancelButton: "إلغاء",
   errorEmptyFields: "يجب ملء كلا الحقلين.",
   errorSubmissionFailed: "فشل في إرسال البيانات. يرجى المحاولة مرة أخرى.",
+  
+  turnOffMessage: "إذا كنت ترغب في إيقاف تشغيل الإضافة، فالرجاء إعادة تحميل الصفحة.",
+  reloadButton: "إعادة تحميل"
 };
