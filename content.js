@@ -1,8 +1,72 @@
 // Main script that works on chrome pages
 
 (() => {
+
+  let shouldChangeText = true;
+  const replacedWords = [];
+  const replacedSet = new Set();
+
+  // takes in the array of obj and returns it as a dict.
+  const parseTranslationData = (data) => {
+    const res = {}
+
+    for (let item of data) {
+      res[item.translation] = item.value;
+    }
+    return res
+  }
+
+  const fetchDictionary = async () => {
+    const url = "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/test/translation"
+
+    try {
+      const response = await fetch(
+        url,
+      );
+
+      const res = await response.json();
+
+      const data = res.data
+
+      if (!data) {
+        shouldChangeText = false;
+        return;
+      }
+      const dictionary = parseTranslationData(data)
+      console.log(dictionary)
+      await chrome.storage.sync.set({ dictionary: dictionary }, () => { });
+      await chrome.storage.local.set({ dictionary: dictionary });
+
+      saveDictionaryToLocalStorage(dictionary);
+      return dictionary;
+    } catch (error) {
+      console.error("Error fetching dictionary:", error);
+    }
+  }
+
+  // Function to save dictionary to local storage
+  const saveDictionaryToLocalStorage = (dictionary) => {
+    const timestamp = new Date();
+    localStorage.setItem("dictionary", JSON.stringify(dictionary));
+    localStorage.setItem("dictionaryTimestamp", timestamp.toISOString());
+
+  }
+
+  // Function to check if a week has passed since the last update
+  const isWeekPassed = (timestamp) => {
+    const now = new Date();
+    const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+    let x = 0
+    if (now - timestamp > weekInMilliseconds) {
+      return true
+    }
+    else {
+      return false
+    }
+  }
+
   // Function to get dictionary from local storage
-  function getDictionaryFromLocalStorage() {
+  const getDictionaryFromLocalStorage = () => {
     const dictionary = localStorage.getItem("dictionary");
     const timestamp = localStorage.getItem("dictionaryTimestamp");
     if (dictionary && timestamp) {
@@ -14,140 +78,111 @@
     return null;
   }
 
-  // Function to save dictionary to local storage
-  function saveDictionaryToLocalStorage(dictionary) {
-    const timestamp = new Date();
-    localStorage.setItem("dictionary", JSON.stringify(dictionary));
-    localStorage.setItem("dictionaryTimestamp", timestamp.toISOString());
-  }
-
-  // Function to check if a week has passed since the last update
-  function isWeekPassed(timestamp) {
-    const now = new Date();
-    const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-    return now - timestamp > weekInMilliseconds;
-  }
-
   // Main function to get dictionary
-  async function getDictionary() {
+  const getDictionary = async () => {
     let dictionaryData = getDictionaryFromLocalStorage();
+    console.log(dictionaryData)
     if (dictionaryData && !isWeekPassed(dictionaryData.timestamp)) {
       return dictionaryData.data;
-    } else {
-      return await fetchDictionary();
     }
+    const newDictionary = await fetchDictionary();
+    if (newDictionary) {
+      saveDictionaryToLocalStorage(newDictionary)
+    }
+    return newDictionary
+
   }
 
-  async function fetchDictionary() {
-    try {
-      response = await fetch(
-        // "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/prod/translation",
-        // {
-        //   method: "GET",
-        // }
-        "https://api.jsonbin.io/v3/b/669bb785e41b4d34e41497e4",
-        {
-          method: "GET",
-          headers: {
-            "X-Access-Key":
-              "$2a$10$D40ON/o9o/wDGqEu281T5e/t.DQ8NipDJAXRYc/conOeNaUuvxIRS",
-          },
-        }
-      );
+  // replacing images function
+  const replaceImages = () => {
+    // Locate the container of the flag by its class or other attributes
+    const flagContainer = document.querySelector("div.MRI68d");
+    if (!flagContainer) return;
 
-      data = await response.json();
+    const flagImage = flagContainer.querySelector("img");
+    if (!flagImage) return;
 
-      console.log("data is ", data);
+    const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png") + `?t=${Date.now()}`;
+    flagImage.src = newImageUrl;
 
-      const dictionary = data["record"];
-
-      if (dictionary == null || typeof dictionary === "undefined") {
-        textToChange = false;
-        return;
-      }
-
-      dictionary["israel"] = "Palestine";
-
-      await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
-      await chrome.storage.local.set({ dictionary: dictionary });
-
-      saveDictionaryToLocalStorage(dictionary);
-      return dictionary;
-    } catch (error) {
-      console.error("Error fetching dictionary:", error);
-    }
-  }
-
-  let textToChange;
-  let regex;
-
-  const replacedWords = [];
-  const replacedSet = new Set();
-
-  const getReplacementText = (text) => {
-    let replacement = textToChange[text.toLowerCase()];
-    if (!replacement) {
-      return text;
-    }
-    if (text.charAt(0) === text.charAt(0).toUpperCase()) {
-      replacement = replacement.charAt(0).toUpperCase() + replacement.slice(1);
-    }
-    return replacement;
+    flagImage.alt = "Replaced Flag";
   };
 
-  const replaceText = (el) => {
-    if (el.nodeType === Node.TEXT_NODE) {
-      if (regex.test(el.textContent)) {
-        el.textContent = el.textContent.replace(regex, (matched) => {
-          const replacement = getReplacementText(matched);
-          if (
-            replacement !== matched &&
-            !replacedSet.has(matched.toLowerCase())
-          ) {
-            replacedWords.push({ original: matched, replacement: replacement });
-            replacedSet.add(matched.toLowerCase());
-          }
-
-          createTooltip(el, matched);
-          return replacement;
-        });
-      }
-    } else {
-      for (let child of el.childNodes) {
-        replaceText(child);
-      }
-    }
+  const escapeRegExp = (str) => {
+    // Commonly used snippet to escape special regex chars
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   };
 
-  const anyChildOfBody = "/html/body//";
-  // const doesNotContainAncestorWithRoleTextbox =
-  //   "div[not(ancestor-or-self::*[@role=textbox])]/";
-  const isTextButNotPartOfJsScriptOrTooltip = "text()[not(parent::script) and not(ancestor::*[contains(@class, 'tooltip')])]";
-  const xpathExpression =
-    anyChildOfBody +
-    //  + doesNotContainAncestorWithRoleTextbox;
-    isTextButNotPartOfJsScriptOrTooltip;
+  const replaceWordsInDOM = (dictionary) => {
 
-  const replaceTextInNodes = () => {
-    if (regex == null || typeof regex === "undefined") {
+    if (!dictionary || Object.keys(dictionary).length === 0) return;
+
+    // Build a single RegExp from all keys in the dictionary
+    //   - Escapes special characters so they won't break the RegExp.
+    //   - Joins them in a capturing group, e.g. "\b(word1|word2|...)\b"
+    const pattern = "\\b(" +
+      Object.keys(dictionary)
+        .map(escapeRegExp)
+        .join("|") +
+      ")\\b";
+    const regex = new RegExp(pattern, "gi");
+
+    replaceTextNodes(document.body, dictionary, regex);
+    chrome.storage.local.set({
+      replacedWords,
+      replacedSet
+    });
+  };
+
+  const shouldSkipNode = (node) => {
+    // Only element nodes can be input/textarea/contenteditable
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      // 1) Matches any literal input or textarea elements
+      // 2) Checks isContentEditable (true if this or an ancestor has contenteditable attribute)
+      // 3) Matches role="textbox" (used by some WYSIWYG editors, messaging apps, etc.)
+      if (
+        node.matches("input, textarea, [role='textbox']") ||
+        node.isContentEditable
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const replaceTextNodes = (node, dictionary, regex) => {
+    if (shouldSkipNode(node)) {
       return;
     }
-
-    const result = document.evaluate(
-      xpathExpression,
-      document,
-      null,
-      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-      null
-    );
-    console.log(result);
-    for (let i = 0; i < result.snapshotLength; i++) {
-      replaceText(result.snapshotItem(i));
+    if (node.nodeType === Node.ELEMENT_NODE && node.matches("input, textarea")) {
+      return;
     }
-    chrome.storage.local.set({
-      replacedWords: replacedWords,
-      replacedSet: replacedSet,
-    });
+    if (node.nodeType === Node.TEXT_NODE) {
+      node.textContent = node.textContent.replace(regex, (matchedWord) => {
+        const lower = matchedWord.toLowerCase();
+
+        if (!dictionary[lower]) return matchedWord
+
+        if (!replacedSet.has(lower)) {
+          replacedWords.push({
+            original: matchedWord,
+            replacement: dictionary[lower],
+          });
+        }
+        replacedSet.add(lower);
+        return dictionary[lower];
+      });
+    } else {
+      node.childNodes.forEach((child) => {
+        replaceTextNodes(child, dictionary, regex);
+      });
+    }
+  };
+
+
+  const replaceTextAndImages = (dictData) => {
+    replaceWordsInDOM(dictData);
+    replaceImages();
   };
 
   chrome.storage.sync.get(["ext_on"], async function (items) {
@@ -155,27 +190,11 @@
       console.error(chrome.runtime.lastError);
       return;
     }
+    const dictData = await getDictionary()
 
-    if (items.ext_on === false) {
-      return;
-    }
+    if (!items.ext_on) return;
 
-    if (textToChange === false) {
-      return;
-    }
-
-    if (textToChange == null || typeof textToChange === "undefined") {
-      textToChange = await getDictionary();
-
-      if (textToChange == null || typeof textToChange === "undefined") {
-        return;
-      }
-
-      regex = new RegExp(
-        "\\b(" + Object.keys(textToChange).join("|") + ")\\b",
-        "gi"
-      );
-    }
+    if (!shouldChangeText) return;
 
     if (replacedWords.length > 0) {
       chrome.storage.local.set({
@@ -188,23 +207,29 @@
     let lastRun = performance.now();
 
     const observer = new MutationObserver((mutations) => {
+
       const shouldUpdate = mutations.some((mutation) => {
-        return mutation.type === "childList" && mutation.addedNodes.length > 0;
+        if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+          return Array.from(mutation.addedNodes).some((node) => {
+            const insideInputLike = node.closest?.("input, textarea, [role='textbox']")
+              || node.isContentEditable
+              || node.parentNode?.isContentEditable;
+            return !insideInputLike;
+          });
+        }
+        return false;
       });
 
-      if (!shouldUpdate) {
-        return;
-      }
+      if (!shouldUpdate) return;
 
       if (performance.now() - lastRun < 3000) {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-          replaceTextInNodes();
+          replaceTextAndImages(dictData);
           lastRun = performance.now();
         }, 600);
       } else {
-        replaceTextInNodes();
-
+        replaceTextAndImages(dictData);
         lastRun = performance.now();
       }
     });
@@ -216,6 +241,20 @@
       characterData: false,
       characterDataOldValue: false,
     });
+
+    chrome.storage.sync.get(["ext_on"], async function (items) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+        return;
+      }
+
+      if (items.ext_on === false) {
+        return;
+      }
+
+      replaceTextAndImages(dictData);
+    });
+
   });
 
   const createTooltip = (el, text) => {
@@ -232,10 +271,10 @@
       text == "Haifa" || text == "haifa"
         ? haifaText
         : text == "Jerusalem" || text == "jerusalem"
-        ? jerusalemText
-        : text == "Nazareth" || text == "nazareth"
-        ? nazarethText
-        : text;
+          ? jerusalemText
+          : text == "Nazareth" || text == "nazareth"
+            ? nazarethText
+            : text;
 
     newElement.innerText = toolTipText;
     newElement.classList.add("tooltip");
@@ -263,9 +302,8 @@
     parentNode.addEventListener("mouseenter", function () {
       const rect = parentNode.getBoundingClientRect(); // Get the element's position
       newElement.style.left = `${rect.left + window.scrollX}px`;
-      newElement.style.top = `${
-        rect.top + window.scrollY - newElement.offsetHeight
-      }px`;
+      newElement.style.top = `${rect.top + window.scrollY - newElement.offsetHeight
+        }px`;
       newElement.style.visibility = "visible";
     });
 
