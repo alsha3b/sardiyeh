@@ -256,6 +256,7 @@ function setLanguage(language) {
     document.body.style.fontFamily = "'Beiruti', sans-serif";
   }
 }
+
 function loadLanguage(lang) {
   // document.getElementById("header-text").textContent = lang.pluginName;
   document.getElementById("replaced-words-title").textContent =
