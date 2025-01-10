@@ -1,40 +1,38 @@
 // Main script that works on chrome pages
 
 (() => {
-
   let shouldChangeText = true;
   const replacedWords = [];
   const replacedSet = new Set();
 
   // takes in the array of obj and returns it as a dict.
   const parseTranslationData = (data) => {
-    const res = {}
+    const res = {};
 
     for (let item of data) {
       res[item.translation] = item.value;
     }
-    return res
-  }
+    return res;
+  };
 
   const fetchDictionary = async () => {
-    const url = "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/test/translation"
+    const url =
+      "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/test/translation";
 
     try {
-      const response = await fetch(
-        url,
-      );
+      const response = await fetch(url);
 
       const res = await response.json();
 
-      const data = res.data
+      const data = res.data;
 
       if (!data) {
         shouldChangeText = false;
         return;
       }
-      const dictionary = parseTranslationData(data)
-      console.log(dictionary)
-      await chrome.storage.sync.set({ dictionary: dictionary }, () => { });
+      const dictionary = parseTranslationData(data);
+      console.log(dictionary);
+      await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
       await chrome.storage.local.set({ dictionary: dictionary });
 
       saveDictionaryToLocalStorage(dictionary);
@@ -42,28 +40,26 @@
     } catch (error) {
       console.error("Error fetching dictionary:", error);
     }
-  }
+  };
 
   // Function to save dictionary to local storage
   const saveDictionaryToLocalStorage = (dictionary) => {
     const timestamp = new Date();
     localStorage.setItem("dictionary", JSON.stringify(dictionary));
     localStorage.setItem("dictionaryTimestamp", timestamp.toISOString());
-
-  }
+  };
 
   // Function to check if a week has passed since the last update
   const isWeekPassed = (timestamp) => {
     const now = new Date();
     const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-    let x = 0
+    let x = 0;
     if (now - timestamp > weekInMilliseconds) {
-      return true
+      return true;
+    } else {
+      return false;
     }
-    else {
-      return false
-    }
-  }
+  };
 
   // Function to get dictionary from local storage
   const getDictionaryFromLocalStorage = () => {
@@ -76,22 +72,21 @@
       };
     }
     return null;
-  }
+  };
 
   // Main function to get dictionary
   const getDictionary = async () => {
     let dictionaryData = getDictionaryFromLocalStorage();
-    console.log(dictionaryData)
+    console.log(dictionaryData);
     if (dictionaryData && !isWeekPassed(dictionaryData.timestamp)) {
       return dictionaryData.data;
     }
     const newDictionary = await fetchDictionary();
     if (newDictionary) {
-      saveDictionaryToLocalStorage(newDictionary)
+      saveDictionaryToLocalStorage(newDictionary);
     }
-    return newDictionary
-
-  }
+    return newDictionary;
+  };
 
   // replacing images function
   const replaceImages = () => {
@@ -102,7 +97,8 @@
     const flagImage = flagContainer.querySelector("img");
     if (!flagImage) return;
 
-    const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png") + `?t=${Date.now()}`;
+    const newImageUrl =
+      chrome.runtime.getURL("images/Palestine_Flag.png") + `?t=${Date.now()}`;
     flagImage.src = newImageUrl;
 
     flagImage.alt = "Replaced Flag";
@@ -114,23 +110,19 @@
   };
 
   const replaceWordsInDOM = (dictionary) => {
-
     if (!dictionary || Object.keys(dictionary).length === 0) return;
 
     // Build a single RegExp from all keys in the dictionary
     //   - Escapes special characters so they won't break the RegExp.
     //   - Joins them in a capturing group, e.g. "\b(word1|word2|...)\b"
-    const pattern = "\\b(" +
-      Object.keys(dictionary)
-        .map(escapeRegExp)
-        .join("|") +
-      ")\\b";
+    const pattern =
+      "\\b(" + Object.keys(dictionary).map(escapeRegExp).join("|") + ")\\b";
     const regex = new RegExp(pattern, "gi");
 
     replaceTextNodes(document.body, dictionary, regex);
     chrome.storage.local.set({
       replacedWords,
-      replacedSet
+      replacedSet,
     });
   };
 
@@ -154,14 +146,17 @@
     if (shouldSkipNode(node)) {
       return;
     }
-    if (node.nodeType === Node.ELEMENT_NODE && node.matches("input, textarea")) {
+    if (
+      node.nodeType === Node.ELEMENT_NODE &&
+      node.matches("input, textarea")
+    ) {
       return;
     }
     if (node.nodeType === Node.TEXT_NODE) {
       node.textContent = node.textContent.replace(regex, (matchedWord) => {
         const lower = matchedWord.toLowerCase();
 
-        if (!dictionary[lower]) return matchedWord
+        if (!dictionary[lower]) return matchedWord;
 
         if (!replacedSet.has(lower)) {
           replacedWords.push({
@@ -170,6 +165,7 @@
           });
         }
         replacedSet.add(lower);
+        // createTooltip(node, matchedWord);
         return dictionary[lower];
       });
     } else {
@@ -178,7 +174,6 @@
       });
     }
   };
-
 
   const replaceTextAndImages = (dictData) => {
     replaceWordsInDOM(dictData);
@@ -190,7 +185,7 @@
       console.error(chrome.runtime.lastError);
       return;
     }
-    const dictData = await getDictionary()
+    const dictData = await getDictionary();
 
     if (!items.ext_on) return;
 
@@ -207,13 +202,13 @@
     let lastRun = performance.now();
 
     const observer = new MutationObserver((mutations) => {
-
       const shouldUpdate = mutations.some((mutation) => {
         if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
           return Array.from(mutation.addedNodes).some((node) => {
-            const insideInputLike = node.closest?.("input, textarea, [role='textbox']")
-              || node.isContentEditable
-              || node.parentNode?.isContentEditable;
+            const insideInputLike =
+              node.closest?.("input, textarea, [role='textbox']") ||
+              node.isContentEditable ||
+              node.parentNode?.isContentEditable;
             return !insideInputLike;
           });
         }
@@ -254,7 +249,6 @@
 
       replaceTextAndImages(dictData);
     });
-
   });
 
   const createTooltip = (el, text) => {
@@ -271,10 +265,10 @@
       text == "Haifa" || text == "haifa"
         ? haifaText
         : text == "Jerusalem" || text == "jerusalem"
-          ? jerusalemText
-          : text == "Nazareth" || text == "nazareth"
-            ? nazarethText
-            : text;
+        ? jerusalemText
+        : text == "Nazareth" || text == "nazareth"
+        ? nazarethText
+        : text;
 
     newElement.innerText = toolTipText;
     newElement.classList.add("tooltip");
@@ -302,8 +296,9 @@
     parentNode.addEventListener("mouseenter", function () {
       const rect = parentNode.getBoundingClientRect(); // Get the element's position
       newElement.style.left = `${rect.left + window.scrollX}px`;
-      newElement.style.top = `${rect.top + window.scrollY - newElement.offsetHeight
-        }px`;
+      newElement.style.top = `${
+        rect.top + window.scrollY - newElement.offsetHeight
+      }px`;
       newElement.style.visibility = "visible";
     });
 
