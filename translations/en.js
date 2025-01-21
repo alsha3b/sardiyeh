@@ -9,6 +9,6 @@ const en = {
   cancelButton: "Cancel",
   wordInput: "The word you want to replace",
   replacementInput: "The replacement for the word",
-  errorSubmissionFailed: "Failed to submit the data. Please try again.",
+  errorSubmissionFailed: "Failed to submit the data! Please try again.",
 };
 

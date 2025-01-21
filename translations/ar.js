@@ -9,6 +9,6 @@ const ar = {
   cancelButton: "إلغاء",
   wordInput: "الكلمة التي تريد تعديلها",
   replacementInput: "الكلمة الاصلية",
-  errorSubmissionFailed: "فشل في إرسال البيانات. يرجى المحاولة مرة أخرى.",
+  errorSubmissionFailed: "فشل في إرسال البيانات! يرجى المحاولة مرة أخرى.",
 };
 

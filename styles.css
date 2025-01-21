@@ -1,17 +1,19 @@
 /* styles.css */
 
+
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Space Mono', sans-serif;
   background-color: #FAFAFA;
   border-radius: 12px;
   padding: 0px;
   margin: 0px;
+  font-size: 16px;
 }
 
 body[dir="rtl"] {
-  font-family: 'Beiruti', sans-serif;
-} 
-
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 16px; 
+}
 
 
 .plugin-window {
@@ -254,13 +256,13 @@ input:checked+.slider:before {
   padding: 20px;
   border-radius: 10px;
   width: 272px;
-  height: 272px;
+  height: 342px;
   max-width: 280px;
   margin: auto;
   text-align: center;
 }
 
-.dialog-content input.input-error {
+.dialog-content input.replacement {
   border: 1px solid red;
   color: red;
 }
@@ -328,7 +330,7 @@ input:checked+.slider:before {
 .dialog-buttons {
   display: flex;
   justify-content: stretch;
-  margin-top: 60px;
+  margin-top: 38px;
 }
 
 .formStyle{
@@ -346,7 +348,6 @@ input:checked+.slider:before {
   font-weight: 400;
   font-size: 15px;
 }
-
 
 .dialog-submit {
   background-color: #004D23;
