@@ -12,14 +12,39 @@ function initToggle() {
   chrome.storage.sync.get(["ext_on"], function (data) {
     toggle.checked = data.ext_on !== false; // Default to true if not set
   });
+
   toggle.addEventListener("change", function () {
-    chrome.storage.sync.set({ ext_on: this.checked }, () => {
-       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    const isChecked = this.checked;
+
+    if (!isChecked) {
+        chrome.storage.sync.set({ ext_on: isChecked }, () => {
+          chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            if (tabs[0] && tabs[0].id) {
+              chrome.scripting.executeScript({
+                target: { tabId: tabs[0].id, allFrames: true },
+                func: () => {
+                    if (confirm("Turn off extension and reload page?")) {
+                      location.reload()
+                    } else {
+                        chrome.storage.sync.set({ ext_on: true }, () => {
+                            chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: true });
+                        });
+                    }
+                }
+              });
+            }
+          });
+        });
+
+    } else {
+      chrome.storage.sync.set({ ext_on: isChecked }, () => {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
           if (tabs[0] && tabs[0].id) {
             chrome.tabs.reload(tabs[0].id);
           }
         });
-    });
+      });
+    }
   });
 }
 
@@ -304,3 +329,10 @@ document.getElementById("edit-button").addEventListener("click", openDialog);
 document
   .getElementById("language-select")
   .addEventListener("click", changeLanguage);
+  
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'updateToggle') {
+        const toggle = document.getElementById("toggleSwitch");
+        toggle.checked = message.isChecked;
+    }
+});
