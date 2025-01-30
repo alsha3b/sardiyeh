@@ -182,24 +182,25 @@ const replaceText = (el,bloom) => {
   }
 };
 
-  // replacing images function
+
+
+  // Replacing images function
   const replaceImages = () => {
-    // Locate the container of the flag by its class or other attributes
     const flagContainer = document.querySelector("div.MRI68d");
+    console.log("Flag container found:", flagContainer);
+    if (!flagContainer) return;
+
+    const flagImage = flagContainer.querySelector("img");
+    console.log("Flag image found:", flagImage);
+    if (!flagImage) return;
   
-    if (flagContainer) {
-      // Locate the <img> element inside the container
-      const flagImage = flagContainer.querySelector("img");
-  
-      if (flagImage) {
-        // Replace the image source with your custom image
-        const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png");
-        flagImage.src = newImageUrl; // Update the image source
-        flagImage.alt = "Replaced Flag"; // Optionally update the alt text
-      }
-    }
+
+    const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png") + `?t=${Date.now()}`;
+    flagImage.src = newImageUrl;
+
+    flagImage.alt = "Replaced Flag"; 
   };
-  
+
   
 
   const anyChildOfBody = "/html/body//";
@@ -287,30 +288,22 @@ const replaceText = (el,bloom) => {
       const shouldUpdate = mutations.some((mutation) => {
         return mutation.type === "childList" && mutation.addedNodes.length > 0;
       });
-
-      if (!shouldUpdate) {
-        return;
-      }
-
-      if (performance.now() - lastRun < 3000) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          replaceTextAndImages();
-          lastRun = performance.now();
-        }, 600);
-      } else {
-        replaceTextAndImages();
-        lastRun = performance.now();
-      }
+    
+      if (!shouldUpdate) return;
+    
+      // Temporarily disconnect the observer
+      observer.disconnect();
+    
+      // Perform replacements
+      replaceTextAndImages();
+    
+      // Reconnect the observer
+      observer.observe(document, {
+        childList: true,
+        subtree: true,
+      });
     });
-
-    observer.observe(document, {
-      childList: true,
-      subtree: true,
-      attributes: false,
-      characterData: false,
-      characterDataOldValue: false,
-    });
+    
 
     chrome.storage.sync.get(["ext_on"], async function (items) {
       if (chrome.runtime.lastError) {
