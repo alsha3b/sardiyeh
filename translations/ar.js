@@ -7,6 +7,8 @@ const ar = {
   replacementLabel: "الأصل",
   submitButton: "حفظ الكلمة",
   cancelButton: "إلغاء",
-  errorEmptyFields: "يجب ملء كلا الحقلين.",
-  errorSubmissionFailed: "فشل في إرسال البيانات. يرجى المحاولة مرة أخرى.",
+  wordInput: "الكلمة التي تريد تعديلها",
+  replacementInput: "الكلمة الاصلية",
+  errorSubmissionFailed: "فشل في إرسال البيانات! يرجى المحاولة مرة أخرى.",
 };
+
