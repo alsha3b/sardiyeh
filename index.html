@@ -1,55 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <title>سرديّة</title>
     <meta charset="utf-8" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="script-src 'self' 'unsafe-eval'; object-src 'self'"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; object-src 'self'" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Beiruti:wght@200..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    
-        <div class="plugin-window" id="plugin-window">
 
-            <!-- start header section -->
-            <header class="header" id="header">
-                <div class="header-text" id="header-text">
-                    <img src="images/logo.svg" alt="logo for sardiyah" width="auto" height="27">
-                </div>
-                <label class="switch">
-                    <input type="checkbox" id="toggleSwitch">
-                    <span class="slider round"></span>
-                </label>
-            </header>
-            <!-- end header section -->
+</head>
 
-            <!-- start content section -->
-            <section class="content" id="content">
+<body>
 
-                <div class="title-row">
-                    <h1 class="replaced-words-title"  id="replaced-words-title">Replaced words</h1>
-                        <button class="add-button" id="edit-button">
-                            <img src="images/add.svg" alt="add button icon">
-                        </button>
-                        
-                    <select class="lang-select" id="language-select">
-                        <option value="en">English</option>
-                        <option value="ar">Arabic</option>
-                    </select>
-                </div>
+    <div class="plugin-window" id="plugin-window">
 
-                <div class="table-container">
+        <!-- start header section -->
+        <header class="header" id="header">
+            <div class="header-text" id="header-text">
+                <img src="images/logo.svg" alt="logo for sardiyah" width="auto" height="27">
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="toggleSwitch">
+                <span class="slider round"></span>
+            </label>
+        </header>
+        <!-- end header section -->
+
+        <!-- start content section -->
+        <section class="content" id="content">
+
+            <div class="title-row">
+                <h1 class="replaced-words-title" id="replaced-words-title">Replaced words</h1>
+                <button class="add-button" id="edit-button">
+                    <img src="images/add.svg" alt="add button icon">
+                </button>
+
+                <select class="lang-select" id="language-select">
+                    <option value="en">English</option>
+                    <option value="ar">Arabic</option>
+                </select>
+            </div>
+
+            <div class="table-container">
                 <table class="replaced-words-table">
                     <thead>
                         <tr>
@@ -61,56 +57,69 @@
                         <!-- Rows will be added here programmatically -->
                     </tbody>
                 </table>
-                </div>
-            </section>
-            <!-- end contecnt section -->
-
-
-            <!-- start welcome section -->
-            <section class="welcome" id="welcome" >
-                <hr>
-                <img src="images/welcome.svg" alt="welcome page" width="100%" height="auto">
-            </section>
-            <!-- end welcome section -->
-
-            <!-- start replacment-word section -->
-            <section id="input-dialog" class="input-dialog">
-                <div class="dialog-content">
-                    <form id="input-form">
-                        <label for="word-input" id="word-label">Word</label>
-                        <input type="text" name="word" id="word-input" placeholder="Word" required>
-                        <label for="replacement-input" id="replacement-label">Replacement</label>
-                        <input type="text" name="replacement" id="replacement-input" placeholder="Replacement" required>
+            </div>
             
-                        <div class="error-message" id="error-message"></div>
-                        
-                        <div class="dialog-buttons">
-                            <button class="dialog-submit" id="dialog-submit" type="submit"></button>
-                            <button class="dialog-close" id="dialog-close" type="button"></button>
-                        </div>
-                    </form>
+        <!-- start footer section -->
+        <footer id="footer">
+            <p>© <time datetime="2024">2024</time> Sardiya</p>
+        </footer>
 
-                    <div id="loading-indicator" style="display: none;">
-                        <span class="loader"></span>
+        <!-- end footer section -->
+        </section>
+        <!-- end contecnt section -->
+
+        <!-- start welcome section -->
+        <section class="welcome" id="welcome">
+            <hr>
+            <img src="images/welcome.svg" alt="welcome page" width="100%" height="auto">
+        </section>
+        <!-- end welcome section -->
+
+        <!-- start replacment-word section -->
+        <section id="input-dialog" class="input-dialog">
+            <div class="dialog-content">
+                <form id="input-form">
+
+                    <div class="formStyle">
+                        <label for="word-input" id="word-label"></label>
+                        <input type="text" name="word" id="word-input" placeholder="The word you want to replace"
+                            required>
+
+                        <label for="replacement-input" id="replacement-label"></label>
+                        <input type="text" name="replacement" id="replacement-input" placeholder="The replacement for the word"
+                         required>
                     </div>
+
+
+                    <div class="error-message" id="error-message">
+                        <span class="error-icon"></span>
+                        <span id="error-text"></span>
+                    </div>
+
+
+                    <div class="dialog-buttons">
+                        <button class="dialog-submit" id="dialog-submit" type="submit">Save</button>
+                        <button class="dialog-close" id="dialog-close" type="button">Cancel</button>
+                    </div>
+                </form>
+
+                <div id="loading-indicator" style="display: none;">
+                    <span class="loader"></span>
                 </div>
-            </section>
-            <!-- end replacment-word section -->
+            </div>
+        </section>
+        <!-- end replacment-word section -->
 
-            <!-- start footer section -->
-            <footer id="footer">
-                <p>© <time datetime="2024">2024</time> Sardiya</p>
-            </footer>
-            <!-- end footer section -->
-             
-        </div>
-        
-            <!-- https://script.google.com/macros/s/AKfycbwqV-kCvRonl9MXdSOP7l7LsMh4ZA-Ro0eLsDvrruF228OI4UT1-AW5JFuijnNqsg5V/exec -->
-        <script type="module" src="script.js"></script>
-        <script src="script.js"></script>     
-        <script src="translations/en.js"></script>
-        <script src="translations/ar.js"></script>
-        <script src="popup.js"></script>
 
-    </body>
+    </div>
+
+    <!-- https://script.google.com/macros/s/AKfycbwqV-kCvRonl9MXdSOP7l7LsMh4ZA-Ro0eLsDvrruF228OI4UT1-AW5JFuijnNqsg5V/exec -->
+    <script type="module" src="script.js"></script>
+    <script src="script.js"></script>
+    <script src="translations/en.js"></script>
+    <script src="translations/ar.js"></script>
+    <script src="popup.js"></script>
+
+</body>
+
 </html>
