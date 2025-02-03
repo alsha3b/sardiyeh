@@ -14,8 +14,6 @@
     return null;
   }
 
-
-
   // Function to save dictionary to local storage
   function saveDictionaryToLocalStorage(dictionary) {
     const timestamp = new Date();
@@ -188,6 +186,23 @@ const replaceText = (el, bloom) => {
   }
 };
 
+  // Replacing images function
+const replaceImages = () => {
+  const flagContainer = document.querySelector("div.MRI68d");
+  console.log("Flag container found:", flagContainer);
+  if (!flagContainer) return;
+
+  const flagImage = flagContainer.querySelector("img");
+  console.log("Flag image found:", flagImage);
+  if (!flagImage) return;
+
+
+  const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png") + `?t=${Date.now()}`;
+  flagImage.src = newImageUrl;
+
+  flagImage.alt = "Replaced Flag"; 
+};
+
 
   const anyChildOfBody = "/html/body//";
   // const doesNotContainAncestorWithRoleTextbox =
@@ -220,11 +235,16 @@ const replaceText = (el, bloom) => {
       // Call the replaceText function
       replaceText(result.snapshotItem(i),bloom);
     }
-
     chrome.storage.local.set({
       replacedWords: replacedWords,
       replacedSet: replacedSet,
     });
+  };
+
+  // integrating the 'replaceTextInNodes' and 'replaceImages' functions
+  const replaceTextAndImages = () => {
+    replaceTextInNodes(); // Call text replacement function
+    replaceImages(); // Call image replacement function
   };
 
   chrome.storage.sync.get(["ext_on"], async function (items) {
@@ -265,23 +285,20 @@ const replaceText = (el, bloom) => {
     let lastRun = performance.now();
 
     const observer = new MutationObserver((mutations) => {
-      const shouldUpdate = mutations.some((mutation) => {
-        return mutation.type === "childList" && mutation.addedNodes.length > 0;
-      });
-
-      if (!shouldUpdate) {
-        return;
-      }
-
+        const shouldUpdate = mutations.some((mutation) => {
+          return mutation.type === "childList" && mutation.addedNodes.length > 0;
+        });
+  
+        if (!shouldUpdate) return;
+      
       if (performance.now() - lastRun < 3000) {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-          replaceTextInNodes();
+          replaceTextAndImages();
           lastRun = performance.now();
         }, 600);
       } else {
-        replaceTextInNodes();
-
+        replaceTextAndImages();
         lastRun = performance.now();
       }
     });
@@ -292,6 +309,18 @@ const replaceText = (el, bloom) => {
       attributes: false,
       characterData: false,
       characterDataOldValue: false,
+    });
+    
+    chrome.storage.sync.get(["ext_on"], async function (items) {
+      if (chrome.runtime.lastError) {
+          console.error(chrome.runtime.lastError);
+          return;
+      }
+
+      if (items.ext_on === false) {
+          return;
+      }
+      replaceTextAndImages(); // Initial replacement when the extension is active
     });
   });
 

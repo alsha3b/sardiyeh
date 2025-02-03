@@ -86,25 +86,14 @@ function initForm() {
     const wordValue = wordInput.value.trim();
     const replacementValue = replacementInput.value.trim();
 
-    // Check if the words are the same (case-insensitive)
-      if (wordValue.toLowerCase() === replacementValue.toLowerCase()) {
-        showErrorMessage("The word and its replacement cannot be the same.");
-          wordInput.classList.add("input-error");
-          replacementInput.classList.add("input-error");
-          return;
-      }
-
-
-      // Check if the word is already added
-    const existingWords = await getReplacedWordsFromStorage();
-
-    const isDuplicate = existingWords.some(item => item.word.toLowerCase() === wordValue.toLowerCase());
-    if (isDuplicate) {
-        showErrorMessage("This word is already added.");
-        wordInput.classList.add("input-error");
-        return;
+    // Check if the words are the same
+    if (wordValue === replacementValue) {
+      // Show error message but allow Save button to be clicked
+      showErrorMessage("The word and its replacement cannot be the same.");
+      wordInput.classList.add("input-error");
+      replacementInput.classList.add("input-error");
+      return;
     }
-
 
     // Check if either field is empty
     if (!wordValue || !replacementValue) {
@@ -196,13 +185,47 @@ function initLanguage() {
 }
 
 function populateReplacedWords() {
-    chrome.storage.local.get("replacedWords", function (data) {
-        if (data.replacedWords && data.replacedWords.length > 0) {
-            data.replacedWords.forEach((word) => {
-                addWordToTable(word.word, word.replacement);
-            });
-        }
-    });
+  chrome.storage.local.get("replacedWords", function (data) {
+    if (data.replacedWords && data.replacedWords.length > 0) {
+      data.replacedWords.forEach((word) => {
+        const tableBody = document.getElementById("table-body");
+        const row = document.createElement("tr");
+
+        const wordCell = document.createElement("td");
+        const wordLink = document.createElement("a");
+        wordLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+          word.word
+        )}`;
+        wordLink.target = "_blank"; // Open link in new tab
+        wordLink.textContent = word.word;
+        wordLink.style.color = "#97700B";
+        wordLink.style.textDecoration = "none";
+        wordCell.appendChild(wordLink);
+        // wordCell.innerHTML = wordLink;
+
+        const replacementCell = document.createElement("td");
+        const replacementLink = document.createElement("a");
+        replacementLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+          word.replacement
+        )}`;
+        replacementLink.target = "_blank";
+        replacementLink.textContent = word.replacement;
+        replacementLink.style.color = "#000000";
+        replacementLink.style.textDecoration = "none";
+        replacementCell.appendChild(replacementLink);
+        // replacementCell.innerHTML = replacementLink;
+
+        // const wordCell = document.createElement("td");
+        // const replacementCell = document.createElement("td");
+        // wordCell.textContent = word.original;
+        // replacementCell.textContent = word.replacement;
+
+        row.appendChild(wordCell);
+        row.appendChild(replacementCell);
+        tableBody.appendChild(row);
+      });
+    }
+  });
 }
 
 function addWordToTable(word, replacement) {
@@ -246,15 +269,33 @@ async function getReplacedWordsFromStorage() {
 
 
 function addWord(word, replacement) {
-    if (word && replacement) {
-      addWordToTable(word,replacement);
-        // Store the new word pair in storage
-        chrome.storage.local.get(["replacedWords"], function (data) {
-            const replacedWords = data.replacedWords || [];
-            replacedWords.push({ word: word, replacement: replacement });
-            chrome.storage.local.set({ replacedWords: replacedWords });
-        });
-    }
+  if (word && replacement) {
+    const tableBody = document.getElementById("table-body");
+
+    const row = document.createElement("tr");
+
+    const wordCell = document.createElement("td");
+    const wordLink = document.createElement("a");
+    wordLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+      word
+    )}`;
+    wordLink.target = "_blank"; // Open link in new tab
+    wordLink.textContent = word;
+    wordCell.appendChild(wordLink);
+
+    const replacementCell = document.createElement("td");
+    const replacementLink = document.createElement("a");
+    replacementLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+      replacement
+    )}`;
+    replacementLink.target = "_blank";
+    replacementLink.textContent = replacement;
+    replacementCell.appendChild(replacementLink);
+
+    row.appendChild(wordCell);
+    row.appendChild(replacementCell);
+    tableBody.appendChild(row);
+  }
 }
 
 const sheetUrl =
@@ -286,7 +327,7 @@ async function postSuggestion(params) {
   }
 }
 
-function submitForm() {
+async function submitForm() {
   const wordInput = document.getElementById("word-input").value;
   const replacementInput = document.getElementById("replacement-input").value;
   const errorMessage = document.getElementById("error-message");
@@ -298,12 +339,9 @@ function submitForm() {
 
   errorMessage.textContent = "";
 
-  // postSuggestion({
-  //   translate_to: wordInput,
-  //   suggestion: replacementInput,
-  //   is_accepted: false,
-  // })
-  fetch(sheetUrl, {
+
+  try {
+    const response = await fetch(sheetUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -312,20 +350,18 @@ function submitForm() {
         word: wordInput,
         replacement: replacementInput,
       }),
-    })
-    .then((response) => {
-      console.log("response is ", response);
-      if (response.ok) {
-        closeDialog();
-        addWord(wordInput, replacementInput);
-      } else {
-        errorMessage.textContent = getLocalizedString("errorSubmissionFailed");
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      errorMessage.textContent = getLocalizedString("errorSubmissionFailed");
     });
+
+    if (response.ok) {
+        await closeDialog();
+      addWord(wordInput, replacementInput);
+    } else {
+      errorMessage.textContent = getLocalizedString("errorSubmissionFailed");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    errorMessage.textContent = getLocalizedString("errorSubmissionFailed");
+  }
 }
 
 function openDialog() {
@@ -355,9 +391,7 @@ function changeLanguage() {
   setLanguage(selectedLanguage);
 
   // Save the selected language
-  chrome.storage.sync.set({
-    selectedLanguage: selectedLanguage,
-  });
+  chrome.storage.sync.set({ selectedLanguage: selectedLanguage });
 }
 
 function setLanguage(language) {
