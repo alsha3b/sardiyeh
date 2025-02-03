@@ -295,6 +295,7 @@
       row.appendChild(wordCell);
       row.appendChild(replacementCell);
       tableBody.appendChild(row);
+      
     }
   }
 
@@ -325,6 +326,7 @@
     } catch (error) {
       console.error("Error:", error);
     }
+    
   }
 
   async function submitForm() {
@@ -364,25 +366,6 @@
     }
   }
 
-  function openDialog() {
-    const inputDialog = document.getElementById("input-dialog");
-    const content = document.getElementById("content");
-
-    inputDialog.style.display = "block";
-    content.style.display = "none";
-  }
-
-  function closeDialog() {
-    const inputDialog = document.getElementById("input-dialog");
-    const content = document.getElementById("content");
-
-    inputDialog.style.display = "none";
-    content.style.display = "block";
-
-    const form = document.getElementById("input-form");
-    form.reset(); // Reset the form inputs
-    document.getElementById("error-message").textContent = ""; // Clear error message
-  }
 
   function changeLanguage() {
     const languageSelect = document.getElementById("language-select");
@@ -459,5 +442,5 @@
 
     const form = document.getElementById("input-form");
     form.reset(); // Reset the form inputs
-    document.getElementById("error-message").textContent = ""; // Clear error message
+  //  document.getElementById("error-message").textContent = ""; // Clear error message
   }
