@@ -18,24 +18,23 @@
       const isChecked = this.checked;
 
       if (!isChecked) {
+        // Show the custom alert if toggling off
+        showTurnOffAlert(() => {
+          // Callback function to execute if user clicks "OK" (reload and revert)
           chrome.storage.sync.set({ ext_on: isChecked }, () => {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
               if (tabs[0] && tabs[0].id) {
-                chrome.scripting.executeScript({
-                  target: { tabId: tabs[0].id, allFrames: true },
-                  func: () => {
-                      if (confirm("Turn off extension and reload page?")) {
-                        location.reload()
-                      } else {
-                          chrome.storage.sync.set({ ext_on: true }, () => {
-                              chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: true });
-                          });
-                      }
-                  }
-                });
+                chrome.tabs.reload(tabs[0].id);
               }
             });
           });
+        }, () => {
+          // Callback function to execute if user clicks "Cancel" (revert the toggle)
+          toggle.checked = true; //Revert the toggle switch
+          chrome.storage.sync.set({ ext_on: true }, () => {
+            chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: true });
+          });
+        });
 
       } else {
         chrome.storage.sync.set({ ext_on: isChecked }, () => {
@@ -47,6 +46,96 @@
         });
       }
     });
+  }
+
+  // Function to display the custom alert
+  function showTurnOffAlert(onOk, onCancel) {
+    // Create the alert overlay elements
+    const alertOverlay = document.createElement('div');
+    alertOverlay.id = 'customAlertOverlay';
+    alertOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        `;
+
+    const alertBox = document.createElement('div');
+    alertBox.id = 'customAlertBox';
+    alertBox.style.cssText = `
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid #004D23;
+            width:60%;
+            height: 55%;
+        `;
+
+    const alertTitle = document.createElement('h1');
+    alertTitle.textContent = "Opps!"
+    alertTitle.style.cssText = `
+            color: #D3A93C;
+            text-align: center;
+            padding-bottom: 15px;
+        `;
+
+
+    const alertMessage = document.createElement('p');
+    alertMessage.textContent = "Please turn off the extension and reload the page.";
+    alertMessage.style.cssText = `
+            color: #004d23;
+            font-weight: 600;
+        `;
+
+    const okButton = document.createElement('button');
+    okButton.textContent = "OK";
+    okButton.style.cssText = `
+        background-color: #004D23;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin: 10px;
+        cursor: pointer;
+    `;
+    okButton.addEventListener('click', () => {
+      alertOverlay.remove();
+      onOk(); // Callback for OK button
+    });
+
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = "Cancel";
+    cancelButton.style.cssText = `
+        background-color: white;
+        color: black;
+        border: 1px solid #ccc;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin: 10px;
+        cursor: pointer;
+    `;
+    cancelButton.addEventListener('click', () => {
+      alertOverlay.remove();
+      onCancel(); // Callback for Cancel button
+    });
+
+    // Assemble the alert box
+    alertBox.appendChild(alertTitle);
+    alertBox.appendChild(alertMessage);
+    alertBox.appendChild(okButton);
+    alertBox.appendChild(cancelButton);
+
+    // Add the alert to the overlay and then to the document
+    alertOverlay.appendChild(alertBox);
+    document.body.appendChild(alertOverlay);
   }
 
   function initAddButton() {

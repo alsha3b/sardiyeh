@@ -463,3 +463,45 @@ body[dir="rtl"] #footer {
   display: none;
   margin-top: 1.2px;
 }
+
+/* styles.css */
+/*Existing Styles*/
+/* Style for the alert overlay */
+#customAlertOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top of everything */
+}
+
+/* Style for the alert box */
+#customAlertBox {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* Style for the alert buttons */
+#customAlertBox button {
+  background-color: #004D23; /* Green */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+#customAlertBox button:last-child {
+    background-color: white; /* Red */
+    color: black;
+    border: 1px solid #ccc;
+}
