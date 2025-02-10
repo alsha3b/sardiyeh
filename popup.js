@@ -10,6 +10,8 @@
 
   function initToggle() {
     const toggle = document.getElementById("toggleSwitch");
+    const headerText = document.getElementById("header-text"); // Get the header element
+
     chrome.storage.sync.get(["ext_on"], function (data) {
       toggle.checked = data.ext_on !== false; // Default to true if not set
     });
@@ -19,11 +21,16 @@
 
       if (!isChecked) {
         // Show the custom alert if toggling off
-        showTurnOffAlert(() => {
+        showAlert(false, () => {
           // Callback function to execute if user clicks "OK" (reload and revert)
+          // headerText.textContent = "Turning Off...";
           chrome.storage.sync.set({ ext_on: isChecked }, () => {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
               if (tabs[0] && tabs[0].id) {
+                chrome.scripting.executeScript({
+                    target: { tabId: tabs[0].id, allFrames: true },
+                    files: ["revert.js"],
+                  });
                 chrome.tabs.reload(tabs[0].id);
               }
             });
@@ -37,102 +44,76 @@
         });
 
       } else {
-        chrome.storage.sync.set({ ext_on: isChecked }, () => {
-          chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            if (tabs[0] && tabs[0].id) {
-              chrome.tabs.reload(tabs[0].id);
-            }
+
+        showAlert(true, () => {
+          // Callback function to execute if user clicks "OK" (reload and replace)
+          // headerText.textContent = "Turning On...";
+          chrome.storage.sync.set({ ext_on: isChecked }, () => {
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+              if (tabs[0] && tabs[0].id) {
+                chrome.scripting.executeScript({
+                  target: { tabId: tabs[0].id, allFrames: true },
+                  files: ["content.js"],
+                });
+                chrome.tabs.reload(tabs[0].id);
+              }
+            });
+          });
+        }, () => {
+          // Callback function to execute if user clicks "Cancel" (revert the toggle)
+          toggle.checked = false; //Revert the toggle switch
+          chrome.storage.sync.set({ ext_on: false }, () => {
+            chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: false });
           });
         });
       }
     });
   }
 
-  // Function to display the custom alert
-  function showTurnOffAlert(onOk, onCancel) {
+  function showAlert(isTurningOn, onOk, onCancel) {
     // Create the alert overlay elements
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'customAlertOverlay';
-    alertOverlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        `;
-
+  
     const alertBox = document.createElement('div');
     alertBox.id = 'customAlertBox';
-    alertBox.style.cssText = `
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border: 2px solid #004D23;
-            width:60%;
-            height: 55%;
-        `;
-
+  
     const alertTitle = document.createElement('h1');
-    alertTitle.textContent = "Opps!"
-    alertTitle.style.cssText = `
-            color: #D3A93C;
-            text-align: center;
-            padding-bottom: 15px;
-        `;
-
-
+    alertTitle.textContent = isTurningOn ? "Turning on ..." : "Turning off...";
+  
     const alertMessage = document.createElement('p');
-    alertMessage.textContent = "Please turn off the extension and reload the page.";
-    alertMessage.style.cssText = `
-            color: #004d23;
-            font-weight: 600;
-        `;
-
+    alertMessage.textContent = "In order to see your changes, the page will need to be reloaded.";
+  
+    // Create the button container
+    const alertButtons = document.createElement('div');
+    alertButtons.classList.add('alert-buttons');
+  
     const okButton = document.createElement('button');
-    okButton.textContent = "OK";
-    okButton.style.cssText = `
-        background-color: #004D23;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        margin: 10px;
-        cursor: pointer;
-    `;
+    okButton.textContent = "Refresh";
+    okButton.classList.add('refresh-button');
     okButton.addEventListener('click', () => {
       alertOverlay.remove();
       onOk(); // Callback for OK button
     });
-
+  
     const cancelButton = document.createElement('button');
     cancelButton.textContent = "Cancel";
-    cancelButton.style.cssText = `
-        background-color: white;
-        color: black;
-        border: 1px solid #ccc;
-        padding: 10px 20px;
-        border-radius: 5px;
-        margin: 10px;
-        cursor: pointer;
-    `;
+    cancelButton.classList.add('cancel-button');
     cancelButton.addEventListener('click', () => {
       alertOverlay.remove();
+  
       onCancel(); // Callback for Cancel button
     });
-
+  
     // Assemble the alert box
     alertBox.appendChild(alertTitle);
     alertBox.appendChild(alertMessage);
-    alertBox.appendChild(okButton);
-    alertBox.appendChild(cancelButton);
-
+  
+    alertButtons.appendChild(okButton);
+    alertButtons.appendChild(cancelButton);
+  
+    alertBox.appendChild(alertButtons);
+  
     // Add the alert to the overlay and then to the document
     alertOverlay.appendChild(alertBox);
     document.body.appendChild(alertOverlay);
@@ -532,4 +513,4 @@
     const form = document.getElementById("input-form");
     form.reset(); // Reset the form inputs
   //  document.getElementById("error-message").textContent = ""; // Clear error message
-  }
+  } 

@@ -1,6 +1,6 @@
 /* styles.css */
-
-
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+/*  font-family: "Space Mono", serif; */
 body {
   font-family: 'Space Mono', sans-serif;
   background-color: #FAFAFA;
@@ -467,41 +467,91 @@ body[dir="rtl"] #footer {
 /* styles.css */
 /*Existing Styles*/
 /* Style for the alert overlay */
+/* Style for the alert overlay */
 #customAlertOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  /* background-color: rgba(0, 0, 0, 0.5); */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it's on top of everything */
+  z-index: 1000;
 }
 
 /* Style for the alert box */
 #customAlertBox {
   background-color: #fff;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 20px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(0, 77, 35, 0.6); 
+  width: 55%;
 }
 
-/* Style for the alert buttons */
-#customAlertBox button {
-  background-color: #004D23; /* Green */
+/* Style for the alert title */
+#customAlertBox h1 {
+  text-align: center;
+  padding-bottom: 15px;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 16.29px;
+  font-family: "Space Mono", serif;
+}
+
+/* Style for the alert message */
+#customAlertBox p {
+  color: #004d23;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 16px;
+  font-family: "Space Mono", serif;
+}
+
+/* General button styles */
+.alert-buttons {
+  gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-top: 20px; */
+  font-family: "Space Mono", serif;
+}
+
+.alert-buttons button {
+  padding: 6px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 14.81px;
+  text-align: center;
+  transition: all 0.3s ease;
+  width: 130px;
+  height: 26px;
+}
+
+/* Style for the Refresh button */
+.alert-buttons .refresh-button {
+  background-color: #004D23;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin: 10px;
-  cursor: pointer;
 }
 
-#customAlertBox button:last-child {
-    background-color: white; /* Red */
-    color: black;
-    border: 1px solid #ccc;
+.alert-buttons .refresh-button:hover {
+  background-color: #D3A93C;
+}
+
+/* Style for the Cancel button */
+.alert-buttons .cancel-button {
+  background-color: white;
+  color: #004D23;
+  border: none;
+}
+
+.alert-buttons .cancel-button:hover {
+  border: 1px solid #004d23;
 }

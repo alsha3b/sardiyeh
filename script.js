@@ -1,5 +1,6 @@
 // toggle switch to (de)activate extension
 const toggleSwitch = document.getElementById("toggleSwitch");
+const logo = document.getElementById("logo");
 
 // getting the saved state of the toggle
 chrome.storage.sync.get(["ext_on"], async function (items) {
@@ -16,14 +17,12 @@ chrome.storage.sync.get(["ext_on"], async function (items) {
   await getDomElements(tab, toggleSwitch.checked);
 });
 
-
 const toggleContent = (isChecked) => {
   const pluginWindow = document.getElementById("plugin-window");
   const content = document.getElementById("content");
   const welcome = document.getElementById("welcome");
   const footer = document.getElementById("footer");
   const inputDialog = document.getElementById("input-dialog");
-
 
   if (isChecked) {
     pluginWindow.style.backgroundColor = "#fafafa";
@@ -99,38 +98,39 @@ document.getElementById("saveButton").addEventListener("click", function () {
   if (wordToReplace === replacementWord && wordToReplace !== "") {
     errorMessage.style.display = "block"; // Show the error message
   } else {
-    errorMessage.style.display = "none";  // Hide the error message
+    errorMessage.style.display = "none"; // Hide the error message
     // Proceed with the save logic
     alert("Saved successfully!");
   }
 });
 
-
-
-
-
-
-
 // Function to switch between English and Arabic
 function setLanguage(language) {
-  const translation = language === 'ar' ? ar : en;
+  const translation = language === "ar" ? ar : en;
 
   // Update text content for various elements
   document.getElementById("header-text").textContent = translation.pluginName;
-  document.getElementById("replaced-words-title").textContent = translation.replacedWords;
+  document.getElementById("replaced-words-title").textContent =
+    translation.replacedWords;
   document.getElementById("word-header").textContent = translation.word;
-  document.getElementById("replacement-header").textContent = translation.replacement;
+  document.getElementById("replacement-header").textContent =
+    translation.replacement;
   document.getElementById("word-label").textContent = translation.wordLabel;
-  document.getElementById("replacement-label").textContent = translation.replacementLabel;
+  document.getElementById("replacement-label").textContent =
+    translation.replacementLabel;
   document.getElementById("dialog-submit").textContent = translation.submitButton;
-  document.getElementById("dialog-close").textContent = translation.cancelButton;
-  document.getElementById("errorMessage").textContent = translation.errorEmptyFields;
+  document.getElementById("dialog-close").textContent =
+    translation.cancelButton;
+  document.getElementById("errorMessage").textContent =
+    translation.errorEmptyFields;
 }
 
 // Event listener for language selection
-document.getElementById("language-select").addEventListener("change", function (event) {
-  setLanguage(event.target.value);
-});
+document
+  .getElementById("language-select")
+  .addEventListener("change", function (event) {
+    setLanguage(event.target.value);
+  });
 
 // Initialize with the default language (English)
-setLanguage('en');
+setLanguage("en");
