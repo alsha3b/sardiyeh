@@ -1,3 +1,5 @@
+// script.js
+
 // toggle switch to (de)activate extension
 const toggleSwitch = document.getElementById("toggleSwitch");
 const logo = document.getElementById("logo");
@@ -11,10 +13,9 @@ chrome.storage.sync.get(["ext_on"], async function (items) {
 
   toggleSwitch.checked = items.ext_on != false;
 
+  // Initial UI setup based on stored state
   toggleContent(toggleSwitch.checked);
 
-  var tab = await getCurrentTab();
-  await getDomElements(tab, toggleSwitch.checked);
 });
 
 const toggleContent = (isChecked) => {
@@ -42,12 +43,6 @@ const toggleContent = (isChecked) => {
 // listening to changes to the toggle switch
 toggleSwitch.addEventListener("change", async () => {
   const isChecked = toggleSwitch.checked;
-
-  toggleContent(isChecked);
-
-  var tab = await getCurrentTab();
-  await getDomElements(tab, isChecked);
-
   chrome.storage.sync.set({
     ext_on: isChecked,
     function() {},

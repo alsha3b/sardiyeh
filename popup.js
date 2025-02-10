@@ -94,6 +94,7 @@
     okButton.addEventListener('click', () => {
       alertOverlay.remove();
       onOk(); // Callback for OK button
+      window.location.reload();
     });
   
     const cancelButton = document.createElement('button');
@@ -101,7 +102,7 @@
     cancelButton.classList.add('cancel-button');
     cancelButton.addEventListener('click', () => {
       alertOverlay.remove();
-  
+      alertBox.remove();  
       onCancel(); // Callback for Cancel button
     });
   
