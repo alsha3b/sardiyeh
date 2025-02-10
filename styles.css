@@ -464,9 +464,6 @@ body[dir="rtl"] #footer {
   margin-top: 1.2px;
 }
 
-/* styles.css */
-/*Existing Styles*/
-/* Style for the alert overlay */
 /* Style for the alert overlay */
 #customAlertOverlay {
   position: fixed;

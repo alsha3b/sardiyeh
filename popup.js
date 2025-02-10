@@ -10,7 +10,6 @@
 
   function initToggle() {
     const toggle = document.getElementById("toggleSwitch");
-    const headerText = document.getElementById("header-text"); // Get the header element
 
     chrome.storage.sync.get(["ext_on"], function (data) {
       toggle.checked = data.ext_on !== false; // Default to true if not set
@@ -22,8 +21,7 @@
       if (!isChecked) {
         // Show the custom alert if toggling off
         showAlert(false, () => {
-          // Callback function to execute if user clicks "OK" (reload and revert)
-          // headerText.textContent = "Turning Off...";
+          // Callback function to execute if user clicks "refresh" (reload and revert)
           chrome.storage.sync.set({ ext_on: isChecked }, () => {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
               if (tabs[0] && tabs[0].id) {
@@ -46,8 +44,7 @@
       } else {
 
         showAlert(true, () => {
-          // Callback function to execute if user clicks "OK" (reload and replace)
-          // headerText.textContent = "Turning On...";
+          // Callback function to execute if user clicks "refresh" (reload and replace)
           chrome.storage.sync.set({ ext_on: isChecked }, () => {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
               if (tabs[0] && tabs[0].id) {
@@ -93,7 +90,7 @@
     okButton.classList.add('refresh-button');
     okButton.addEventListener('click', () => {
       alertOverlay.remove();
-      onOk(); // Callback for OK button
+      onOk(); // Callback for refresh button
       window.location.reload();
     });
   
