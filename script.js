@@ -1,23 +1,4 @@
-// script.js
-
-// toggle switch to (de)activate extension
-const toggleSwitch = document.getElementById("toggleSwitch");
-const logo = document.getElementById("logo");
-
-// getting the saved state of the toggle
-chrome.storage.sync.get(["ext_on"], async function (items) {
-  if (chrome.runtime.lastError) {
-    console.error(chrome.runtime.lastError);
-    return;
-  }
-
-  toggleSwitch.checked = items.ext_on != false;
-
-  // Initial UI setup based on stored state
-  toggleContent(toggleSwitch.checked);
-
-});
-
+// toggleContent function to toggle the UI based on the checkbox toggleState
 const toggleContent = (isChecked) => {
   const pluginWindow = document.getElementById("plugin-window");
   const content = document.getElementById("content");
@@ -39,15 +20,6 @@ const toggleContent = (isChecked) => {
     inputDialog.style.display = "none";
   }
 };
-
-// listening to changes to the toggle switch
-toggleSwitch.addEventListener("change", async () => {
-  const isChecked = toggleSwitch.checked;
-  chrome.storage.sync.set({
-    ext_on: isChecked,
-    function() {},
-  });
-});
 
 // get the current active tab to run script on it
 async function getCurrentTab() {
@@ -85,20 +57,6 @@ if (typeof window !== "undefined") {
   global.getDomElements = getDomElements;
 }
 
-document.getElementById("saveButton").addEventListener("click", function () {
-  const wordToReplace = document.getElementById("wordToReplace").value.trim();
-  const replacementWord = document.getElementById("replacementWord").value.trim();
-  const errorMessage = document.getElementById("errorMessage");
-
-  if (wordToReplace === replacementWord && wordToReplace !== "") {
-    errorMessage.style.display = "block"; // Show the error message
-  } else {
-    errorMessage.style.display = "none"; // Hide the error message
-    // Proceed with the save logic
-    alert("Saved successfully!");
-  }
-});
-
 // Function to switch between English and Arabic
 function setLanguage(language) {
   const translation = language === "ar" ? ar : en;
@@ -119,13 +77,3 @@ function setLanguage(language) {
   document.getElementById("errorMessage").textContent =
     translation.errorEmptyFields;
 }
-
-// Event listener for language selection
-document
-  .getElementById("language-select")
-  .addEventListener("change", function (event) {
-    setLanguage(event.target.value);
-  });
-
-// Initialize with the default language (English)
-setLanguage("en");

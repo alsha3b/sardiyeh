@@ -1,90 +1,100 @@
   // File responsible for the extension popup
-
   document.addEventListener("DOMContentLoaded", function () {
+    // Centralized initialization:
+    const toggle = document.getElementById("toggleSwitch");
+    let initialToggleState = true; //Set a defalut state
+
+    // Function to initialize the toggle state
+    const initToggleState = () => {
+      chrome.storage.sync.get(["ext_on"], function (data) {
+        const isChecked = data.ext_on !== false; // Default to true if not set
+        toggle.checked = isChecked;
+        toggleContent(isChecked); // Set initial UI state based on saved value
+      });
+    };
+
+    // Initial toggle setting
+    initToggleState();
+
+    // Toggle Functionality:
+    toggle.addEventListener("change", function () {
+      const isChecked = this.checked;
+      handleToggleChange(isChecked); // Call function to handle toggle state and its changes
+    });
+
     initLanguage();
     populateReplacedWords();
     initForm();
     initAddButton(); // Initialize the add-button functionality
-    initToggle();
   });
 
-  function initToggle() {
-    const toggle = document.getElementById("toggleSwitch");
-
-    chrome.storage.sync.get(["ext_on"], function (data) {
-      toggle.checked = data.ext_on !== false; // Default to true if not set
-    });
-
-    toggle.addEventListener("change", function () {
-      const isChecked = this.checked;
-
-      if (!isChecked) {
-        // Show the custom alert if toggling off
-        showAlert(false, () => {
-          // Callback function to execute if user clicks "refresh" (reload and revert)
-          chrome.storage.sync.set({ ext_on: isChecked }, () => {
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-              if (tabs[0] && tabs[0].id) {
-                chrome.scripting.executeScript({
-                    target: { tabId: tabs[0].id, allFrames: true },
-                    files: ["revert.js"],
-                  });
-                chrome.tabs.reload(tabs[0].id);
-              }
-            });
-          });
-        }, () => {
-          // Callback function to execute if user clicks "Cancel" (revert the toggle)
-          toggle.checked = true; //Revert the toggle switch
-          chrome.storage.sync.set({ ext_on: true }, () => {
-            chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: true });
+  function handleToggleChange(isChecked) {
+    if (!isChecked) {
+      // Show the custom alert if toggling off
+      showAlert(false, () => {
+        // Callback function to execute if user clicks "refresh" (reload and revert)
+        chrome.storage.sync.set({ ext_on: isChecked }, () => {
+          chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            if (tabs[0] && tabs[0].id) {
+              chrome.scripting.executeScript({
+                target: { tabId: tabs[0].id, allFrames: true },
+                files: ["revert.js"],
+              });
+              chrome.tabs.reload(tabs[0].id);
+            }
           });
         });
+      }, () => {
+        // Callback function to execute if user clicks "Cancel" (revert the toggle)
+        document.getElementById("toggleSwitch").checked = true; // Revert the toggle switch
+        chrome.storage.sync.set({ ext_on: true }, () => {
+          chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: true });
+        });
+      });
 
-      } else {
-
-        showAlert(true, () => {
-          // Callback function to execute if user clicks "refresh" (reload and replace)
-          chrome.storage.sync.set({ ext_on: isChecked }, () => {
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-              if (tabs[0] && tabs[0].id) {
-                chrome.scripting.executeScript({
-                  target: { tabId: tabs[0].id, allFrames: true },
-                  files: ["content.js"],
-                });
-                chrome.tabs.reload(tabs[0].id);
-              }
-            });
-          });
-        }, () => {
-          // Callback function to execute if user clicks "Cancel" (revert the toggle)
-          toggle.checked = false; //Revert the toggle switch
-          chrome.storage.sync.set({ ext_on: false }, () => {
-            chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: false });
+    } else {
+      showAlert(true, () => {
+        // Callback function to execute if user clicks "refresh" (reload and replace)
+        chrome.storage.sync.set({ ext_on: isChecked }, () => {
+          chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            if (tabs[0] && tabs[0].id) {
+              chrome.scripting.executeScript({
+                target: { tabId: tabs[0].id, allFrames: true },
+                files: ["content.js"],
+              });
+              chrome.tabs.reload(tabs[0].id);
+            }
           });
         });
-      }
-    });
+      }, () => {
+        // Callback function to execute if user clicks "Cancel" (revert the toggle)
+        document.getElementById("toggleSwitch").checked = false; // Revert the toggle switch
+        chrome.storage.sync.set({ ext_on: false }, () => {
+          chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: false });
+        });
+      });
+    }
   }
 
+  function initToggle() {}
   function showAlert(isTurningOn, onOk, onCancel) {
     // Create the alert overlay elements
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'customAlertOverlay';
-  
+
     const alertBox = document.createElement('div');
     alertBox.id = 'customAlertBox';
-  
+
     const alertTitle = document.createElement('h1');
-    alertTitle.textContent = isTurningOn ? "Turning on ..." : "Turning off...";
-  
+    alertTitle.textContent = isTurningOn ? getLocalizedString("turningOnTitle") : getLocalizedString("turningOffTitle");
+
     const alertMessage = document.createElement('p');
-    alertMessage.textContent = "In order to see your changes, the page will need to be reloaded.";
-  
+    alertMessage.textContent = getLocalizedString("reloadMessage");
+
     // Create the button container
     const alertButtons = document.createElement('div');
     alertButtons.classList.add('alert-buttons');
-  
+
     const okButton = document.createElement('button');
     okButton.textContent = "Refresh";
     okButton.classList.add('refresh-button');
@@ -93,25 +103,25 @@
       onOk(); // Callback for refresh button
       window.location.reload();
     });
-  
+
     const cancelButton = document.createElement('button');
     cancelButton.textContent = "Cancel";
     cancelButton.classList.add('cancel-button');
     cancelButton.addEventListener('click', () => {
       alertOverlay.remove();
-      alertBox.remove();  
+      alertBox.remove();
       onCancel(); // Callback for Cancel button
     });
-  
+
     // Assemble the alert box
     alertBox.appendChild(alertTitle);
     alertBox.appendChild(alertMessage);
-  
+
     alertButtons.appendChild(okButton);
     alertButtons.appendChild(cancelButton);
-  
+
     alertBox.appendChild(alertButtons);
-  
+
     // Add the alert to the overlay and then to the document
     alertOverlay.appendChild(alertBox);
     document.body.appendChild(alertOverlay);
@@ -297,42 +307,42 @@
   }
 
   function addWordToTable(word, replacement) {
-      const tableBody = document.getElementById("table-body");
-      const row = document.createElement("tr");
+    const tableBody = document.getElementById("table-body");
+    const row = document.createElement("tr");
 
-      const wordCell = document.createElement("td");
-      const wordLink = document.createElement("a");
-      wordLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
-          word
-      )}`;
-      wordLink.target = "_blank"; // Open link in new tab
-      wordLink.textContent = word;
-      wordLink.style.color = "#97700B";
-      wordLink.style.textDecoration = "none";
-      wordCell.appendChild(wordLink);
+    const wordCell = document.createElement("td");
+    const wordLink = document.createElement("a");
+    wordLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+      word
+    )}`;
+    wordLink.target = "_blank"; // Open link in new tab
+    wordLink.textContent = word;
+    wordLink.style.color = "#97700B";
+    wordLink.style.textDecoration = "none";
+    wordCell.appendChild(wordLink);
 
-      const replacementCell = document.createElement("td");
-      const replacementLink = document.createElement("a");
-      replacementLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
-          replacement
-      )}`;
-      replacementLink.target = "_blank";
-      replacementLink.textContent = replacement;
-      replacementLink.style.color = "#000000";
-      replacementLink.style.textDecoration = "none";
-      replacementCell.appendChild(replacementLink);
+    const replacementCell = document.createElement("td");
+    const replacementLink = document.createElement("a");
+    replacementLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
+      replacement
+    )}`;
+    replacementLink.target = "_blank";
+    replacementLink.textContent = replacement;
+    replacementLink.style.color = "#000000";
+    replacementLink.style.textDecoration = "none";
+    replacementCell.appendChild(replacementLink);
 
-      row.appendChild(wordCell);
-      row.appendChild(replacementCell);
-      tableBody.appendChild(row);
+    row.appendChild(wordCell);
+    row.appendChild(replacementCell);
+    tableBody.appendChild(row);
   }
 
   async function getReplacedWordsFromStorage() {
-      return new Promise((resolve) => {
-          chrome.storage.local.get(["replacedWords"], (data) => {
-              resolve(data.replacedWords || []);
-          });
+    return new Promise((resolve) => {
+      chrome.storage.local.get(["replacedWords"], (data) => {
+        resolve(data.replacedWords || []);
       });
+    });
   }
 
 
@@ -363,7 +373,7 @@
       row.appendChild(wordCell);
       row.appendChild(replacementCell);
       tableBody.appendChild(row);
-      
+
     }
   }
 
@@ -394,7 +404,7 @@
     } catch (error) {
       console.error("Error:", error);
     }
-    
+
   }
 
   async function submitForm() {
@@ -423,7 +433,7 @@
       });
 
       if (response.ok) {
-          await closeDialog();
+        await closeDialog();
         addWord(wordInput, replacementInput);
       } else {
         errorMessage.textContent = getLocalizedString("errorSubmissionFailed");
@@ -510,5 +520,5 @@
 
     const form = document.getElementById("input-form");
     form.reset(); // Reset the form inputs
-  //  document.getElementById("error-message").textContent = ""; // Clear error message
-  } 
+    //  document.getElementById("error-message").textContent = ""; // Clear error message
+  }

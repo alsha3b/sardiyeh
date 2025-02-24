@@ -14,5 +14,9 @@ const ar = {
   reloadButton: "إعادة تحميل",
   wordInput: "الكلمة التي تريد تعديلها",
   replacementInput: "الكلمة الاصلية",
+
+  turningOnTitle: "قيد التشغيل...",
+  turningOffTitle: "قيد الإيقاف...",
+  reloadMessage: "لكي ترى التغييرات، يجب إعادة تحميل الصفحة.",
 };
 

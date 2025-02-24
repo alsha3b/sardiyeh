@@ -14,5 +14,10 @@ const en = {
   cancelButton: "Cancel",
   wordInput: "The word you want to replace",
   replacementInput: "The replacement for the word",
+
+  turningOnTitle: "Turning on...",
+  turningOffTitle: "Turning off...",
+  reloadMessage: "In order to see your changes, the page will need to be reloaded.",
+
 };
 
