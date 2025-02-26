@@ -253,7 +253,7 @@
     chrome.storage.sync.get(["selectedLanguage"], function (result) {
       const selectedLanguage = result.selectedLanguage || "en"; // Default to English if no language is saved
       languageSelect.value = selectedLanguage;
-      setLanguage(selectedLanguage);
+      updateLanguage(selectedLanguage);
     });
   }
 
@@ -444,13 +444,13 @@
     const languageSelect = document.getElementById("language-select");
     const selectedLanguage = languageSelect.value;
 
-    setLanguage(selectedLanguage);
+    updateLanguage(selectedLanguage);
 
     // Save the selected language
     chrome.storage.sync.set({ selectedLanguage: selectedLanguage });
   }
 
-  function setLanguage(language) {
+  function updateLanguage(language) {
     if (language === "en") {
       loadLanguage(en);
       document.body.setAttribute("dir", "ltr");
