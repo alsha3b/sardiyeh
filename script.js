@@ -101,31 +101,24 @@ document.getElementById("saveButton").addEventListener("click", function () {
 
 // Function to switch between English and Arabic
 function setLanguage(language) {
-  const translation = language === "ar" ? ar : en;
+  const translation = language === 'ar' ? ar : en;
 
   // Update text content for various elements
   document.getElementById("header-text").textContent = translation.pluginName;
-  document.getElementById("replaced-words-title").textContent =
-    translation.replacedWords;
+  document.getElementById("replaced-words-title").textContent = translation.replacedWords;
   document.getElementById("word-header").textContent = translation.word;
-  document.getElementById("replacement-header").textContent =
-    translation.replacement;
+  document.getElementById("replacement-header").textContent = translation.replacement;
   document.getElementById("word-label").textContent = translation.wordLabel;
-  document.getElementById("replacement-label").textContent =
-    translation.replacementLabel;
+  document.getElementById("replacement-label").textContent = translation.replacementLabel;
   document.getElementById("dialog-submit").textContent = translation.submitButton;
-  document.getElementById("dialog-close").textContent =
-    translation.cancelButton;
-  document.getElementById("errorMessage").textContent =
-    translation.errorEmptyFields;
+  document.getElementById("dialog-close").textContent = translation.cancelButton;
+  document.getElementById("errorMessage").textContent = translation.errorEmptyFields;
 }
 
 // Event listener for language selection
-document
-  .getElementById("language-select")
-  .addEventListener("change", function (event) {
-    setLanguage(event.target.value);
-  });
+document.getElementById("language-select").addEventListener("change", function (event) {
+  setLanguage(event.target.value);
+});
 
 // Initialize with the default language (English)
-setLanguage("en");
+setLanguage('en');

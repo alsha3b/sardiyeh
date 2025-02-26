@@ -391,6 +391,7 @@ input:checked+.slider:before {
 }
 
 
+
 /* Additional styles for RTL support */
 body[dir="rtl"] .header .icon {
   margin-right: 0;
@@ -552,3 +553,4 @@ body[dir="rtl"] #footer {
 .alert-buttons .cancel-button:hover {
   border: 1px solid #004d23;
 }
+

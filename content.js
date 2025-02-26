@@ -1,4 +1,5 @@
 (() => {
+
   // Function to get dictionary from local storage
   function getDictionaryFromLocalStorage() {
     const dictionary = localStorage.getItem("dictionary");
@@ -70,6 +71,57 @@
       console.error("Error fetching dictionary:", error);
     }
   }
+
+  // Function to save dictionary to local storage
+  function saveDictionaryToLocalStorage(dictionary) {
+    const timestamp = new Date();
+    localStorage.setItem("dictionary", JSON.stringify(dictionary));
+    localStorage.setItem("dictionaryTimestamp", timestamp.toISOString());
+  }
+
+  // Function to check if a week has passed since the last update
+  function isWeekPassed(timestamp) {
+    const now = new Date();
+    const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+    let x=0
+    if (now -timestamp>weekInMilliseconds){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
+  // Function to get dictionary from local storage
+  function getDictionaryFromLocalStorage() {
+    const dictionary = localStorage.getItem("dictionary");
+    const timestamp = localStorage.getItem("dictionaryTimestamp");
+    if (dictionary && timestamp) {
+      return {
+        data: JSON.parse(dictionary),
+        timestamp: new Date(timestamp),
+      };
+    }
+    return null;
+  }
+
+  // Main function to get dictionary
+  async function getDictionary() {
+    let dictionaryData = getDictionaryFromLocalStorage();
+    if (dictionaryData && !isWeekPassed(dictionaryData.timestamp)) {
+      console.log("not fetching")
+      return dictionaryData.data;
+    } 
+      console.log("fetchingg")
+      const newDictionary= await fetchDictionary();
+      if(newDictionary){
+        saveDictionaryToLocalStorage(newDictionary)
+      }
+      return newDictionary
+    
+  }
+
+  
 
   let textToChange;
   let regex;

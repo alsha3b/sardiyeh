@@ -1,4 +1,4 @@
-  // File responsible for the extension popup
+// File responsible for the extension popup
 
   document.addEventListener("DOMContentLoaded", function () {
     initLanguage();
@@ -127,6 +127,7 @@
     }
   }
 
+
   function initForm() {
     const form = document.getElementById("input-form");
     const wordInput = document.getElementById("word-input");
@@ -147,6 +148,7 @@
       input.addEventListener("focus", handleFocus);
       input.addEventListener("blur", handleBlur);
     });
+
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault(); // Prevent default form submission
@@ -197,6 +199,7 @@
       }
     });
 
+
     document
       .querySelector(".dialog-close")
       .addEventListener("click", closeDialog);
@@ -217,10 +220,12 @@
       }
     }
 
+
     function showErrorMessage(message) {
       errorMessage.style.display = "flex";
       errorText.textContent = message;
     }
+
 
     function clearErrorStyles() {
       wordInput.classList.remove("input-error");
@@ -512,3 +517,4 @@
     form.reset(); // Reset the form inputs
   //  document.getElementById("error-message").textContent = ""; // Clear error message
   } 
+
