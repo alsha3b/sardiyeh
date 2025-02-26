@@ -29,7 +29,8 @@
         return;
       }
       const dictionary = parseTranslationData(data);
-console.log(dictionary);      if (chrome.runtime?.id) {
+      console.log(dictionary);
+      if (chrome.runtime?.id) {
         await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
         await chrome.storage.local.set({ dictionary: dictionary });
       }
@@ -166,9 +167,8 @@ console.log(dictionary);      if (chrome.runtime?.id) {
       "\\b(" + Object.keys(dictionary).map(escapeRegExp).join("|") + ")\\b";
     const regex = new RegExp(pattern, "gi");
 
-    const bloom= new BloomFilter(1440,1)      // Adjust size and number of hash functions
+    const bloom = new BloomFilter(1440, 1); // Adjust size and number of hash functions
     Object.keys(dictionary || {}).forEach((word) => bloom.add(word));
-
 
     replaceTextNodes(document.body, dictionary, regex, bloom);
     chrome.storage.local.set({
@@ -303,11 +303,11 @@ console.log(dictionary);      if (chrome.runtime?.id) {
       if (now - lastRun < 3000) {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-          replaceTextAndImages();
+          replaceTextAndImages(dictData);
           lastRun = now;
         }, 600);
       } else {
-        replaceTextAndImages();
+        replaceTextAndImages(dictData);
         lastRun = now;
       }
     });
