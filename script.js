@@ -1,5 +1,8 @@
+// script.js
+
 // toggle switch to (de)activate extension
 const toggleSwitch = document.getElementById("toggleSwitch");
+const logo = document.getElementById("logo");
 
 // getting the saved state of the toggle
 chrome.storage.sync.get(["ext_on"], async function (items) {
@@ -10,12 +13,10 @@ chrome.storage.sync.get(["ext_on"], async function (items) {
 
   toggleSwitch.checked = items.ext_on != false;
 
+  // Initial UI setup based on stored state
   toggleContent(toggleSwitch.checked);
 
-  var tab = await getCurrentTab();
-  await getDomElements(tab, toggleSwitch.checked);
 });
-
 
 const toggleContent = (isChecked) => {
   const pluginWindow = document.getElementById("plugin-window");
@@ -23,7 +24,6 @@ const toggleContent = (isChecked) => {
   const welcome = document.getElementById("welcome");
   const footer = document.getElementById("footer");
   const inputDialog = document.getElementById("input-dialog");
-
 
   if (isChecked) {
     pluginWindow.style.backgroundColor = "#fafafa";
@@ -43,12 +43,6 @@ const toggleContent = (isChecked) => {
 // listening to changes to the toggle switch
 toggleSwitch.addEventListener("change", async () => {
   const isChecked = toggleSwitch.checked;
-
-  toggleContent(isChecked);
-
-  var tab = await getCurrentTab();
-  await getDomElements(tab, isChecked);
-
   chrome.storage.sync.set({
     ext_on: isChecked,
     function() {},
@@ -99,17 +93,11 @@ document.getElementById("saveButton").addEventListener("click", function () {
   if (wordToReplace === replacementWord && wordToReplace !== "") {
     errorMessage.style.display = "block"; // Show the error message
   } else {
-    errorMessage.style.display = "none";  // Hide the error message
+    errorMessage.style.display = "none"; // Hide the error message
     // Proceed with the save logic
     alert("Saved successfully!");
   }
 });
-
-
-
-
-
-
 
 // Function to switch between English and Arabic
 function setLanguage(language) {
