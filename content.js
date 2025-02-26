@@ -1,5 +1,4 @@
 (() => {
-
   // Function to get dictionary from local storage
   function getDictionaryFromLocalStorage() {
     const dictionary = localStorage.getItem("dictionary");
@@ -44,7 +43,8 @@
         {
           method: "GET",
           headers: {
-            "X-Access-Key": "$2a$10$D40ON/o9o/wDGqEu281T5e/t.DQ8NipDJAXRYc/conOeNaUuvxIRS",
+            "X-Access-Key":
+              "$2a$10$D40ON/o9o/wDGqEu281T5e/t.DQ8NipDJAXRYc/conOeNaUuvxIRS",
           },
         }
       );
@@ -62,9 +62,10 @@
 
       dictionary["israel"] = "Palestine";
 
-      await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
-      await chrome.storage.local.set({ dictionary: dictionary });
-
+      if (chrome.runtime?.id) {
+        await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
+        await chrome.storage.local.set({ dictionary: dictionary });
+      }
       saveDictionaryToLocalStorage(dictionary);
       return dictionary;
     } catch (error) {
@@ -83,45 +84,13 @@
   function isWeekPassed(timestamp) {
     const now = new Date();
     const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-    let x=0
-    if (now -timestamp>weekInMilliseconds){
-      return true
-    }
-    else{
-      return false
+    let x = 0;
+    if (now - timestamp > weekInMilliseconds) {
+      return true;
+    } else {
+      return false;
     }
   }
-
-  // Function to get dictionary from local storage
-  function getDictionaryFromLocalStorage() {
-    const dictionary = localStorage.getItem("dictionary");
-    const timestamp = localStorage.getItem("dictionaryTimestamp");
-    if (dictionary && timestamp) {
-      return {
-        data: JSON.parse(dictionary),
-        timestamp: new Date(timestamp),
-      };
-    }
-    return null;
-  }
-
-  // Main function to get dictionary
-  async function getDictionary() {
-    let dictionaryData = getDictionaryFromLocalStorage();
-    if (dictionaryData && !isWeekPassed(dictionaryData.timestamp)) {
-      console.log("not fetching")
-      return dictionaryData.data;
-    } 
-      console.log("fetchingg")
-      const newDictionary= await fetchDictionary();
-      if(newDictionary){
-        saveDictionaryToLocalStorage(newDictionary)
-      }
-      return newDictionary
-    
-  }
-
-  
 
   let textToChange;
   let regex;
@@ -143,7 +112,9 @@
   class BloomFilter {
     constructor(size, numHashFunctions) {
       if (size <= 0 || numHashFunctions <= 0) {
-        throw new Error("Size and number of hash functions must be positive integers.");
+        throw new Error(
+          "Size and number of hash functions must be positive integers."
+        );
       }
       this.size = size;
       this.numHashFunctions = numHashFunctions;
@@ -190,7 +161,7 @@
           const key = word.toLowerCase();
           if (!bloom.contains(key)) {
             if (textToChange[key]) {
-              createTooltip(el, word);
+              // createTooltip(el, word);
               return textToChange[key];
             }
           }
@@ -242,10 +213,12 @@
       replaceText(result.snapshotItem(i), bloom);
     }
 
-    chrome.storage.local.set({
-      replacedWords: replacedWords,
-      replacedSet: replacedSet,
-    });
+    if (chrome.runtime?.id) {
+      chrome.storage.local.set({
+        replacedWords: replacedWords,
+        replacedSet: replacedSet,
+      });
+    }
   };
 
   const replaceTextAndImages = () => {
@@ -280,7 +253,7 @@
       );
     }
 
-    if (replacedWords.length > 0) {
+    if (replacedWords.length > 0 && chrome.runtime?.id) {
       chrome.storage.local.set({
         replacedWords: replacedWords,
         replacedSet: replacedSet,
@@ -293,7 +266,8 @@
 
     const observer = new MutationObserver((mutations) => {
       const shouldUpdate = mutations.some(
-        (mutation) => mutation.type === "childList" && mutation.addedNodes.length > 0
+        (mutation) =>
+          mutation.type === "childList" && mutation.addedNodes.length > 0
       );
 
       if (!shouldUpdate) return;
@@ -339,54 +313,6 @@
       }
     });
 
-    window.addEventListener("unload", stopObserving); // Cleanup on page unload
+    window.addEventListener("pagehide", stopObserving); // Cleanup on page unload
   });
-
-  const createTooltip = (el, text) => {
-    const newElement = document.createElement("div");
-
-    const haifaText =
-      "Haifa was raided and occupied on April 22–23, 1948, after a major assault by the Haganah terrorists against Palestinian civilians. The Zionist terrorists drove the Palestinian residents to the sea under the threat of being shot cold in the street, thus emptying a large portion of the Palestinian population in Haifa.";
-    const jerusalemText =
-      "Jerusalem, an eternal capital of Palestinians, was raided by Zionist terrorist forces with the help of British soldiers who were occupying Jerusalem in April 1948, culminating with the division of the city by mid-May between the Hagana terrorists and Palestinians. Western Jerusalem fell to the occupation of the Zionist terrorists, while the Old City was taken by Jordanian forces on May 28, 1948.";
-    const nazarethText =
-      "Zionist terrorists raided Nazareth on July 16, 1948. After the Palestinians surrendered to the terrorists, they continued to massacre the inhabitants until a pact was made, and an-Nasra still houses the largest Palestinian native population in the occupied land.";
-
-    const toolTipText =
-      text == "Haifa" || text == "haifa"
-        ? haifaText
-        : text == "Jerusalem" || text == "jerusalem"
-        ? jerusalemText
-        : text == "Nazareth" || text == "nazareth"
-        ? nazarethText
-        : text;
-
-    newElement.innerText = toolTipText;
-    newElement.classList.add("tooltip");
-    newElement.style.position = "absolute";
-    newElement.style.backgroundColor = "black";
-    newElement.style.color = "white";
-    newElement.style.padding = "5px";
-    newElement.style.borderRadius = "5px";
-    newElement.style.fontSize = "12px";
-    newElement.style.visibility = "hidden";
-    newElement.style.zIndex = "1000";
-
-    document.body.appendChild(newElement);
-
-    const parentNode = el.parentNode;
-
-    parentNode.addEventListener("mouseenter", function () {
-      const rect = parentNode.getBoundingClientRect();
-      newElement.style.left = `${rect.left + window.scrollX}px`;
-      newElement.style.top = `${
-        rect.top + window.scrollY - newElement.offsetHeight
-      }px`;
-      newElement.style.visibility = "visible";
-    });
-
-    parentNode.addEventListener("mouseleave", function () {
-      newElement.style.visibility = "hidden";
-    });
-  };
 })();
