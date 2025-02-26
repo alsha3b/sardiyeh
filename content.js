@@ -1,6 +1,66 @@
 (() => {
+  let shouldChangeText = true;
+  const replacedWords = [];
+  const replacedSet = new Set();
+
+  // takes in the array of obj and returns it as a dict.
+  const parseTranslationData = (data) => {
+    const res = {};
+
+    for (let item of data) {
+      res[item.translation] = item.value;
+    }
+    return res;
+  };
+
+  const fetchDictionary = async () => {
+    const url =
+      "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/test/translation";
+
+    try {
+      const response = await fetch(url);
+
+      const res = await response.json();
+
+      const data = res.data;
+
+      if (!data) {
+        shouldChangeText = false;
+        return;
+      }
+      const dictionary = parseTranslationData(data);
+console.log(dictionary);      if (chrome.runtime?.id) {
+        await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
+        await chrome.storage.local.set({ dictionary: dictionary });
+      }
+      saveDictionaryToLocalStorage(dictionary);
+      return dictionary;
+    } catch (error) {
+      console.error("Error fetching dictionary:", error);
+    }
+  };
+
+  // Function to save dictionary to local storage
+  const saveDictionaryToLocalStorage = (dictionary) => {
+    const timestamp = new Date();
+    localStorage.setItem("dictionary", JSON.stringify(dictionary));
+    localStorage.setItem("dictionaryTimestamp", timestamp.toISOString());
+  };
+
+  // Function to check if a week has passed since the last update
+  const isWeekPassed = (timestamp) => {
+    const now = new Date();
+    const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+    let x = 0;
+    if (now - timestamp > weekInMilliseconds) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   // Function to get dictionary from local storage
-  function getDictionaryFromLocalStorage() {
+  const getDictionaryFromLocalStorage = () => {
     const dictionary = localStorage.getItem("dictionary");
     const timestamp = localStorage.getItem("dictionaryTimestamp");
     if (dictionary && timestamp) {
@@ -10,103 +70,41 @@
       };
     }
     return null;
-  }
-
-  // Function to save dictionary to local storage
-  function saveDictionaryToLocalStorage(dictionary) {
-    const timestamp = new Date();
-    localStorage.setItem("dictionary", JSON.stringify(dictionary));
-    localStorage.setItem("dictionaryTimestamp", timestamp.toISOString());
-  }
-
-  // Function to check if a week has passed since the last update
-  function isWeekPassed(timestamp) {
-    const now = new Date();
-    const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-    return now - timestamp > weekInMilliseconds;
-  }
+  };
 
   // Main function to get dictionary
-  async function getDictionary() {
+  const getDictionary = async () => {
     let dictionaryData = getDictionaryFromLocalStorage();
+    console.log(dictionaryData);
     if (dictionaryData && !isWeekPassed(dictionaryData.timestamp)) {
       return dictionaryData.data;
-    } else {
-      return await fetchDictionary();
     }
-  }
-
-  async function fetchDictionary() {
-    try {
-      response = await fetch(
-        "https://api.jsonbin.io/v3/b/669bb785e41b4d34e41497e4",
-        {
-          method: "GET",
-          headers: {
-            "X-Access-Key":
-              "$2a$10$D40ON/o9o/wDGqEu281T5e/t.DQ8NipDJAXRYc/conOeNaUuvxIRS",
-          },
-        }
-      );
-
-      data = await response.json();
-
-      console.log("data is ", data);
-
-      const dictionary = data["record"];
-
-      if (dictionary == null || typeof dictionary === "undefined") {
-        textToChange = false;
-        return;
-      }
-
-      dictionary["israel"] = "Palestine";
-
-      if (chrome.runtime?.id) {
-        await chrome.storage.sync.set({ dictionary: dictionary }, () => {});
-        await chrome.storage.local.set({ dictionary: dictionary });
-      }
-      saveDictionaryToLocalStorage(dictionary);
-      return dictionary;
-    } catch (error) {
-      console.error("Error fetching dictionary:", error);
+    const newDictionary = await fetchDictionary();
+    if (newDictionary) {
+      saveDictionaryToLocalStorage(newDictionary);
     }
-  }
+    return newDictionary;
+  };
 
-  // Function to save dictionary to local storage
-  function saveDictionaryToLocalStorage(dictionary) {
-    const timestamp = new Date();
-    localStorage.setItem("dictionary", JSON.stringify(dictionary));
-    localStorage.setItem("dictionaryTimestamp", timestamp.toISOString());
-  }
+  // replacing images function
+  const replaceImages = () => {
+    // Locate the container of the flag by its class or other attributes
+    const flagContainer = document.querySelector("div.MRI68d");
+    if (!flagContainer) return;
 
-  // Function to check if a week has passed since the last update
-  function isWeekPassed(timestamp) {
-    const now = new Date();
-    const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-    let x = 0;
-    if (now - timestamp > weekInMilliseconds) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+    const flagImage = flagContainer.querySelector("img");
+    if (!flagImage) return;
 
-  let textToChange;
-  let regex;
+    const newImageUrl =
+      chrome.runtime.getURL("images/Palestine_Flag.png") + `?t=${Date.now()}`;
+    flagImage.src = newImageUrl;
 
-  const replacedWords = [];
-  const replacedSet = new Set();
+    flagImage.alt = "Replaced Flag";
+  };
 
-  const getReplacementText = (text) => {
-    let replacement = textToChange[text.toLowerCase()];
-    if (!replacement) {
-      return text;
-    }
-    if (text.charAt(0) === text.charAt(0).toUpperCase()) {
-      replacement = replacement.charAt(0).toUpperCase() + replacement.slice(1);
-    }
-    return replacement;
+  const escapeRegExp = (str) => {
+    // Commonly used snippet to escape special regex chars
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   };
 
   class BloomFilter {
@@ -120,13 +118,16 @@
       this.numHashFunctions = numHashFunctions;
       this.bitArray = new Array(size).fill(false);
     }
+    //dwdwe
 
+    // Improved hash function with better distribution
     hash(value, i) {
       const hash1 = this.simpleHash(value, i);
       const hash2 = this.simpleHash(value.split("").reverse().join(""), i + 1);
       return (hash1 + i * hash2) % this.size;
     }
 
+    // Simple hash function for demonstration
     simpleHash(value, salt) {
       let hash = 0;
       for (let char of value) {
@@ -135,6 +136,7 @@
       return hash;
     }
 
+    // Add an item to the Bloom filter
     add(value) {
       for (let i = 0; i < this.numHashFunctions; i++) {
         const index = this.hash(value, i);
@@ -142,6 +144,7 @@
       }
     }
 
+    // Check if an item might be in the Bloom filter
     contains(value) {
       for (let i = 0; i < this.numHashFunctions; i++) {
         const index = this.hash(value, i);
@@ -153,76 +156,108 @@
     }
   }
 
-  const replaceText = (el, bloom) => {
-    if (el.nodeType === Node.TEXT_NODE) {
-      const words = el.textContent.split(/\b/);
-      const updatedText = words
-        .map((word) => {
-          const key = word.toLowerCase();
-          if (!bloom.contains(key)) {
-            if (textToChange[key]) {
-              // createTooltip(el, word);
-              return textToChange[key];
-            }
-          }
-          return word;
-        })
-        .join("");
-      el.textContent = updatedText;
-    } else {
-      for (let child of el.childNodes) {
-        replaceText(child, bloom);
-      }
-    }
+  const replaceWordsInDOM = (dictionary) => {
+    if (!dictionary || Object.keys(dictionary).length === 0) return;
+
+    // Build a single RegExp from all keys in the dictionary
+    //   - Escapes special characters so they won't break the RegExp.
+    //   - Joins them in a capturing group, e.g. "\b(word1|word2|...)\b"
+    const pattern =
+      "\\b(" + Object.keys(dictionary).map(escapeRegExp).join("|") + ")\\b";
+    const regex = new RegExp(pattern, "gi");
+
+    const bloom= new BloomFilter(1440,1)      // Adjust size and number of hash functions
+    Object.keys(dictionary || {}).forEach((word) => bloom.add(word));
+
+
+    replaceTextNodes(document.body, dictionary, regex, bloom);
+    chrome.storage.local.set({
+      replacedWords,
+      replacedSet,
+    });
   };
 
-  const replaceImages = () => {
-    const flagContainer = document.querySelector("div.MRI68d");
-    if (flagContainer) {
-      const flagImage = flagContainer.querySelector("img");
-      if (flagImage) {
-        const newImageUrl = chrome.runtime.getURL("images/Palestine_Flag.png");
-        flagImage.src = newImageUrl;
-        flagImage.alt = "Replaced Flag";
+  const shouldSkipNode = (node) => {
+    // Only element nodes can be input/textarea/contenteditable
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      // 1) Matches any literal input or textarea elements
+      // 2) Checks isContentEditable (true if this or an ancestor has contenteditable attribute)
+      // 3) Matches role="textbox" (used by some WYSIWYG editors, messaging apps, etc.)
+      if (
+        node.matches("input, textarea, [role='textbox']") ||
+        node.isContentEditable
+      ) {
+        return true;
       }
     }
+    return false;
   };
 
-  const anyChildOfBody = "/html/body//";
-  const isTextButNotPartOfJsScriptOrTooltip =
-    "text()[not(parent::script) and not(ancestor::*[contains(@class, 'tooltip')])]";
-  const xpathExpression = anyChildOfBody + isTextButNotPartOfJsScriptOrTooltip;
-
-  const replaceTextInNodes = () => {
-    if (regex == null || typeof regex === "undefined") {
+  const replaceTextNodes = (node, dictionary, regex, bloom) => {
+    if (shouldSkipNode(node)) {
       return;
     }
-    const times = [];
-    const bloom = new BloomFilter(1440, 1);
-    Object.keys(textToChange || {}).forEach((word) => bloom.add(word));
-
-    const result = document.evaluate(
-      xpathExpression,
-      document,
-      null,
-      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-      null
-    );
-    console.log(result);
-    for (let i = 0; i < result.snapshotLength; i++) {
-      replaceText(result.snapshotItem(i), bloom);
+    if (
+      node.nodeType === Node.ELEMENT_NODE &&
+      node.matches("input, textarea")
+    ) {
+      return;
     }
+    if (node.nodeType === Node.TEXT_NODE) {
+      const words = node.textContent.split(regex);
+      const updatedNodes = words.map((word) => {
+        const key = word.toLowerCase();
 
-    if (chrome.runtime?.id) {
-      chrome.storage.local.set({
-        replacedWords: replacedWords,
-        replacedSet: replacedSet,
+        if (!bloom.contains(key) && dictionary[key]) {
+          const replacement = dictionary[key];
+          if (!replacedSet.has(word)) {
+            replacedSet.add(word);
+            replacedWords.push({ word, replacement });
+          }
+
+          const span = document.createElement("span");
+          span.textContent = replacement;
+          span.style.textDecoration = "underline";
+          span.style.textDecorationColor = "green";
+          span.style.textDecorationThickness = "3px";
+
+          return span;
+        }
+
+        return document.createTextNode(word);
+      });
+
+      const parent = node.parentNode;
+      if (parent) {
+        updatedNodes.forEach((n) => parent.insertBefore(n, node));
+        parent.removeChild(node);
+      }
+
+      // node.textContent = node.textContent.replace(regex, (matchedWord) => {
+      //   const lower = matchedWord.toLowerCase();
+
+      //   if (!dictionary[lower]) return matchedWord;
+
+      //   if (!replacedSet.has(lower)) {
+      //     replacedWords.push({
+      //       original: matchedWord,
+      //       replacement: dictionary[lower],
+      //     });
+      //   }
+      //   replacedSet.add(lower);
+      //   // createTooltip(node, matchedWord)
+
+      //   return dictionary[lower];
+      // });
+    } else {
+      node.childNodes.forEach((child) => {
+        replaceTextNodes(child, dictionary, regex, bloom);
       });
     }
   };
 
-  const replaceTextAndImages = () => {
-    replaceTextInNodes();
+  const replaceTextAndImages = (dictData) => {
+    replaceWordsInDOM(dictData);
     replaceImages();
   };
 
@@ -231,27 +266,11 @@
       console.error(chrome.runtime.lastError);
       return;
     }
+    const dictData = await getDictionary();
 
-    if (items.ext_on === false) {
-      return;
-    }
+    if (!items.ext_on) return;
 
-    if (textToChange === false) {
-      return;
-    }
-
-    if (textToChange == null || typeof textToChange === "undefined") {
-      textToChange = await getDictionary();
-
-      if (textToChange == null || typeof textToChange === "undefined") {
-        return;
-      }
-
-      regex = new RegExp(
-        "\\b(" + Object.keys(textToChange).join("|") + ")\\b",
-        "gi"
-      );
-    }
+    if (!shouldChangeText) return;
 
     if (replacedWords.length > 0 && chrome.runtime?.id) {
       chrome.storage.local.set({
@@ -265,10 +284,18 @@
     let lastRun = performance.now();
 
     const observer = new MutationObserver((mutations) => {
-      const shouldUpdate = mutations.some(
-        (mutation) =>
-          mutation.type === "childList" && mutation.addedNodes.length > 0
-      );
+      const shouldUpdate = mutations.some((mutation) => {
+        if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+          return Array.from(mutation.addedNodes).some((node) => {
+            const insideInputLike =
+              node.closest?.("input, textarea, [role='textbox']") ||
+              node.isContentEditable ||
+              node.parentNode?.isContentEditable;
+            return !insideInputLike;
+          });
+        }
+        return false;
+      });
 
       if (!shouldUpdate) return;
 
@@ -292,7 +319,7 @@
         attributes: false,
         characterData: false,
       });
-      replaceTextAndImages(); // Initial run to match original behavior
+      replaceTextAndImages(dictData); // Initial run to match original behavior
     }
 
     function stopObserving() {

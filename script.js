@@ -85,24 +85,53 @@ if (typeof window !== "undefined") {
 }
 
 document.getElementById("dialog-submit").addEventListener("click", function () {
-  const wordToReplace = document.getElementById("wordToReplace").value.trim();
+  const wordToReplace = document.getElementById("word-input").value.trim();
   const replacementWord = document
-    .getElementById("replacementWord")
+    .getElementById("replacement-input")
     .value.trim();
   const errorMessage = document.getElementById("error-text");
 
   if (wordToReplace === replacementWord && wordToReplace !== "") {
-    errorMessage.style.display = "block"; // Show the error message
+    if (errorMessage) {
+      errorMessage.style.display = "block"; // Show the error message
+    }
   } else {
-    errorMessage.style.display = "none"; // Hide the error message
-    // Proceed with the save logic
-    alert("Saved successfully!");
+    if (errorMessage) {
+      errorMessage.style.display = "none"; // Hide the error message
+    }
   }
 });
+
+// Load translations
+let en, ar;
+
+// Function to load JSON files
+async function loadJSON(filePath) {
+  const response = await fetch(filePath);
+  if (!response.ok) {
+    throw new Error("Failed to load ${filePath}: ${response.statusText}");
+  }
+  return await response.json();
+}
+
+async function loadTranslations() {
+  try {
+    en = await loadJSON("../translations/en.json");
+    ar = await loadJSON("../translations/ar.json");
+    // Initialize with the default language (English)
+    setLanguage("en");
+  } catch (error) {
+    console.error("Error loading translations:", error);
+  }
+}
 
 // Function to switch between English and Arabic
 function setLanguage(language) {
   const translation = language === "ar" ? ar : en;
+
+  if (!translation) {
+    return;
+  }
 
   // Update text content for various elements
   document.getElementById("header-text").textContent = translation.pluginName;
@@ -118,8 +147,11 @@ function setLanguage(language) {
     translation.submitButton;
   document.getElementById("dialog-close").textContent =
     translation.cancelButton;
-  document.getElementById("error-text").textContent =
-    translation.errorEmptyFields;
+  const errorElement = document.getElementById("error-text");
+
+  if (errorElement) {
+    errorElement.textContent = translation.errorEmptyFields;
+  }
 }
 
 // Event listener for language selection
@@ -130,4 +162,4 @@ document
   });
 
 // Initialize with the default language (English)
-setLanguage("en");
+loadTranslations();
