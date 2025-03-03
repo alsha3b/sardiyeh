@@ -12,5 +12,12 @@
   "turnOffMessage": "إذا كنت ترغب في إيقاف تشغيل الإضافة، فالرجاء إعادة تحميل الصفحة.",
   "reloadButton": "إعادة تحميل",
   "wordInput": "الكلمة التي تريد تعديلها",
-  "replacementInput": "الكلمة الاصلية"
+  "replacementInput": "الكلمة الاصلية",
+
+  "refreshButton":"تحديث",
+
+  "turningOnTitle": "قيد التشغيل...",
+  "turningOffTitle": "قيد الإيقاف...",
+  "reloadMessage": "لكي ترى التغييرات، يجب إعادة تحميل الصفحة."
+  
 }

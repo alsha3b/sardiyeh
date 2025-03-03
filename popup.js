@@ -76,17 +76,17 @@
     alertBox.id = 'customAlertBox';
   
     const alertTitle = document.createElement('h1');
-    alertTitle.textContent = isTurningOn ? "Turning on ..." : "Turning off...";
+    alertTitle.textContent = isTurningOn ? getLocalizedString("turningOnTitle") : getLocalizedString("turningOffTitle");
   
     const alertMessage = document.createElement('p');
-    alertMessage.textContent = "In order to see your changes, the page will need to be reloaded.";
+    alertMessage.textContent = getLocalizedString("reloadMessage");
   
     // Create the button container
     const alertButtons = document.createElement('div');
     alertButtons.classList.add('alert-buttons');
   
     const okButton = document.createElement('button');
-    okButton.textContent = "Refresh";
+    okButton.textContent = getLocalizedString("refreshButton");  
     okButton.classList.add('refresh-button');
     okButton.addEventListener('click', () => {
       alertOverlay.remove();
@@ -95,7 +95,7 @@
     });
   
     const cancelButton = document.createElement('button');
-    cancelButton.textContent = "Cancel";
+    cancelButton.textContent = getLocalizedString("cancelButton");
     cancelButton.classList.add('cancel-button');
     cancelButton.addEventListener('click', () => {
       alertOverlay.remove();

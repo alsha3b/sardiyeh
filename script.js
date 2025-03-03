@@ -134,7 +134,7 @@ function setLanguage(language) {
   }
 
   // Update text content for various elements
-  document.getElementById("header-text").textContent = translation.pluginName;
+  document.getElementById("header-text").textContent = translation.pluginName; // review with basel why this exist (it hide the logo)
   document.getElementById("replaced-words-title").textContent =
     translation.replacedWords;
   document.getElementById("word-header").textContent = translation.word;
