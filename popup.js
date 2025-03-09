@@ -86,7 +86,7 @@
     alertButtons.classList.add('alert-buttons');
   
     const okButton = document.createElement('button');
-    okButton.textContent = getLocalizedString("refreshButton");  
+    okButton.textContent = getLocalizedString("refreshButton");
     okButton.classList.add('refresh-button');
     okButton.addEventListener('click', () => {
       alertOverlay.remove();
