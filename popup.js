@@ -475,12 +475,12 @@
       loadLanguage(en);
       document.body.setAttribute("dir", "ltr");
       document.querySelector(".header").setAttribute("dir", "ltr");
-      document.body.style.fontFamily = "'Montserrat', sans-serif";
+      // document.body.style.fontFamily = "'Montserrat', sans-serif";
     } else if (language === "ar") {
       loadLanguage(ar);
       document.body.setAttribute("dir", "rtl");
       document.querySelector(".header").setAttribute("dir", "rtl");
-      document.body.style.fontFamily = "'Beiruti', sans-serif";
+      // document.body.style.fontFamily = "'Beiruti', sans-serif";
     }
   }
 
