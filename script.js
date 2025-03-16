@@ -1,66 +1,19 @@
-// script.js
+// script.js (after edit)
 
-// toggle switch to (de)activate extension
-const toggleSwitch = document.getElementById("toggleSwitch");
-const logo = document.getElementById("logo");
-
-// getting the saved state of the toggle
-chrome.storage.sync.get(["ext_on"], async function (items) {
-  if (chrome.runtime.lastError) {
-    console.error(chrome.runtime.lastError);
-    return;
-  }
-
-  toggleSwitch.checked = items.ext_on != false;
-
-  // Initial UI setup based on stored state
-  toggleContent(toggleSwitch.checked);
-});
-
-const toggleContent = (isChecked) => {
-  const pluginWindow = document.getElementById("plugin-window");
-  const content = document.getElementById("content");
-  const welcome = document.getElementById("welcome");
-  const footer = document.getElementById("footer");
-  const inputDialog = document.getElementById("input-dialog");
-
-  if (isChecked) {
-    pluginWindow.style.backgroundColor = "#fafafa";
-    content.style.display = "block";
-    welcome.style.display = "none";
-    footer.style.color = "#000000";
-    inputDialog.style.display = "none";
-  } else {
-    pluginWindow.style.backgroundColor = "#004D23";
-    content.style.display = "none";
-    welcome.style.display = "flex";
-    footer.style.color = "#ffffff";
-    inputDialog.style.display = "none";
-  }
-};
-
-// listening to changes to the toggle switch
-toggleSwitch.addEventListener("change", async () => {
-  const isChecked = toggleSwitch.checked;
-  chrome.storage.sync.set({
-    ext_on: isChecked,
-    function() {},
-  });
-});
-
-// get the current active tab to run script on it
+// Utility function to get the current active tab
 async function getCurrentTab() {
   let queryOptions = { active: true, currentWindow: true };
-  // `tab` will either be a `tabs.Tab` instance or `undefined`.
   try {
     let [tab] = await chrome.tabs.query(queryOptions);
     return tab;
   } catch (error) {
-    console.error(error);
+    console.error("Error getting current tab:", error);
+    return null;
   }
 }
 
-// runs the content.js or revert.js file on the current tab
+
+// Utility function to run content.js or revert.js on the current tab
 const getDomElements = async (tab, shouldReplace) => {
   if (!tab && !tab.id) {
     return;
@@ -102,30 +55,32 @@ document.getElementById("dialog-submit").addEventListener("click", function () {
   }
 });
 
-// Load translations
+// Load translations (if still needed here, though likely moved to popup.js)
 let en, ar;
 
-// Function to load JSON files
 async function loadJSON(filePath) {
-  const response = await fetch(filePath);
-  if (!response.ok) {
-    throw new Error("Failed to load ${filePath}: ${response.statusText}");
+  try {
+    const response = await fetch(filePath);
+    if (!response.ok) {
+      throw new Error(`Failed to load ${filePath}: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error loading JSON:", error);
+    return null;
   }
-  return await response.json();
 }
 
 async function loadTranslations() {
   try {
     en = await loadJSON("../translations/en.json");
     ar = await loadJSON("../translations/ar.json");
-    // Initialize with the default language (English)
-    setLanguage("en");
+    // Note: setLanguage likely moved to popup.js; this is just loading data
   } catch (error) {
     console.error("Error loading translations:", error);
   }
 }
 
-// Function to switch between English and Arabic
 function setLanguage(language) {
   const translation = language === "ar" ? ar : en;
 
@@ -134,7 +89,7 @@ function setLanguage(language) {
   }
 
   // Update text content for various elements
-  document.getElementById("header-text").textContent = translation.pluginName;
+  // document.getElementById("header-text").textContent = translation.pluginName; 
   document.getElementById("replaced-words-title").textContent =
     translation.replacedWords;
   document.getElementById("word-header").textContent = translation.word;
@@ -161,5 +116,8 @@ document
     setLanguage(event.target.value);
   });
 
-// Initialize with the default language (English)
-loadTranslations();
+// Minimal DOMContentLoaded to keep script functional if still included
+document.addEventListener("DOMContentLoaded", () => {
+  // Only load translations if this script is still responsible for it
+  loadTranslations();
+});

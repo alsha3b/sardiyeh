@@ -6,48 +6,52 @@
     initForm();
     initAddButton(); // Initialize the add-button functionality
     initToggle();
+    
   });
 
   function initToggle() {
     const toggle = document.getElementById("toggleSwitch");
-
-    chrome.storage.sync.get(["ext_on"], function (data) {
-      toggle.checked = data.ext_on !== false; // Default to true if not set
+  
+    // Fetch and apply initial state
+    chrome.storage.sync.get(["ext_on"], (data) => {
+      const isChecked = data.ext_on !== false; // Default to true if not set
+      toggle.checked = isChecked;
+      toggleContent(isChecked); // Set initial UI state
     });
-
+  
     toggle.addEventListener("change", function () {
       const isChecked = this.checked;
-
+  
       if (!isChecked) {
-        // Show the custom alert if toggling off
+        // Show alert when turning off
         showAlert(false, () => {
-          // Callback function to execute if user clicks "refresh" (reload and revert)
+          // On "Refresh"
           chrome.storage.sync.set({ ext_on: isChecked }, () => {
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-              if (tabs[0] && tabs[0].id) {
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+              if (tabs[0]?.id) {
                 chrome.scripting.executeScript({
-                    target: { tabId: tabs[0].id, allFrames: true },
-                    files: ["revert.js"],
-                  });
+                  target: { tabId: tabs[0].id, allFrames: true },
+                  files: ["revert.js"],
+                });
                 chrome.tabs.reload(tabs[0].id);
               }
             });
+            toggleContent(isChecked); // Update UI after confirming
           });
         }, () => {
-          // Callback function to execute if user clicks "Cancel" (revert the toggle)
-          toggle.checked = true; //Revert the toggle switch
+          // On "Cancel"
+          toggle.checked = true; // Revert toggle
           chrome.storage.sync.set({ ext_on: true }, () => {
-            chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: true });
+            toggleContent(true); // Revert UI
           });
         });
-
       } else {
-
+        // Show alert when turning on
         showAlert(true, () => {
-          // Callback function to execute if user clicks "refresh" (reload and replace)
+          // On "Refresh"
           chrome.storage.sync.set({ ext_on: isChecked }, () => {
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-              if (tabs[0] && tabs[0].id) {
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+              if (tabs[0]?.id) {
                 chrome.scripting.executeScript({
                   target: { tabId: tabs[0].id, allFrames: true },
                   files: ["content.js"],
@@ -55,67 +59,83 @@
                 chrome.tabs.reload(tabs[0].id);
               }
             });
+            toggleContent(isChecked); // Update UI after confirming
           });
         }, () => {
-          // Callback function to execute if user clicks "Cancel" (revert the toggle)
-          toggle.checked = false; //Revert the toggle switch
+          // On "Cancel"
+          toggle.checked = false; // Revert toggle
           chrome.storage.sync.set({ ext_on: false }, () => {
-            chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: false });
+            toggleContent(false); // Revert UI
           });
         });
       }
     });
   }
-
+  
+  function toggleContent(isChecked) {
+    const pluginWindow = document.getElementById("plugin-window");
+    const content = document.getElementById("content");
+    const welcome = document.getElementById("welcome");
+    const footer = document.getElementById("footer");
+    const inputDialog = document.getElementById("input-dialog");
+  
+    if (isChecked) {
+      pluginWindow.style.backgroundColor = "#fafafa";
+      content.style.display = "block";
+      welcome.style.display = "none";
+      footer.style.color = "#000000";
+      inputDialog.style.display = "none";
+    } else {
+      pluginWindow.style.backgroundColor = "#004D23";
+      content.style.display = "none";
+      welcome.style.display = "flex";
+      footer.style.color = "#ffffff";
+      inputDialog.style.display = "none";
+    }
+  }
+  
+  // Keep showAlert and other functions as they are, just ensure toggleContent is called appropriately
   function showAlert(isTurningOn, onOk, onCancel) {
-    // Create the alert overlay elements
-    const alertOverlay = document.createElement('div');
-    alertOverlay.id = 'customAlertOverlay';
+    const alertOverlay = document.createElement("div");
+    alertOverlay.id = "customAlertOverlay";
   
-    const alertBox = document.createElement('div');
-    alertBox.id = 'customAlertBox';
+    const alertBox = document.createElement("div");
+    alertBox.id = "customAlertBox";
   
-    const alertTitle = document.createElement('h1');
-    alertTitle.textContent = isTurningOn ? "Turning on ..." : "Turning off...";
+    const alertTitle = document.createElement("h1");
+    alertTitle.textContent = isTurningOn ? getLocalizedString("turningOnTitle") : getLocalizedString("turningOffTitle");
   
-    const alertMessage = document.createElement('p');
-    alertMessage.textContent = "In order to see your changes, the page will need to be reloaded.";
+    const alertMessage = document.createElement("p");
+    alertMessage.textContent = getLocalizedString("reloadMessage");
   
-    // Create the button container
-    const alertButtons = document.createElement('div');
-    alertButtons.classList.add('alert-buttons');
+    const alertButtons = document.createElement("div");
+    alertButtons.classList.add("alert-buttons");
   
-    const okButton = document.createElement('button');
-    okButton.textContent = "Refresh";
-    okButton.classList.add('refresh-button');
-    okButton.addEventListener('click', () => {
+    const okButton = document.createElement("button");
+    okButton.textContent = getLocalizedString("refreshButton");
+    okButton.classList.add("refresh-button");
+    okButton.addEventListener("click", () => {
       alertOverlay.remove();
-      onOk(); // Callback for refresh button
-      window.location.reload();
+      onOk(); // Execute refresh callback
     });
   
-    const cancelButton = document.createElement('button');
-    cancelButton.textContent = "Cancel";
-    cancelButton.classList.add('cancel-button');
-    cancelButton.addEventListener('click', () => {
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = getLocalizedString("cancelButton");
+    cancelButton.classList.add("cancel-button");
+    cancelButton.addEventListener("click", () => {
       alertOverlay.remove();
-      alertBox.remove();  
-      onCancel(); // Callback for Cancel button
+      onCancel(); // Execute cancel callback
     });
   
-    // Assemble the alert box
     alertBox.appendChild(alertTitle);
     alertBox.appendChild(alertMessage);
-  
     alertButtons.appendChild(okButton);
     alertButtons.appendChild(cancelButton);
-  
     alertBox.appendChild(alertButtons);
-  
-    // Add the alert to the overlay and then to the document
     alertOverlay.appendChild(alertBox);
     document.body.appendChild(alertOverlay);
   }
+
 
   function initAddButton() {
     const addButton = document.getElementById("edit-button");
@@ -455,12 +475,12 @@
       loadLanguage(en);
       document.body.setAttribute("dir", "ltr");
       document.querySelector(".header").setAttribute("dir", "ltr");
-      document.body.style.fontFamily = "'Montserrat', sans-serif";
+      // document.body.style.fontFamily = "'Montserrat', sans-serif";
     } else if (language === "ar") {
       loadLanguage(ar);
       document.body.setAttribute("dir", "rtl");
       document.querySelector(".header").setAttribute("dir", "rtl");
-      document.body.style.fontFamily = "'Beiruti', sans-serif";
+      // document.body.style.fontFamily = "'Beiruti', sans-serif";
     }
   }
 
