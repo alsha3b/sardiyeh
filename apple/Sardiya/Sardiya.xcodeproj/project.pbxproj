@@ -1,0 +1,1023 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FB184F703007A619007FEEA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F6F3007A619007FEEA8 /* AppDelegate.swift */; };
+		FB184F723007A619007FEEA8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F713007A619007FEEA8 /* SceneDelegate.swift */; };
+		FB184F753007A619007FEEA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB184F733007A619007FEEA8 /* LaunchScreen.storyboard */; };
+		FB184F783007A619007FEEA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB184F763007A619007FEEA8 /* Main.storyboard */; };
+		FB184F813007A619007FEEA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F803007A619007FEEA8 /* AppDelegate.swift */; };
+		FB184F843007A619007FEEA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB184F823007A619007FEEA8 /* Main.storyboard */; };
+		FB184F8B3007A619007FEEA8 /* Sardiya Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FB184F8A3007A619007FEEA8 /* Sardiya Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FB184F953007A619007FEEA8 /* Sardiya Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FB184F943007A619007FEEA8 /* Sardiya Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FB184F9A3007A619007FEEA8 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = FB184F5F3007A618007FEEA8 /* Main.html */; };
+		FB184F9B3007A619007FEEA8 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = FB184F5F3007A618007FEEA8 /* Main.html */; };
+		FB184F9C3007A619007FEEA8 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FB184F613007A618007FEEA8 /* Icon.png */; };
+		FB184F9D3007A619007FEEA8 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FB184F613007A618007FEEA8 /* Icon.png */; };
+		FB184F9E3007A619007FEEA8 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = FB184F623007A618007FEEA8 /* Style.css */; };
+		FB184F9F3007A619007FEEA8 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = FB184F623007A618007FEEA8 /* Style.css */; };
+		FB184FA03007A619007FEEA8 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184F633007A618007FEEA8 /* Script.js */; };
+		FB184FA13007A619007FEEA8 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184F633007A618007FEEA8 /* Script.js */; };
+		FB184FA23007A619007FEEA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F643007A618007FEEA8 /* ViewController.swift */; };
+		FB184FA33007A619007FEEA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F643007A618007FEEA8 /* ViewController.swift */; };
+		FB184FA43007A619007FEEA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FB184F653007A619007FEEA8 /* Assets.xcassets */; };
+		FB184FA53007A619007FEEA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FB184F653007A619007FEEA8 /* Assets.xcassets */; };
+		FB184FA63007A619007FEEA8 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F673007A619007FEEA8 /* SafariWebExtensionHandler.swift */; };
+		FB184FA73007A619007FEEA8 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F673007A619007FEEA8 /* SafariWebExtensionHandler.swift */; };
+		FB184FC43007A619007FEEA8 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FB93007A619007FEEA8 /* popup.js */; };
+		FB184FC53007A619007FEEA8 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBA3007A619007FEEA8 /* index.html */; };
+		FB184FC63007A619007FEEA8 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBB3007A619007FEEA8 /* LICENSE */; };
+		FB184FC73007A619007FEEA8 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBC3007A619007FEEA8 /* styles.css */; };
+		FB184FC83007A619007FEEA8 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBD3007A619007FEEA8 /* background.js */; };
+		FB184FC93007A619007FEEA8 /* images in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBE3007A619007FEEA8 /* images */; };
+		FB184FCA3007A619007FEEA8 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBF3007A619007FEEA8 /* icons */; };
+		FB184FCB3007A619007FEEA8 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC03007A619007FEEA8 /* manifest.json */; };
+		FB184FCC3007A619007FEEA8 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC13007A619007FEEA8 /* content.js */; };
+		FB184FCD3007A619007FEEA8 /* translations in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC23007A619007FEEA8 /* translations */; };
+		FB184FCE3007A619007FEEA8 /* src in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC33007A619007FEEA8 /* src */; };
+		FB184FCF3007A619007FEEA8 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FB93007A619007FEEA8 /* popup.js */; };
+		FB184FD03007A619007FEEA8 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBA3007A619007FEEA8 /* index.html */; };
+		FB184FD13007A619007FEEA8 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBB3007A619007FEEA8 /* LICENSE */; };
+		FB184FD23007A619007FEEA8 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBC3007A619007FEEA8 /* styles.css */; };
+		FB184FD33007A619007FEEA8 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBD3007A619007FEEA8 /* background.js */; };
+		FB184FD43007A619007FEEA8 /* images in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBE3007A619007FEEA8 /* images */; };
+		FB184FD53007A619007FEEA8 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBF3007A619007FEEA8 /* icons */; };
+		FB184FD63007A619007FEEA8 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC03007A619007FEEA8 /* manifest.json */; };
+		FB184FD73007A619007FEEA8 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC13007A619007FEEA8 /* content.js */; };
+		FB184FD83007A619007FEEA8 /* translations in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC23007A619007FEEA8 /* translations */; };
+		FB184FD93007A619007FEEA8 /* src in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC33007A619007FEEA8 /* src */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FB184F8C3007A619007FEEA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FB184F593007A618007FEEA8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FB184F893007A619007FEEA8;
+			remoteInfo = "Sardiya Extension (iOS)";
+		};
+		FB184F963007A619007FEEA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FB184F593007A618007FEEA8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FB184F933007A619007FEEA8;
+			remoteInfo = "Sardiya Extension (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FB184FAD3007A619007FEEA8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				FB184F8B3007A619007FEEA8 /* Sardiya Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB184FB43007A619007FEEA8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				FB184F953007A619007FEEA8 /* Sardiya Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		FB184F603007A618007FEEA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
+		FB184F613007A618007FEEA8 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		FB184F623007A618007FEEA8 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		FB184F633007A618007FEEA8 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		FB184F643007A618007FEEA8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FB184F653007A619007FEEA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FB184F673007A619007FEEA8 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		FB184F6C3007A619007FEEA8 /* Sardiya.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sardiya.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB184F6F3007A619007FEEA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FB184F713007A619007FEEA8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		FB184F743007A619007FEEA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		FB184F773007A619007FEEA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FB184F793007A619007FEEA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FB184F7E3007A619007FEEA8 /* Sardiya.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sardiya.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB184F803007A619007FEEA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FB184F833007A619007FEEA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FB184F853007A619007FEEA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FB184F8A3007A619007FEEA8 /* Sardiya Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Sardiya Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB184F8F3007A619007FEEA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FB184F943007A619007FEEA8 /* Sardiya Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Sardiya Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB184F993007A619007FEEA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FB184FB93007A619007FEEA8 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = Resources/popup.js; sourceTree = "<group>"; };
+		FB184FBA3007A619007FEEA8 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = Resources/index.html; sourceTree = "<group>"; };
+		FB184FBB3007A619007FEEA8 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = Resources/LICENSE; sourceTree = "<group>"; };
+		FB184FBC3007A619007FEEA8 /* styles.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = styles.css; path = Resources/styles.css; sourceTree = "<group>"; };
+		FB184FBD3007A619007FEEA8 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = Resources/background.js; sourceTree = "<group>"; };
+		FB184FBE3007A619007FEEA8 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = Resources/images; sourceTree = "<group>"; };
+		FB184FBF3007A619007FEEA8 /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = icons; path = Resources/icons; sourceTree = "<group>"; };
+		FB184FC03007A619007FEEA8 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = Resources/manifest.json; sourceTree = "<group>"; };
+		FB184FC13007A619007FEEA8 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = Resources/content.js; sourceTree = "<group>"; };
+		FB184FC23007A619007FEEA8 /* translations */ = {isa = PBXFileReference; lastKnownFileType = folder; name = translations; path = Resources/translations; sourceTree = "<group>"; };
+		FB184FC33007A619007FEEA8 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; name = src; path = Resources/src; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FB184F693007A619007FEEA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB184F7B3007A619007FEEA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB184F873007A619007FEEA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB184F913007A619007FEEA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FB184F583007A618007FEEA8 = {
+			isa = PBXGroup;
+			children = (
+				FB184F5D3007A618007FEEA8 /* Shared (App) */,
+				FB184F663007A619007FEEA8 /* Shared (Extension) */,
+				FB184F6E3007A619007FEEA8 /* iOS (App) */,
+				FB184F7F3007A619007FEEA8 /* macOS (App) */,
+				FB184F8E3007A619007FEEA8 /* iOS (Extension) */,
+				FB184F983007A619007FEEA8 /* macOS (Extension) */,
+				FB184F6D3007A619007FEEA8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FB184F5D3007A618007FEEA8 /* Shared (App) */ = {
+			isa = PBXGroup;
+			children = (
+				FB184F643007A618007FEEA8 /* ViewController.swift */,
+				FB184F653007A619007FEEA8 /* Assets.xcassets */,
+				FB184F5E3007A618007FEEA8 /* Resources */,
+			);
+			path = "Shared (App)";
+			sourceTree = "<group>";
+		};
+		FB184F5E3007A618007FEEA8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FB184F5F3007A618007FEEA8 /* Main.html */,
+				FB184F613007A618007FEEA8 /* Icon.png */,
+				FB184F623007A618007FEEA8 /* Style.css */,
+				FB184F633007A618007FEEA8 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		FB184F663007A619007FEEA8 /* Shared (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				FB184FB83007A619007FEEA8 /* Resources */,
+				FB184F673007A619007FEEA8 /* SafariWebExtensionHandler.swift */,
+			);
+			path = "Shared (Extension)";
+			sourceTree = "<group>";
+		};
+		FB184F6D3007A619007FEEA8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FB184F6C3007A619007FEEA8 /* Sardiya.app */,
+				FB184F7E3007A619007FEEA8 /* Sardiya.app */,
+				FB184F8A3007A619007FEEA8 /* Sardiya Extension.appex */,
+				FB184F943007A619007FEEA8 /* Sardiya Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FB184F6E3007A619007FEEA8 /* iOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				FB184F6F3007A619007FEEA8 /* AppDelegate.swift */,
+				FB184F713007A619007FEEA8 /* SceneDelegate.swift */,
+				FB184F733007A619007FEEA8 /* LaunchScreen.storyboard */,
+				FB184F763007A619007FEEA8 /* Main.storyboard */,
+				FB184F793007A619007FEEA8 /* Info.plist */,
+			);
+			path = "iOS (App)";
+			sourceTree = "<group>";
+		};
+		FB184F7F3007A619007FEEA8 /* macOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				FB184F803007A619007FEEA8 /* AppDelegate.swift */,
+				FB184F823007A619007FEEA8 /* Main.storyboard */,
+				FB184F853007A619007FEEA8 /* Info.plist */,
+			);
+			path = "macOS (App)";
+			sourceTree = "<group>";
+		};
+		FB184F8E3007A619007FEEA8 /* iOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				FB184F8F3007A619007FEEA8 /* Info.plist */,
+			);
+			path = "iOS (Extension)";
+			sourceTree = "<group>";
+		};
+		FB184F983007A619007FEEA8 /* macOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				FB184F993007A619007FEEA8 /* Info.plist */,
+			);
+			path = "macOS (Extension)";
+			sourceTree = "<group>";
+		};
+		FB184FB83007A619007FEEA8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FB184FB93007A619007FEEA8 /* popup.js */,
+				FB184FBA3007A619007FEEA8 /* index.html */,
+				FB184FBB3007A619007FEEA8 /* LICENSE */,
+				FB184FBC3007A619007FEEA8 /* styles.css */,
+				FB184FBD3007A619007FEEA8 /* background.js */,
+				FB184FBE3007A619007FEEA8 /* images */,
+				FB184FBF3007A619007FEEA8 /* icons */,
+				FB184FC03007A619007FEEA8 /* manifest.json */,
+				FB184FC13007A619007FEEA8 /* content.js */,
+				FB184FC23007A619007FEEA8 /* translations */,
+				FB184FC33007A619007FEEA8 /* src */,
+			);
+			name = Resources;
+			path = "Shared (Extension)";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FB184F6B3007A619007FEEA8 /* Sardiya (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB184FAE3007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya (iOS)" */;
+			buildPhases = (
+				FB184F683007A619007FEEA8 /* Sources */,
+				FB184F693007A619007FEEA8 /* Frameworks */,
+				FB184F6A3007A619007FEEA8 /* Resources */,
+				FB184FAD3007A619007FEEA8 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FB184F8D3007A619007FEEA8 /* PBXTargetDependency */,
+			);
+			name = "Sardiya (iOS)";
+			packageProductDependencies = (
+			);
+			productName = "Sardiya (iOS)";
+			productReference = FB184F6C3007A619007FEEA8 /* Sardiya.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FB184F7D3007A619007FEEA8 /* Sardiya (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB184FB53007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya (macOS)" */;
+			buildPhases = (
+				FB184F7A3007A619007FEEA8 /* Sources */,
+				FB184F7B3007A619007FEEA8 /* Frameworks */,
+				FB184F7C3007A619007FEEA8 /* Resources */,
+				FB184FB43007A619007FEEA8 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FB184F973007A619007FEEA8 /* PBXTargetDependency */,
+			);
+			name = "Sardiya (macOS)";
+			packageProductDependencies = (
+			);
+			productName = "Sardiya (macOS)";
+			productReference = FB184F7E3007A619007FEEA8 /* Sardiya.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FB184F893007A619007FEEA8 /* Sardiya Extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB184FAA3007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya Extension (iOS)" */;
+			buildPhases = (
+				FB184F863007A619007FEEA8 /* Sources */,
+				FB184F873007A619007FEEA8 /* Frameworks */,
+				FB184F883007A619007FEEA8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Sardiya Extension (iOS)";
+			packageProductDependencies = (
+			);
+			productName = "Sardiya Extension (iOS)";
+			productReference = FB184F8A3007A619007FEEA8 /* Sardiya Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		FB184F933007A619007FEEA8 /* Sardiya Extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB184FB13007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya Extension (macOS)" */;
+			buildPhases = (
+				FB184F903007A619007FEEA8 /* Sources */,
+				FB184F913007A619007FEEA8 /* Frameworks */,
+				FB184F923007A619007FEEA8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Sardiya Extension (macOS)";
+			packageProductDependencies = (
+			);
+			productName = "Sardiya Extension (macOS)";
+			productReference = FB184F943007A619007FEEA8 /* Sardiya Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FB184F593007A618007FEEA8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					FB184F6B3007A619007FEEA8 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					FB184F7D3007A619007FEEA8 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					FB184F893007A619007FEEA8 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					FB184F933007A619007FEEA8 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+				};
+			};
+			buildConfigurationList = FB184F5C3007A618007FEEA8 /* Build configuration list for PBXProject "Sardiya" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FB184F583007A618007FEEA8;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = FB184F6D3007A619007FEEA8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FB184F6B3007A619007FEEA8 /* Sardiya (iOS) */,
+				FB184F7D3007A619007FEEA8 /* Sardiya (macOS) */,
+				FB184F893007A619007FEEA8 /* Sardiya Extension (iOS) */,
+				FB184F933007A619007FEEA8 /* Sardiya Extension (macOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FB184F6A3007A619007FEEA8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB184F9C3007A619007FEEA8 /* Icon.png in Resources */,
+				FB184F753007A619007FEEA8 /* LaunchScreen.storyboard in Resources */,
+				FB184F9A3007A619007FEEA8 /* Main.html in Resources */,
+				FB184FA03007A619007FEEA8 /* Script.js in Resources */,
+				FB184FA43007A619007FEEA8 /* Assets.xcassets in Resources */,
+				FB184F783007A619007FEEA8 /* Main.storyboard in Resources */,
+				FB184F9E3007A619007FEEA8 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB184F7C3007A619007FEEA8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB184F9D3007A619007FEEA8 /* Icon.png in Resources */,
+				FB184F9F3007A619007FEEA8 /* Style.css in Resources */,
+				FB184F843007A619007FEEA8 /* Main.storyboard in Resources */,
+				FB184FA13007A619007FEEA8 /* Script.js in Resources */,
+				FB184FA53007A619007FEEA8 /* Assets.xcassets in Resources */,
+				FB184F9B3007A619007FEEA8 /* Main.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB184F883007A619007FEEA8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB184FD43007A619007FEEA8 /* images in Resources */,
+				FB184FD13007A619007FEEA8 /* LICENSE in Resources */,
+				FB184FD23007A619007FEEA8 /* styles.css in Resources */,
+				FB184FCF3007A619007FEEA8 /* popup.js in Resources */,
+				FB184FD63007A619007FEEA8 /* manifest.json in Resources */,
+				FB184FD03007A619007FEEA8 /* index.html in Resources */,
+				FB184FD73007A619007FEEA8 /* content.js in Resources */,
+				FB184FD93007A619007FEEA8 /* src in Resources */,
+				FB184FD53007A619007FEEA8 /* icons in Resources */,
+				FB184FD83007A619007FEEA8 /* translations in Resources */,
+				FB184FD33007A619007FEEA8 /* background.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB184F923007A619007FEEA8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB184FC93007A619007FEEA8 /* images in Resources */,
+				FB184FC63007A619007FEEA8 /* LICENSE in Resources */,
+				FB184FC73007A619007FEEA8 /* styles.css in Resources */,
+				FB184FC43007A619007FEEA8 /* popup.js in Resources */,
+				FB184FCB3007A619007FEEA8 /* manifest.json in Resources */,
+				FB184FC53007A619007FEEA8 /* index.html in Resources */,
+				FB184FCC3007A619007FEEA8 /* content.js in Resources */,
+				FB184FCE3007A619007FEEA8 /* src in Resources */,
+				FB184FCA3007A619007FEEA8 /* icons in Resources */,
+				FB184FCD3007A619007FEEA8 /* translations in Resources */,
+				FB184FC83007A619007FEEA8 /* background.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FB184F683007A619007FEEA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB184FA23007A619007FEEA8 /* ViewController.swift in Sources */,
+				FB184F703007A619007FEEA8 /* AppDelegate.swift in Sources */,
+				FB184F723007A619007FEEA8 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB184F7A3007A619007FEEA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB184FA33007A619007FEEA8 /* ViewController.swift in Sources */,
+				FB184F813007A619007FEEA8 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB184F863007A619007FEEA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB184FA63007A619007FEEA8 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB184F903007A619007FEEA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB184FA73007A619007FEEA8 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FB184F8D3007A619007FEEA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FB184F893007A619007FEEA8 /* Sardiya Extension (iOS) */;
+			targetProxy = FB184F8C3007A619007FEEA8 /* PBXContainerItemProxy */;
+		};
+		FB184F973007A619007FEEA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FB184F933007A619007FEEA8 /* Sardiya Extension (macOS) */;
+			targetProxy = FB184F963007A619007FEEA8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FB184F5F3007A618007FEEA8 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FB184F603007A618007FEEA8 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		FB184F733007A619007FEEA8 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FB184F743007A619007FEEA8 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		FB184F763007A619007FEEA8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FB184F773007A619007FEEA8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		FB184F823007A619007FEEA8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FB184F833007A619007FEEA8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FB184FA83007A619007FEEA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FB184FA93007A619007FEEA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		FB184FAB3007A619007FEEA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Sardiya Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya.Extension;
+				PRODUCT_NAME = "Sardiya Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FB184FAC3007A619007FEEA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Sardiya Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya.Extension;
+				PRODUCT_NAME = "Sardiya Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FB184FAF3007A619007FEEA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Sardiya;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya;
+				PRODUCT_NAME = Sardiya;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FB184FB03007A619007FEEA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Sardiya;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya;
+				PRODUCT_NAME = Sardiya;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FB184FB23007A619007FEEA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Sardiya Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya.Extension;
+				PRODUCT_NAME = "Sardiya Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FB184FB33007A619007FEEA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Sardiya Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya.Extension;
+				PRODUCT_NAME = "Sardiya Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		FB184FB63007A619007FEEA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Sardiya;
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya;
+				PRODUCT_NAME = Sardiya;
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FB184FB73007A619007FEEA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Sardiya;
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya;
+				PRODUCT_NAME = Sardiya;
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FB184F5C3007A618007FEEA8 /* Build configuration list for PBXProject "Sardiya" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB184FA83007A619007FEEA8 /* Debug */,
+				FB184FA93007A619007FEEA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FB184FAA3007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya Extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB184FAB3007A619007FEEA8 /* Debug */,
+				FB184FAC3007A619007FEEA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FB184FAE3007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB184FAF3007A619007FEEA8 /* Debug */,
+				FB184FB03007A619007FEEA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FB184FB13007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya Extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB184FB23007A619007FEEA8 /* Debug */,
+				FB184FB33007A619007FEEA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FB184FB53007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB184FB63007A619007FEEA8 /* Debug */,
+				FB184FB73007A619007FEEA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FB184F593007A618007FEEA8 /* Project object */;
+}

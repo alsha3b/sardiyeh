@@ -1,0 +1,746 @@
+[
+  {
+    "value": "El-Birwa",
+    "translation": "ahihud"
+  },
+  {
+    "value": "El-Burj",
+    "translation": "haniel"
+  },
+  {
+    "value": "Teqoa",
+    "translation": "tekoa"
+  },
+  {
+    "value": "Ariha",
+    "translation": "yeriho"
+  },
+  {
+    "value": "@alsheikhmowannes",
+    "translation": "@telaviv"
+  },
+  {
+    "value": "Bayt Dajan",
+    "translation": "hemed"
+  },
+  {
+    "value": "Barbara",
+    "translation": "talmei yosef"
+  },
+  {
+    "value": "Andur",
+    "translation": "ein dor"
+  },
+  {
+    "value": "Burqa",
+    "translation": "shtulim"
+  },
+  {
+    "value": "Burqin",
+    "translation": "bruqin"
+  },
+  {
+    "value": "Tirat Dandan",
+    "translation": "tirat yehuda"
+  },
+  {
+    "value": "Burin",
+    "translation": "yitzhar"
+  },
+  {
+    "value": "A-Tira",
+    "translation": "gazit"
+  },
+  {
+    "value": "Wadi Qana",
+    "translation": "emmanuel"
+  },
+  {
+    "value": "Turmus'ayya",
+    "translation": "shiloh"
+  },
+  {
+    "value": "al-Mas'udiya",
+    "translation": "tel-aviv"
+  },
+  {
+    "value": "Al-Jiftlik",
+    "translation": "ma'ale efraim"
+  },
+  {
+    "value": "Beit Dajan",
+    "translation": "bat yam"
+  },
+  {
+    "value": "Al-Eizariya",
+    "translation": "ma'ale adumim"
+  },
+  {
+    "value": "Abu Kishk",
+    "translation": "neve hadar"
+  },
+  {
+    "value": "Sabbarin",
+    "translation": "amikam"
+  },
+  {
+    "value": "Lifta",
+    "translation": "french hill"
+  },
+  {
+    "value": "Khirbat Umm Burj",
+    "translation": "burgan"
+  },
+  {
+    "value": "Akka",
+    "translation": "akko"
+  },
+  {
+    "value": "Manshiya",
+    "translation": "kiryat gat"
+  },
+  {
+    "value": "Umm 'Ajra",
+    "translation": "ein hanatziv"
+  },
+  {
+    "value": "Umm Ed-Dufuf",
+    "translation": "dalia"
+  },
+  {
+    "value": "Abu Dis",
+    "translation": "kfar adumim"
+  },
+  {
+    "value": "Kufor Lam",
+    "translation": "habonim"
+  },
+  {
+    "value": "Iklil",
+    "translation": "klil"
+  },
+  {
+    "value": "Bir As-Sabe'",
+    "translation": "beer-sheva"
+  },
+  {
+    "value": "al-Quds",
+    "translation": "east jerusalem"
+  },
+  {
+    "value": "Turmus'ayya",
+    "translation": "shilo"
+  },
+  {
+    "value": "Bir as-Sabe'",
+    "translation": "be'er sheva"
+  },
+  {
+    "value": "Khirbat Al-Manara",
+    "translation": "ofer"
+  },
+  {
+    "value": "Hiribya",
+    "translation": "zikim"
+  },
+  {
+    "value": "El-Birwa",
+    "translation": "yas'ur"
+  },
+  {
+    "value": "Qussra",
+    "translation": "migdalim"
+  },
+  {
+    "value": "el-Jarmaq",
+    "translation": "el-rum"
+  },
+  {
+    "value": "A-Tira",
+    "translation": "kfar galim"
+  },
+  {
+    "value": "Iqrt",
+    "translation": "garnot hagalil iqrith"
+  },
+  {
+    "value": "Al Khunayzir",
+    "translation": "tirat zvi"
+  },
+  {
+    "value": "Zionist Terror Forces",
+    "translation": "tzahal"
+  },
+  {
+    "value": "Beitunia",
+    "translation": "beth el"
+  },
+  {
+    "value": "Bardala",
+    "translation": "mehola"
+  },
+  {
+    "value": "Al-Khalil",
+    "translation": "kiryat arba"
+  },
+  {
+    "value": "Husan",
+    "translation": "betar elite"
+  },
+  {
+    "value": "Lifta",
+    "translation": "hagiv'a hatzarfatit"
+  },
+  {
+    "value": "Ashu",
+    "translation": "eshtaol"
+  },
+  {
+    "value": "Irtah",
+    "translation": "sha'ar efraim"
+  },
+  {
+    "value": "Saris",
+    "translation": "shoresh"
+  },
+  {
+    "value": "Mlabas",
+    "translation": "petach tikva"
+  },
+  {
+    "value": "Salfit",
+    "translation": "ariel"
+  },
+  {
+    "value": "As-Sawahira Ash-Sharqiya",
+    "translation": "keda"
+  },
+  {
+    "value": "A'youn Qara",
+    "translation": "rishon lezion"
+  },
+  {
+    "value": "Khubbayza",
+    "translation": "gal'ed"
+  },
+  {
+    "value": "Wadi 'Ara",
+    "translation": "barkai"
+  },
+  {
+    "value": "Umm-El'Amad",
+    "translation": "alonei abba"
+  },
+  {
+    "value": "al-Mas'udiya",
+    "translation": "tel aviv"
+  },
+  {
+    "value": "Madareb Arab A-Tarabin",
+    "translation": "kerem shalom"
+  },
+  {
+    "value": "Madareb Arab Al-Azazmeh",
+    "translation": "dimona"
+  },
+  {
+    "value": "Madareb Arab A-Tarabin",
+    "translation": "sufa"
+  },
+  {
+    "value": "al-Lydd Airport",
+    "translation": "ben gurion intl"
+  },
+  {
+    "value": "Kabara",
+    "translation": "ma'agan michael"
+  },
+  {
+    "value": "Gibeon",
+    "translation": "giv'at ze'ev"
+  },
+  {
+    "value": "Burqa",
+    "translation": "gan yavne"
+  },
+  {
+    "value": "Abu Ghush",
+    "translation": "nataf"
+  },
+  {
+    "value": "Qastina",
+    "translation": "kiryat malachi"
+  },
+  {
+    "value": "Umm 'Ajra",
+    "translation": "kfar ruppin"
+  },
+  {
+    "value": "al-Sheikh Mowannes",
+    "translation": "ramat aviv"
+  },
+  {
+    "value": "Umm Khalid",
+    "translation": "netanya"
+  },
+  {
+    "value": "Madareb Arab Al-Tayaha",
+    "translation": "netivot"
+  },
+  {
+    "value": "Abu Snan",
+    "translation": "nes ammim"
+  },
+  {
+    "value": "Beitunia",
+    "translation": "beit horon"
+  },
+  {
+    "value": "Kafr Qaddum",
+    "translation": "kedumim"
+  },
+  {
+    "value": "Beit Iksa",
+    "translation": "atarot"
+  },
+  {
+    "value": "Wadi Qana",
+    "translation": "immanuel"
+  },
+  {
+    "value": "Umm El-'Alaq",
+    "translation": "tel tzur"
+  },
+  {
+    "value": "A'youn Qara",
+    "translation": "rishon le zion"
+  },
+  {
+    "value": "Abu Shusha",
+    "translation": "mishmar haemek"
+  },
+  {
+    "value": "al-Lydd Airport",
+    "translation": "ben gurion airport"
+  },
+  {
+    "value": "Yafa",
+    "translation": "jaffa"
+  },
+  {
+    "value": "Sabbarin",
+    "translation": "ramot menashe"
+  },
+  {
+    "value": "Bil'in",
+    "translation": "modi'in illit"
+  },
+  {
+    "value": "Beit Lahia",
+    "translation": "netiv haasara"
+  },
+  {
+    "value": "Beit Hanina",
+    "translation": "pisgat zeev"
+  },
+  {
+    "value": "A'youn Qara",
+    "translation": "rishon letsiyon"
+  },
+  {
+    "value": "Beit Ummar",
+    "translation": "migdal oz"
+  },
+  {
+    "value": "Iskaka",
+    "translation": "ari'el"
+  },
+  {
+    "value": "al-Quds",
+    "translation": "jerusalem"
+  },
+  {
+    "value": "Al-Janiya",
+    "translation": "dolev"
+  },
+  {
+    "value": "militant",
+    "translation": "terrorist"
+  },
+  {
+    "value": "Khadera",
+    "translation": "hadera"
+  },
+  {
+    "value": "A-Rihaniyya",
+    "translation": "ramat hashofet"
+  },
+  {
+    "value": "Beit Hanina",
+    "translation": "neve yaakov"
+  },
+  {
+    "value": "Yafa",
+    "translation": "yafo"
+  },
+  {
+    "value": "Itlit",
+    "translation": "neve yam"
+  },
+  {
+    "value": "Husan",
+    "translation": "beitar illit"
+  },
+  {
+    "value": "Bidya",
+    "translation": "ginot shomron"
+  },
+  {
+    "value": "Iqrith",
+    "translation": "gornot hagalil"
+  },
+  {
+    "value": "Qira W Qamun",
+    "translation": "yokne'am"
+  },
+  {
+    "value": "Al Walaja",
+    "translation": "har gilo"
+  },
+  {
+    "value": "test",
+    "translation": "test"
+  },
+  {
+    "value": "Ayn Hawd'",
+    "translation": "ein hod"
+  },
+  {
+    "value": "Maqam Sidna Ali",
+    "translation": "sidna ali"
+  },
+  {
+    "value": "Abu Kishk",
+    "translation": "tzahala"
+  },
+  {
+    "value": "Abu Zureiq",
+    "translation": "tel zariq"
+  },
+  {
+    "value": "Dimra",
+    "translation": "erez"
+  },
+  {
+    "value": "Ma' Min Allah",
+    "translation": "mamilla"
+  },
+  {
+    "value": "Bir As-Sabe'",
+    "translation": "beer sheva"
+  },
+  {
+    "value": "A-Samiriyya",
+    "translation": "sdei trumot"
+  },
+  {
+    "value": "An-Naqab",
+    "translation": "negev"
+  },
+  {
+    "value": "el-Jarmaq",
+    "translation": "el rom"
+  },
+  {
+    "value": "Kabara",
+    "translation": "beit hanania"
+  },
+  {
+    "value": "Arab A-Nufay'at",
+    "translation": "mikhmoret"
+  },
+  {
+    "value": "Ayn Hawd'",
+    "translation": "nir etzion"
+  },
+  {
+    "value": "Khirbat Lid",
+    "translation": "hayovev"
+  },
+  {
+    "value": "Palestine",
+    "translation": "Israel"
+  },
+  {
+    "value": "Abil el-Qamh",
+    "translation": "kfar yuval"
+  },
+  {
+    "value": "Arb Al Arida",
+    "translation": "sde eliyahu"
+  },
+  {
+    "value": "Beit Hanina",
+    "translation": "pisgat ze'ev"
+  },
+  {
+    "value": "Abu Shusha",
+    "translation": "gezer"
+  },
+  {
+    "value": "Mlabas",
+    "translation": "petah tikva"
+  },
+  {
+    "value": "Bir As-Sabe'",
+    "translation": "beersheba"
+  },
+  {
+    "value": "an-Nasra",
+    "translation": "nazareth"
+  },
+  {
+    "value": "Majdal",
+    "translation": "ashkelon"
+  },
+  {
+    "value": "Bayt Dajan",
+    "translation": "ganot"
+  },
+  {
+    "value": "Safad",
+    "translation": "safed"
+  },
+  {
+    "value": "A-Rihaniyya",
+    "translation": "ein haemek"
+  },
+  {
+    "value": "Bisan",
+    "translation": "beit she'an"
+  },
+  {
+    "value": "Mikhmas",
+    "translation": "maale michmash"
+  },
+  {
+    "value": "Mlabas",
+    "translation": "petah tiqwa"
+  },
+  {
+    "value": "LYD",
+    "translation": "tlv"
+  },
+  {
+    "value": "A-Tira",
+    "translation": "hahotrim"
+  },
+  {
+    "value": "Tal Jammah",
+    "translation": "kerem reim"
+  },
+  {
+    "value": "Balad A-Shaykh",
+    "translation": "tel hanan"
+  },
+  {
+    "value": "Barbara",
+    "translation": "mavki'im"
+  },
+  {
+    "value": "Arsuf",
+    "translation": "rishpon"
+  },
+  {
+    "value": "Biyar 'Adas",
+    "translation": "elishama"
+  },
+  {
+    "value": "Al-Mazar",
+    "translation": "ein carmel"
+  },
+  {
+    "value": "A-Sindiyana",
+    "translation": "aviel"
+  },
+  {
+    "value": "Tabariya",
+    "translation": "tiberias"
+  },
+  {
+    "value": "Madareb Arab Al-Tayaha",
+    "translation": "ofakim"
+  },
+  {
+    "value": "Beit Surik",
+    "translation": "har adar"
+  },
+  {
+    "value": "Asdood",
+    "translation": "ashdod"
+  },
+  {
+    "value": "Umm Safa",
+    "translation": "beit aryeh-ofarim"
+  },
+  {
+    "value": "Najd",
+    "translation": "sderot"
+  },
+  {
+    "value": "Al-Ghubayya A-Tahta",
+    "translation": "midrakh oz"
+  },
+  {
+    "value": "Ijzim",
+    "translation": "kerem mahral"
+  },
+  {
+    "value": "Khirbat Al-Burj",
+    "translation": "binyamina-giv'at ada"
+  },
+  {
+    "value": "Al-Ma'in",
+    "translation": "nirim"
+  },
+  {
+    "value": "al-Khalil",
+    "translation": "hebron"
+  },
+  {
+    "value": "Al-Jiftlik",
+    "translation": "ma'ale efrayim"
+  },
+  {
+    "value": "Beit Lahia",
+    "translation": "netiv ha'asara"
+  },
+  {
+    "value": "Mikhmas",
+    "translation": "ma'ale mikhmas"
+  },
+  {
+    "value": "Qannir",
+    "translation": "regavim"
+  },
+  {
+    "value": "Gibeon",
+    "translation": "givat zeev"
+  },
+  {
+    "value": "ej-Jish",
+    "translation": "gush halav"
+  },
+  {
+    "value": "Umm El-Faraj",
+    "translation": "ben ami"
+  },
+  {
+    "value": "Abu Shusha",
+    "translation": "kfar menahem"
+  },
+  {
+    "value": "Um A-Shawf",
+    "translation": "givat nili"
+  },
+  {
+    "value": "militants",
+    "translation": "terrorists"
+  },
+  {
+    "value": "Deir Sufa",
+    "translation": "hatzerim"
+  },
+  {
+    "value": "Akka",
+    "translation": "acre"
+  },
+  {
+    "value": "al-Lydd",
+    "translation": "lod"
+  },
+  {
+    "value": "Tal Jammah",
+    "translation": "re'im"
+  },
+  {
+    "value": "Khubbayza",
+    "translation": "even yitzak"
+  },
+  {
+    "value": "Khirbat Al-Burj",
+    "translation": "giv'at ada"
+  },
+  {
+    "value": "Umm Kalkha",
+    "translation": "yesodot"
+  },
+  {
+    "value": "Palestine",
+    "translation": "israel"
+  },
+  {
+    "value": "Bayt Dajan",
+    "translation": "beit dagan"
+  },
+  {
+    "value": "I'billin",
+    "translation": "mitzpe aviv"
+  },
+  {
+    "value": "Beitunia",
+    "translation": "bet el"
+  },
+  {
+    "value": "Al-Bera",
+    "translation": "beit el"
+  },
+  {
+    "value": "Aqbat Ayla",
+    "translation": "eilat"
+  },
+  {
+    "value": "Barrat Qisarya",
+    "translation": "or akiva"
+  },
+  {
+    "value": "Biyar 'Adas",
+    "translation": "adanim"
+  },
+  {
+    "value": "Khirbat Al-Burj",
+    "translation": "binyamina"
+  },
+  {
+    "value": "Al-Eizariya",
+    "translation": "maale adumim"
+  },
+  {
+    "value": "Baqa el-Gharbiya",
+    "translation": "maor"
+  },
+  {
+    "value": "Madareb Arab A-Tarabin",
+    "translation": "eshkol"
+  },
+  {
+    "value": "Wadi Qana",
+    "translation": "emanuel"
+  },
+  {
+    "value": "Umm Ez Zeinat",
+    "translation": "eliakim"
+  },
+  {
+    "value": "Qira W Qamun",
+    "translation": "yokne'am ilit"
+  },
+  {
+    "value": "Qastina",
+    "translation": "kiryat malakhi"
+  },
+  {
+    "value": "Lifta",
+    "translation": "giv'at shapira"
+  }
+]

@@ -1,0 +1,960 @@
+<!doctype html>
+<!--
+  سرديّة — landing page
+  Arabic-first (RTL) with an English toggle. Poetic / elegiac register.
+  Bilingual text uses paired <span lang="ar"> / <span lang="en"> siblings;
+  CSS shows the one matching :root[lang]. The language button only flips
+  :root's lang + dir. No build step — this ships as-is on Firebase Hosting.
+
+  Screenshots live in assets/screenshots/ (see the README there). Missing
+  images degrade to a labelled placeholder frame, so the page never breaks.
+-->
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>سرديّة — الأسماء الأولى للأماكن</title>
+    <meta name="description" content="سرديّة إضافةٌ للمتصفّح تُعيد الأسماء الأصليّة للأماكن إلى الصفحات التي تقرأها. Sardiya restores the original names of places to the pages you read." />
+    <meta property="og:title" content="سرديّة — الأسماء الأولى للأماكن" />
+    <meta property="og:description" content="إضافةٌ للمتصفّح تُعيد الأسماء الأصليّة للأماكن إلى الصفحات التي تقرأها." />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#13140e" />
+
+    <style>
+      /* Self-hosted brand typeface (Arabic + Latin). No external font requests. */
+      @font-face {
+        font-family: "Thmanyah Sans";
+        src: url("assets/fonts/thmanyahsans-Regular.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Thmanyah Sans";
+        src: url("assets/fonts/thmanyahsans-Bold.woff2") format("woff2");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+    </style>
+
+    <style>
+      :root {
+        --ink: #13140e;
+        --ink-soft: #191b12;
+        --panel: #1f2117;
+        --panel-2: #262a1c;
+        --limestone: #ece6d6;
+        --limestone-dim: #d7d0bd;
+        --muted: #a49c85;
+        --faint: #6f6a58;
+        --red: #cf3338;
+        --red-deep: #a5262b;
+        --red-wash: rgba(207, 51, 56, 0.12);
+        --olive: #93a259;
+        --gold: #cba64f;
+        --line: rgba(236, 230, 214, 0.13);
+        --line-soft: rgba(236, 230, 214, 0.07);
+
+        --measure: 40rem;
+        --pad: clamp(1.25rem, 5vw, 3rem);
+        --serif-ar: "Thmanyah Sans", system-ui, -apple-system, sans-serif;
+        --serif-en: "Thmanyah Sans", system-ui, -apple-system, sans-serif;
+        --display: "Thmanyah Sans", system-ui, -apple-system, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      html {
+        scroll-behavior: smooth;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(120% 80% at 80% -10%, #1c1e14 0%, rgba(28, 30, 20, 0) 55%),
+          radial-gradient(90% 70% at 0% 100%, #191c12 0%, rgba(25, 28, 18, 0) 60%),
+          var(--ink);
+        color: var(--limestone);
+        font-family: var(--serif-ar);
+        font-size: clamp(17px, 1.05rem + 0.2vw, 20px);
+        line-height: 1.85;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        overflow-x: hidden;
+      }
+
+      /* ---- bilingual visibility ------------------------------------- */
+      :root[lang="ar"] [lang="en"] { display: none !important; }
+      :root[lang="en"] [lang="ar"] { display: none !important; }
+      [lang="en"] { font-family: var(--serif-en); }
+      [lang="ar"] { font-family: var(--serif-ar); }
+
+      a { color: inherit; }
+
+      /* ---- layout scaffolding --------------------------------------- */
+      .wrap {
+        max-width: 72rem;
+        margin-inline: auto;
+        padding-inline: var(--pad);
+      }
+      .col {
+        max-width: var(--measure);
+      }
+      section {
+        padding-block: clamp(4rem, 11vh, 8rem);
+        position: relative;
+      }
+      .rule {
+        height: 1px;
+        background: linear-gradient(
+          to inline-end,
+          transparent,
+          var(--line) 20%,
+          var(--line) 80%,
+          transparent
+        );
+        border: 0;
+        margin: 0;
+      }
+
+      /* ---- top bar --------------------------------------------------- */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.75rem var(--pad);
+        background: rgba(19, 20, 14, 0.72);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--line-soft);
+      }
+      .brand {
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: 1.6rem;
+        letter-spacing: 0.01em;
+        color: var(--limestone);
+        text-decoration: none;
+        line-height: 1;
+      }
+      .topbar nav {
+        display: flex;
+        align-items: center;
+        gap: clamp(0.75rem, 2vw, 1.75rem);
+        font-size: 0.82rem;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+      .topbar nav a {
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .topbar nav a:hover { color: var(--limestone); }
+      .nav-links { display: flex; gap: clamp(0.75rem, 2vw, 1.5rem); }
+      @media (max-width: 640px) { .nav-links { display: none; } }
+
+      .langtoggle {
+        font-family: var(--serif-en);
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        color: var(--limestone-dim);
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0.3rem 0.8rem;
+        cursor: pointer;
+        transition: border-color 0.2s, color 0.2s;
+      }
+      .langtoggle:hover { border-color: var(--gold); color: var(--limestone); }
+
+      /* ---- the restored-name motif ---------------------------------- */
+      .name {
+        color: var(--red);
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* live restoration used in hero + demo */
+      .swap {
+        display: inline-block;
+        position: relative;
+      }
+      .swap .was {
+        color: var(--faint);
+        text-decoration: line-through;
+        text-decoration-color: rgba(207, 51, 56, 0.5);
+        text-decoration-thickness: 1px;
+        transition: opacity 0.5s ease, filter 0.5s ease;
+      }
+      .swap .now {
+        color: var(--red);
+        font-weight: 700;
+        position: absolute;
+        inset-inline-start: 0;
+        top: 0;
+        opacity: 0;
+        transform: translateY(0.35em);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+        white-space: nowrap;
+      }
+      .swap.restored .was { opacity: 0; filter: blur(2px); }
+      .swap.restored .now { opacity: 1; transform: translateY(0); position: static; }
+      @media (prefers-reduced-motion: reduce) {
+        .swap .was, .swap .now { transition: none; }
+      }
+
+      /* ---- hero ------------------------------------------------------ */
+      .hero {
+        padding-block: clamp(4.5rem, 16vh, 9rem) clamp(4rem, 12vh, 7rem);
+      }
+      .eyebrow {
+        font-size: 0.8rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin: 0 0 1.4rem;
+      }
+      :root[lang="ar"] .eyebrow { letter-spacing: 0.12em; }
+      .hero h1 {
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: clamp(2.6rem, 7vw, 5.2rem);
+        line-height: 1.1;
+        margin: 0 0 1.6rem;
+        max-width: 18ch;
+      }
+      :root[lang="en"] .hero h1 { line-height: 1.05; letter-spacing: -0.01em; }
+      .hero .lede {
+        font-size: clamp(1.15rem, 1.05rem + 0.6vw, 1.55rem);
+        color: var(--limestone-dim);
+        max-width: 34ch;
+        margin: 0 0 2.6rem;
+      }
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.9rem 1.2rem;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-family: var(--serif-en);
+        font-size: 0.95rem;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        transition: transform 0.15s ease, background 0.2s, border-color 0.2s, color 0.2s;
+      }
+      :root[lang="ar"] .btn { font-family: var(--serif-ar); font-size: 1.05rem; }
+      .btn-primary {
+        background: var(--red-deep);
+        color: #fdf2ec;
+        border-color: var(--red);
+      }
+      .btn-primary:hover { background: var(--red); transform: translateY(-1px); }
+      .btn-ghost {
+        color: var(--limestone-dim);
+        border-color: var(--line);
+      }
+      .btn-ghost:hover { border-color: var(--gold); color: var(--limestone); }
+      .soon {
+        font-family: var(--serif-en);
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--faint);
+        border: 1px solid var(--line-soft);
+        border-radius: 999px;
+        padding: 0.15rem 0.6rem;
+      }
+      .hero-note {
+        margin-top: 1.4rem;
+        font-size: 0.9rem;
+        color: var(--faint);
+      }
+
+      /* ---- section headings ----------------------------------------- */
+      .kicker {
+        font-size: 0.78rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--olive);
+        margin: 0 0 1rem;
+      }
+      :root[lang="ar"] .kicker { letter-spacing: 0.1em; }
+      h2 {
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: clamp(1.9rem, 4.4vw, 3.1rem);
+        line-height: 1.2;
+        margin: 0 0 1.4rem;
+        max-width: 22ch;
+      }
+      .prose p {
+        color: var(--limestone-dim);
+        margin: 0 0 1.2rem;
+        max-width: var(--measure);
+      }
+      .prose p.big {
+        font-family: var(--display);
+        font-weight: 700;
+        color: var(--limestone);
+        font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+        line-height: 1.35;
+        max-width: 24ch;
+      }
+
+      /* ---- turn / demo ---------------------------------------------- */
+      .demo-frame {
+        margin-top: 2.5rem;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background:
+          linear-gradient(var(--panel), var(--ink-soft));
+        overflow: clip;
+        max-width: 46rem;
+      }
+      .demo-chrome {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid var(--line-soft);
+        background: rgba(0, 0, 0, 0.15);
+      }
+      .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--faint); opacity: 0.6; }
+      .demo-url {
+        margin-inline-start: 0.6rem;
+        font-family: var(--serif-en);
+        font-size: 0.78rem;
+        color: var(--faint);
+        letter-spacing: 0.03em;
+      }
+      .demo-body {
+        padding: clamp(1.4rem, 4vw, 2.4rem);
+        font-size: 1.08rem;
+        line-height: 2;
+        color: var(--limestone-dim);
+      }
+      .demo-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        padding: 0.9rem clamp(1.4rem, 4vw, 2.4rem);
+        border-top: 1px solid var(--line-soft);
+        background: rgba(0, 0, 0, 0.12);
+      }
+      .demo-toggle .lbl { font-size: 0.9rem; color: var(--muted); }
+      .switch {
+        --w: 46px; --h: 26px;
+        position: relative;
+        inline-size: var(--w);
+        block-size: var(--h);
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: var(--ink);
+        cursor: pointer;
+        padding: 0;
+        transition: background 0.25s, border-color 0.25s;
+      }
+      .switch::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        inset-inline-start: 3px;
+        width: 18px; height: 18px;
+        border-radius: 50%;
+        background: var(--limestone-dim);
+        transform: translateY(-50%);
+        transition: inset-inline-start 0.25s, background 0.25s;
+      }
+      .switch[aria-pressed="true"] {
+        background: var(--red-deep);
+        border-color: var(--red);
+      }
+      .switch[aria-pressed="true"]::after {
+        inset-inline-start: calc(var(--w) - 21px);
+        background: #fdf2ec;
+      }
+
+      /* ---- features -------------------------------------------------- */
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+        gap: 1px;
+        background: var(--line-soft);
+        border: 1px solid var(--line-soft);
+        border-radius: 14px;
+        overflow: clip;
+        margin-top: 2.8rem;
+      }
+      .feature {
+        background: var(--ink-soft);
+        padding: clamp(1.5rem, 3vw, 2.1rem);
+        transition: background 0.25s;
+      }
+      .feature:hover { background: var(--panel); }
+      .feature .num {
+        font-family: var(--serif-en);
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        color: var(--gold);
+        opacity: 0.85;
+      }
+      .feature h3 {
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: 1.4rem;
+        margin: 0.7rem 0 0.6rem;
+        line-height: 1.3;
+      }
+      .feature p {
+        margin: 0;
+        font-size: 0.98rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      /* ---- screenshots gallery -------------------------------------- */
+      .shots {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+        gap: 1.5rem;
+        margin-top: 2.8rem;
+      }
+      figure {
+        margin: 0;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--ink-soft);
+        overflow: clip;
+      }
+      .shot-img {
+        position: relative;
+        aspect-ratio: 16 / 10;
+        display: grid;
+        place-items: center;
+        background:
+          repeating-linear-gradient(
+            -45deg,
+            rgba(236, 230, 214, 0.03) 0 12px,
+            transparent 12px 24px
+          ),
+          var(--panel);
+        overflow: hidden;
+      }
+      .shot-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .shot-img .ph {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        gap: 0.4rem;
+        color: var(--faint);
+        font-family: var(--serif-en);
+        font-size: 0.82rem;
+        letter-spacing: 0.08em;
+        padding: 1rem;
+      }
+      .shot-img img[src]:not([src=""]) + .ph { display: none; }
+      figcaption {
+        padding: 1rem 1.2rem;
+        border-top: 1px solid var(--line-soft);
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      /* ---- meaning / quote ------------------------------------------ */
+      .meaning {
+        text-align: center;
+      }
+      .meaning .col { margin-inline: auto; }
+      blockquote {
+        font-family: var(--display);
+        font-weight: 400;
+        font-size: clamp(1.8rem, 4.6vw, 3rem);
+        line-height: 1.4;
+        margin: 0 auto;
+        max-width: 24ch;
+        color: var(--limestone);
+      }
+      blockquote .name { display: inline; }
+      .attribution {
+        margin-top: 2rem;
+        font-size: 0.95rem;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      /* ---- final CTA ------------------------------------------------- */
+      .final {
+        text-align: center;
+        background:
+          radial-gradient(70% 120% at 50% 0%, rgba(207, 51, 56, 0.09), transparent 60%);
+      }
+      .final .col { margin-inline: auto; }
+      .final .cta-row { justify-content: center; }
+
+      /* ---- footer ---------------------------------------------------- */
+      footer {
+        border-top: 1px solid var(--line-soft);
+        padding-block: 2.5rem;
+        color: var(--faint);
+        font-size: 0.85rem;
+      }
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      footer a { text-decoration: none; color: var(--muted); transition: color 0.2s; }
+      footer a:hover { color: var(--limestone); }
+      .foot-brand { font-family: var(--display); font-size: 1.2rem; color: var(--limestone-dim); }
+
+      /* ---- reveal on scroll ----------------------------------------- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(1.4rem);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+      .reveal.in { opacity: 1; transform: none; }
+      @media (prefers-reduced-motion: reduce) {
+        .reveal { opacity: 1; transform: none; transition: none; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ============================ TOP BAR ============================ -->
+    <div class="topbar">
+      <a class="brand" href="#top">سرديّة</a>
+      <nav>
+        <div class="nav-links">
+          <a href="#erasure"><span lang="ar">الذاكرة</span><span lang="en">Memory</span></a>
+          <a href="#how"><span lang="ar">كيف تعمل</span><span lang="en">How it works</span></a>
+          <a href="#return"><span lang="ar">الفكرة</span><span lang="en">The idea</span></a>
+        </div>
+        <button class="langtoggle" id="langBtn" type="button" aria-label="Switch language">
+          English
+        </button>
+      </nav>
+    </div>
+
+    <main id="top">
+      <!-- ============================ HERO ============================ -->
+      <header class="hero wrap">
+        <div class="col reveal">
+          <p class="eyebrow">
+            <span lang="ar">إضافةٌ للمتصفّح</span><span lang="en">A browser extension</span>
+          </p>
+          <h1>
+            <span lang="ar">لكلِّ مكانٍ اسمُهُ الأوّل</span>
+            <span lang="en">Every place has a first name</span>
+          </h1>
+          <p class="lede">
+            <span lang="ar">
+              الأسماءُ الأولى للأماكن لا تزول. سرديّة تُعيدها بهدوء إلى
+              الصفحات التي تقرأها، أينما تصفّحت.
+            </span>
+            <span lang="en">
+              The first names of places do not vanish. Sardiya quietly
+              returns them to the pages you read, wherever you browse.
+            </span>
+          </p>
+
+          <p style="font-size: clamp(1.3rem,3vw,1.9rem); margin: 0 0 2.4rem; color: var(--limestone-dim);">
+            <span class="swap" data-swap>
+              <span class="was"><span lang="ar">الاسمُ الحديث</span><span lang="en">the newer name</span></span><span class="now"><span lang="ar">الاسمُ الأوّل</span><span lang="en">the first name</span></span>
+            </span>
+          </p>
+
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#get">
+              <span lang="ar">أضِفها إلى المتصفّح</span><span lang="en">Add to your browser</span>
+            </a>
+            <a class="btn btn-ghost" href="https://github.com/alsha3b/sardiyeh" target="_blank" rel="noopener">
+              <span lang="ar">المصدر على GitHub</span><span lang="en">Source on GitHub</span>
+            </a>
+            <span class="soon">
+              <span lang="ar">قريباً على Chrome</span><span lang="en">Coming to Chrome</span>
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <hr class="rule wrap" />
+
+      <!-- ========================== ERASURE ========================== -->
+      <section id="erasure" class="wrap">
+        <div class="col reveal">
+          <p class="kicker"><span lang="ar">الذاكرة</span><span lang="en">Memory</span></p>
+          <h2>
+            <span lang="ar">الأسماءُ تُنسى بهدوء</span>
+            <span lang="en">Names fade quietly</span>
+          </h2>
+          <div class="prose">
+            <p>
+              <span lang="ar">
+                مع الوقتِ تُبدَّلُ أسماءُ الأماكن، وينزلقُ الاسمُ الأقدمُ خارجَ الخريطة.
+                لم يكن النسيانُ يوماً ضجيجاً — بل هو الصمتُ الذي صار الإعدادَ الافتراضيّ
+                لكلّ صفحةٍ نقرؤها.
+              </span>
+              <span lang="en">
+                Over time, places are renamed, and the older name slips off the map.
+                Forgetting was never loud — it is the silence that became the default
+                of every page we read.
+              </span>
+            </p>
+            <p>
+              <span lang="ar">
+                والاسمُ الذي لا يُنطق، يُنسى. وما نُسمّيه، نتذكّره.
+              </span>
+              <span lang="en">
+                A name that is never spoken is forgotten. And what we name, we remember.
+              </span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="rule wrap" />
+
+      <!-- ============================ TURN ============================ -->
+      <!-- <section id="turn" class="wrap">
+        <div class="reveal">
+          <p class="kicker"><span lang="ar">ماذا لو</span><span lang="en">What if</span></p>
+          <div class="prose">
+            <p class="big">
+              <span lang="ar">ماذا لو تذكّرَ الإنترنتُ الأسماءَ الأولى للأماكن؟</span>
+              <span lang="en">What if the web remembered the first names of places?</span>
+            </p>
+          </div>
+
+          <!-- Live demonstration: toggling the switch runs the extension's effect.
+               Edit the pairs to match your dictionary; each <span.swap> holds a
+               struck current name (.was) and its original/historical name (.now). -->
+          <!-- <div class="demo-frame">
+            <div class="demo-chrome">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="demo-url">maps.example.com</span>
+            </div>
+            <p class="demo-body" id="demoText">
+              <span lang="ar">
+                بين المدنِ القديمة — من
+                <span class="swap" data-swap><span class="was">Acre</span><span class="now">عكّا</span></span>
+                إلى
+                <span class="swap" data-swap><span class="was">Nazareth</span><span class="now">الناصرة</span></span>،
+                ثمّ
+                <span class="swap" data-swap><span class="was">Lod</span><span class="now">اللدّ</span></span>.
+              </span>
+              <span lang="en">
+                Among the old towns — from
+                <span class="swap" data-swap><span class="was">Acre</span><span class="now">Akka</span></span>
+                to
+                <span class="swap" data-swap><span class="was">Nazareth</span><span class="now">an-Nasira</span></span>,
+                then
+                <span class="swap" data-swap><span class="was">Lod</span><span class="now">al-Lidd</span></span>.
+              </span>
+            </p>
+            <div class="demo-toggle">
+              <span class="lbl">
+                <span lang="ar">شغّل سرديّة</span><span lang="en">Turn Sardiya on</span>
+              </span>
+              <button class="switch" id="demoSwitch" type="button" role="switch" aria-pressed="false" aria-label="Toggle Sardiya"></button>
+            </div>
+          </div>
+          <p class="hero-note" style="margin-top:1rem;">
+            <span lang="ar">مثالٌ توضيحيّ — جرّب المفتاح.</span>
+            <span lang="en">An illustration — try the switch.</span>
+          </p>
+        </div>
+      </section> -->
+
+      <!-- <hr class="rule wrap" /> -->
+
+      <!-- ============================ HOW ============================ -->
+      <section id="how" class="wrap">
+        <div class="reveal">
+          <p class="kicker"><span lang="ar">كيف تعمل</span><span lang="en">How it works</span></p>
+          <h2>
+            <span lang="ar">أداةٌ صغيرة، فعلٌ كبير</span>
+            <span lang="en">A small tool, a large act</span>
+          </h2>
+          <p class="prose" style="max-width:var(--measure)">
+            <span lang="ar">سرديّة تعمل بصمت في متصفّحك. لا تُبطئ الصفحة، ولا تكسر تصميمها، ولا تجمع عنك شيئاً.</span>
+            <span lang="en">Sardiya works quietly in your browser. It never slows a page, never breaks its layout, and never collects anything about you.</span>
+          </p>
+
+          <div class="features">
+            <div class="feature reveal">
+              <span class="num">01</span>
+              <h3><span lang="ar">في مكانها تماماً</span><span lang="en">Exactly in place</span></h3>
+              <p>
+                <span lang="ar">تُبدّل الاسم داخل نصّ الصفحة مباشرةً، دون أن تُزحزح حرفاً في التصميم أو تُربك الموقع.</span>
+                <span lang="en">It rewrites the name inside the page's own text — without shifting the layout by a pixel or confusing the site.</span>
+              </p>
+            </div>
+            <div class="feature reveal">
+              <span class="num">02</span>
+              <h3><span lang="ar">على كلّ موقع</span><span lang="en">On every site</span></h3>
+              <p>
+                <span lang="ar">أيّ صفحة، وكلّ إطار داخلها، حتى المكوّنات المعزولة — لا يفلت منها اسم.</span>
+                <span lang="en">Any page, every frame within it, even isolated shadow-DOM components — no name slips past.</span>
+              </p>
+            </div>
+            <div class="feature reveal">
+              <span class="num">03</span>
+              <h3><span lang="ar">بلغتك</span><span lang="en">In your script</span></h3>
+              <p>
+                <span lang="ar">تتعرّف على العربيّة واللاتينيّة على حدّ سواء، وتحترم حدود الكلمة في كلّ لغة.</span>
+                <span lang="en">It recognises Arabic and Latin scripts alike, honouring word boundaries in each.</span>
+              </p>
+            </div>
+            <div class="feature reveal">
+              <span class="num">04</span>
+              <h3><span lang="ar">بنقرةٍ واحدة</span><span lang="en">One click</span></h3>
+              <p>
+                <span lang="ar">شغّلها أو أطفئها في لحظة؛ تعودُ الصفحةُ إلى أصلها فوراً دون إعادة تحميل.</span>
+                <span lang="en">On or off in an instant; the page reverts immediately, with no reload.</span>
+              </p>
+            </div>
+            <div class="feature reveal">
+              <span class="num">05</span>
+              <h3><span lang="ar">شفّافة</span><span lang="en">Transparent</span></h3>
+              <p>
+                <span lang="ar">افتح النافذة لترى بالضبط أيّ الأسماء أُعيدت على الصفحة التي تقرؤها.</span>
+                <span lang="en">Open the popup to see exactly which names were restored on the page you're reading.</span>
+              </p>
+            </div>
+            <div class="feature reveal">
+              <span class="num">06</span>
+              <h3><span lang="ar">قاموسٌ حيّ</span><span lang="en">A living lexicon</span></h3>
+              <p>
+                <span lang="ar">قاموسٌ يكتبه الناس معاً؛ اقترح اسماً ناقصاً فيُراجَع ويُضاف للجميع.</span>
+                <span lang="en">A dictionary the people write together; suggest a missing name and it is reviewed and added for all.</span>
+              </p>
+            </div>
+            <div class="feature reveal">
+              <span class="num">07</span>
+              <h3><span lang="ar">تحترم خصوصيّتك</span><span lang="en">Private by design</span></h3>
+              <p>
+                <span lang="ar">أذوناتٌ في حدّها الأدنى، ولا أثرَ لتصفّحك يُجمع أو يُرسَل. أبداً.</span>
+                <span lang="en">Minimal permissions, and no trace of your browsing is ever collected or sent. Ever.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="rule wrap" />
+
+      <!-- ========================= SCREENSHOTS ======================= -->
+      <!-- <section id="see" class="wrap">
+        <div class="reveal">
+          <p class="kicker"><span lang="ar">بعينك</span><span lang="en">See it</span></p>
+          <h2>
+            <span lang="ar">كيف تبدو أثناء العمل</span>
+            <span lang="en">What it looks like at work</span>
+          </h2>
+
+          <div class="shots">
+            <figure class="reveal">
+              <div class="shot-img">
+                <img src="assets/screenshots/popup.png" alt="" loading="lazy" />
+                <div class="ph">
+                  <span lang="ar">لقطة: نافذة الإضافة</span><span lang="en">Screenshot: the popup</span>
+                </div>
+              </div>
+              <figcaption>
+                <span lang="ar">المفتاح، وجدولُ الأسماء التي أُعيدت.</span>
+                <span lang="en">The toggle, and the table of restored names.</span>
+              </figcaption>
+            </figure>
+            <figure class="reveal">
+              <div class="shot-img">
+                <img src="assets/screenshots/page.png" alt="" loading="lazy" />
+                <div class="ph">
+                  <span lang="ar">لقطة: صفحة قبل/بعد</span><span lang="en">Screenshot: a page before / after</span>
+                </div>
+              </div>
+              <figcaption>
+                <span lang="ar">صفحةٌ حقيقيّة والأسماءُ عادت إلى مكانها.</span>
+                <span lang="en">A real page with the names returned to their place.</span>
+              </figcaption>
+            </figure>
+            <figure class="reveal">
+              <div class="shot-img">
+                <img src="assets/screenshots/suggest.png" alt="" loading="lazy" />
+                <div class="ph">
+                  <span lang="ar">لقطة: اقتراح اسم</span><span lang="en">Screenshot: suggest a name</span>
+                </div>
+              </div>
+              <figcaption>
+                <span lang="ar">أضِف اسماً ناقصاً إلى القاموس الحيّ.</span>
+                <span lang="en">Add a missing name to the living dictionary.</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- <hr class="rule wrap" /> -->
+
+      <!-- ========================== MEANING ========================== -->
+      <section id="return" class="meaning wrap">
+        <div class="col reveal">
+          <p class="kicker"><span lang="ar">الفكرة</span><span lang="en">The idea</span></p>
+          <blockquote>
+            <span lang="ar">أن تُسمّيَ مكاناً، أن <span class="name">تتذكّره</span>.</span>
+            <span lang="en">To name a place is to <span class="name">remember</span> it.</span>
+          </blockquote>
+          <p class="attribution">
+            <span lang="ar">قاموسٌ تكتبه أيادٍ كثيرة</span><span lang="en">A dictionary written by many hands</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================ GET ============================ -->
+      <section id="get" class="final wrap">
+        <div class="col reveal">
+          <p class="kicker"><span lang="ar">ابدأ</span><span lang="en">Begin</span></p>
+          <h2 style="margin-inline:auto;">
+            <span lang="ar">أعِد الأسماء إلى صفحاتك</span>
+            <span lang="en">Return the names to your pages</span>
+          </h2>
+          <p class="prose" style="margin-inline:auto; text-align:center;">
+            <span lang="ar">
+              الإضافةُ في طريقها إلى متجر Chrome. حتى ذلك الحين، يمكنك تحميلها من GitHub
+              وتثبيتها يدويّاً.
+            </span>
+            <span lang="en">
+              The extension is on its way to the Chrome Web Store. Until then, you can
+              download it from GitHub and load it yourself.
+            </span>
+          </p>
+          <div class="cta-row" style="margin-top:2rem;">
+            <a class="btn btn-primary" href="https://github.com/alsha3b/sardiyeh" target="_blank" rel="noopener">
+              <span lang="ar">حمّلها من GitHub</span><span lang="en">Get it on GitHub</span>
+            </a>
+            <a class="btn btn-ghost" href="https://github.com/alsha3b/sardiyeh#readme" target="_blank" rel="noopener">
+              <span lang="ar">طريقة التثبيت</span><span lang="en">How to install</span>
+            </a>
+          </div>
+          <p class="hero-note" style="margin-top:1.6rem;">
+            <span lang="ar">قريباً: تثبيتٌ بنقرةٍ واحدة من متجر Chrome.</span>
+            <span lang="en">Coming soon: one-click install from the Chrome Web Store.</span>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================ FOOTER ============================ -->
+    <footer>
+      <div class="wrap">
+        <span class="foot-brand">سرديّة</span>
+        <div style="display:flex; gap:1.4rem; flex-wrap:wrap; align-items:center;">
+          <a href="https://github.com/alsha3b/sardiyeh" target="_blank" rel="noopener">GitHub</a>
+          <a href="/privacy"><span lang="ar">الخصوصية</span><span lang="en">Privacy</span></a>
+          <a href="#top"><span lang="ar">إلى الأعلى</span><span lang="en">Back to top</span></a>
+          <button class="langtoggle" id="langBtnFoot" type="button" aria-label="Switch language">English</button>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var root = document.documentElement;
+
+        /* ---- language toggle ---------------------------------------- */
+        function labelFor(lang) {
+          // button shows the language you'd switch TO
+          return lang === "ar" ? "English" : "العربية";
+        }
+        function setLang(lang) {
+          root.setAttribute("lang", lang);
+          root.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+          document.querySelectorAll(".langtoggle").forEach(function (b) {
+            b.textContent = labelFor(lang);
+          });
+          try { localStorage.setItem("sardiya_lang", lang); } catch (e) {}
+        }
+        var saved = null;
+        try { saved = localStorage.getItem("sardiya_lang"); } catch (e) {}
+        setLang(saved === "en" || saved === "ar" ? saved : "ar");
+
+        document.querySelectorAll(".langtoggle").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            setLang(root.getAttribute("lang") === "ar" ? "en" : "ar");
+          });
+        });
+
+        /* ---- scroll reveal ------------------------------------------ */
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if ("IntersectionObserver" in window && !reduce) {
+          var io = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                  e.target.classList.add("in");
+                  io.unobserve(e.target);
+                }
+              });
+            },
+            { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+          );
+          document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+        } else {
+          document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
+        }
+
+        /* ---- hero motif: auto-restore once, gently ------------------ */
+        var heroSwap = document.querySelector(".hero [data-swap]");
+        if (heroSwap && !reduce) {
+          setTimeout(function () { heroSwap.classList.add("restored"); }, 900);
+        } else if (heroSwap) {
+          heroSwap.classList.add("restored");
+        }
+
+        /* ---- demo switch: run the extension's effect ---------------- */
+        var demoSwitch = document.getElementById("demoSwitch");
+        var demoSwaps = document.querySelectorAll("#turn [data-swap]");
+        if (demoSwitch) {
+          demoSwitch.addEventListener("click", function () {
+            var on = demoSwitch.getAttribute("aria-pressed") === "true";
+            on = !on;
+            demoSwitch.setAttribute("aria-pressed", String(on));
+            demoSwaps.forEach(function (s, i) {
+              if (on && !reduce) {
+                setTimeout(function () { s.classList.add("restored"); }, i * 140);
+              } else if (on) {
+                s.classList.add("restored");
+              } else {
+                s.classList.remove("restored");
+              }
+            });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>سرديّة — تم إلغاء التثبيت</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: system-ui, "Segoe UI", Tahoma, sans-serif;
+      background: #0f0f0f;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 24px;
+    }
+
+    main {
+      max-width: 30rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 0.75rem;
+    }
+
+    p {
+      line-height: 1.7;
+      opacity: 0.85;
+      margin: 0 0 1.5rem;
+    }
+
+    a.btn {
+      display: inline-block;
+      padding: 0.7rem 1.4rem;
+      border-radius: 999px;
+      background: #1f7a3f;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>سلامتك 🇵🇸</h1>
+    <p>
+      نأسف لمغادرتك. سرديّة مشروع مجتمعي — إن كان هناك ما يمكن تحسينه،
+      نودّ أن نسمع منك.
+    </p>
+    <a class="btn" href="mailto:apps@techforpalestine.org..com?subject=Sardiya%20feedback">
+      شاركنا رأيك
+    </a>
+  </main>
+
+  <script>
+    // Churn tracking. This is a normal hosted web page (not the MV3 extension),
+    // but we still use the Measurement Protocol — no gtag, no cookies, no
+    // consent banner — to stay consistent with the extension and keep it
+    // cookieless. background.js appends ?cid=<client_id>, so the removal
+    // threads to the same GA4 user that generated the engagement events.
+    //
+    // MEASUREMENT_ID / API_SECRET must match background.js. The MP secret is
+    // low-sensitivity (it already ships inside the extension to every user);
+    // leave API_SECRET blank to disable, same as the extension.
+    (function () {
+      var MEASUREMENT_ID = "G-DCQ93BN4SE";
+      var API_SECRET = "yAqC0kSGRV-7GXIt64PM2Q";
+      if (!API_SECRET) return;
+
+      var params = new URLSearchParams(location.search);
+      var cid = params.get("cid");
+      if (!cid) return; // no client_id → can't attribute; skip silently
+
+      fetch(
+        "https://www.google-analytics.com/mp/collect?measurement_id=" +
+        encodeURIComponent(MEASUREMENT_ID) +
+        "&api_secret=" +
+        encodeURIComponent(API_SECRET),
+        {
+          method: "POST",
+          body: JSON.stringify({
+            client_id: cid,
+            events: [
+              {
+                name: "extension_uninstalled",
+                params: {
+                  session_id: String(Math.floor(Date.now() / 1000)),
+                  engagement_time_msec: 100,
+                },
+              },
+            ],
+          }),
+          keepalive: true,
+        }
+      ).catch(function () { });
+    })();
+  </script>
+</body>
+
+</html>

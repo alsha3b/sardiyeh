@@ -1,520 +1,315 @@
-// File responsible for the extension popup
+// Single popup controller. Rendering + i18n helpers live in src/popup-core.js
+// (loaded before this file, attaches to window.Sardiya). Analytics relay
+// (sendTrack) lives in src/track-client.js (also on window.Sardiya). This file
+// owns storage, the toggle lifecycle, the suggest-a-name dialog, view-state
+// wiring, and language loading.
+//
+// View state is a single source of truth (S.renderState). Three top-level views:
+//   welcome  — first-run onboarding, shown until welcomeSeen is set
+//   main     — the names list; within it, the off-banner (ext_on) and the
+//              empty-state (no rows) are driven by renderState too
+//   dialog   — the suggest-a-name form
+// Anything that used to poke element.style.display directly now goes through
+// render() so the states never fight each other (and so toggling on/off updates
+// the off-banner live, while the popup is open).
+(() => {
+  const { buildRow, applyTranslations, renderState, sendTrack } = window.Sardiya;
 
-  document.addEventListener("DOMContentLoaded", function () {
+  // Suggestion submission endpoint (crowdsourced; does not create a local
+  // replacement). Suggestions land in the Firestore `suggestions` collection
+  // via the unauthenticated REST createDocument endpoint — the same public REST
+  // surface background.js reads the dictionary from. Firestore rules
+  // (firestore.rules) let anyone create a suggestion but only admins read/triage
+  // it; the admin page promotes accepted ones into `words`.
+  const PROJECT_ID = "sardiyeh-elmokhtbr";
+  const SUGGEST_URL =
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/suggestions";
+
+  const translations = {}; // { en: {...}, ar: {...} }
+  const state = { view: "main", extOn: true, hasRows: false };
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    sendTrack("popup_opened"); // engagement / DAU-WAU signal
+    await loadTranslations();
     initLanguage();
-    populateReplacedWords();
-    initForm();
-    initAddButton(); // Initialize the add-button functionality
+    setFooterYear();
+    await initState(); // reads ext_on + welcomeSeen, picks the first view
+    renderReplacedWords();
     initToggle();
+    initDialog();
+    initWelcome();
+    initSafariHint();
   });
 
-  function initToggle() {
-    const toggle = document.getElementById("toggleSwitch");
-
-    chrome.storage.sync.get(["ext_on"], function (data) {
-      toggle.checked = data.ext_on !== false; // Default to true if not set
-    });
-
-    toggle.addEventListener("change", function () {
-      const isChecked = this.checked;
-
-      if (!isChecked) {
-        // Show the custom alert if toggling off
-        showAlert(false, () => {
-          // Callback function to execute if user clicks "refresh" (reload and revert)
-          chrome.storage.sync.set({ ext_on: isChecked }, () => {
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-              if (tabs[0] && tabs[0].id) {
-                chrome.scripting.executeScript({
-                    target: { tabId: tabs[0].id, allFrames: true },
-                    files: ["revert.js"],
-                  });
-                chrome.tabs.reload(tabs[0].id);
-              }
-            });
-          });
-        }, () => {
-          // Callback function to execute if user clicks "Cancel" (revert the toggle)
-          toggle.checked = true; //Revert the toggle switch
-          chrome.storage.sync.set({ ext_on: true }, () => {
-            chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: true });
-          });
-        });
-
-      } else {
-
-        showAlert(true, () => {
-          // Callback function to execute if user clicks "refresh" (reload and replace)
-          chrome.storage.sync.set({ ext_on: isChecked }, () => {
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-              if (tabs[0] && tabs[0].id) {
-                chrome.scripting.executeScript({
-                  target: { tabId: tabs[0].id, allFrames: true },
-                  files: ["content.js"],
-                });
-                chrome.tabs.reload(tabs[0].id);
-              }
-            });
-          });
-        }, () => {
-          // Callback function to execute if user clicks "Cancel" (revert the toggle)
-          toggle.checked = false; //Revert the toggle switch
-          chrome.storage.sync.set({ ext_on: false }, () => {
-            chrome.runtime.sendMessage({ action: 'updateToggle', isChecked: false });
-          });
-        });
-      }
-    });
+  // ---------- view rendering ----------
+  function render() {
+    renderState(document, state);
+    updateToggleLabel();
   }
 
-  function showAlert(isTurningOn, onOk, onCancel) {
-    // Create the alert overlay elements
-    const alertOverlay = document.createElement('div');
-    alertOverlay.id = 'customAlertOverlay';
-  
-    const alertBox = document.createElement('div');
-    alertBox.id = 'customAlertBox';
-  
-    const alertTitle = document.createElement('h1');
-    alertTitle.textContent = isTurningOn ? "Turning on ..." : "Turning off...";
-  
-    const alertMessage = document.createElement('p');
-    alertMessage.textContent = "In order to see your changes, the page will need to be reloaded.";
-  
-    // Create the button container
-    const alertButtons = document.createElement('div');
-    alertButtons.classList.add('alert-buttons');
-  
-    const okButton = document.createElement('button');
-    okButton.textContent = "Refresh";
-    okButton.classList.add('refresh-button');
-    okButton.addEventListener('click', () => {
-      alertOverlay.remove();
-      onOk(); // Callback for refresh button
-      window.location.reload();
-    });
-  
-    const cancelButton = document.createElement('button');
-    cancelButton.textContent = "Cancel";
-    cancelButton.classList.add('cancel-button');
-    cancelButton.addEventListener('click', () => {
-      alertOverlay.remove();
-      alertBox.remove();  
-      onCancel(); // Callback for Cancel button
-    });
-  
-    // Assemble the alert box
-    alertBox.appendChild(alertTitle);
-    alertBox.appendChild(alertMessage);
-  
-    alertButtons.appendChild(okButton);
-    alertButtons.appendChild(cancelButton);
-  
-    alertBox.appendChild(alertButtons);
-  
-    // Add the alert to the overlay and then to the document
-    alertOverlay.appendChild(alertBox);
-    document.body.appendChild(alertOverlay);
+  function updateToggleLabel() {
+    const label = document.getElementById("toggle-label");
+    if (label) label.textContent = state.extOn ? t("toggleOn") : t("toggleOff");
   }
 
-  function initAddButton() {
-    const addButton = document.getElementById("edit-button");
-
-    if (addButton) {
-      addButton.addEventListener("click", function () {
-        openDialog(); // Navigate to the word-replacement section
-      });
-    }
+  function setFooterYear() {
+    const el = document.getElementById("footer-year");
+    if (el) el.textContent = String(new Date().getFullYear());
   }
 
+  async function initState() {
+    const { ext_on, welcomeSeen } = await chrome.storage.sync.get([
+      "ext_on",
+      "welcomeSeen",
+    ]);
+    state.extOn = ext_on !== false; // default on
+    state.view = welcomeSeen ? "main" : "welcome";
+    render();
+  }
 
-  function initForm() {
-    const form = document.getElementById("input-form");
-    const wordInput = document.getElementById("word-input");
-    const replacementInput = document.getElementById("replacement-input");
-    const errorMessage = document.getElementById("error-message");
-    const errorText = document.getElementById("error-text");
-    const loadingIndicator = document.getElementById("loading-indicator");
-    const submitButton = document.getElementById("dialog-submit");
+  // ---------- Safari host-permission onboarding ----------
+  // Safari (unlike Chrome) does not silently honor host_permissions: content
+  // scripts never run until the user opens the toolbar button and picks "Allow
+  // on Every Website". Show a one-time hint explaining that — Safari only, and
+  // dismissible (persisted in storage.sync). Chrome grants <all_urls> at install
+  // so the banner would be noise there.
+  const IS_SAFARI = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-    // Initially disable the Save button
-    submitButton.disabled = true;
-
-    const inputs = [wordInput, replacementInput];
-
-    // Add event listeners for input fields
-    inputs.forEach((input) => {
-      input.addEventListener("input", validateInputs);
-      input.addEventListener("focus", handleFocus);
-      input.addEventListener("blur", handleBlur);
+  function initSafariHint() {
+    if (!IS_SAFARI) return;
+    const banner = document.getElementById("safari-onboarding");
+    if (!banner) return;
+    chrome.storage.sync.get(["safariHintDismissed"], ({ safariHintDismissed }) => {
+      if (safariHintDismissed) return;
+      banner.style.display = "block";
     });
-
-
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault(); // Prevent default form submission
-
-      const wordValue = wordInput.value.trim();
-      const replacementValue = replacementInput.value.trim();
-
-      // Check if the words are the same
-      if (wordValue === replacementValue || wordValue.toLowerCase() === replacementValue.toLowerCase()) {
-        // Show error message but allow Save button to be clicked
-        showErrorMessage("The word and its replacement cannot be the same.");
-        wordInput.classList.add("input-error");
-        replacementInput.classList.add("input-error");
-        return;
-      }
-
-      // Check if either field is empty
-      if (!wordValue || !replacementValue) {
-        showErrorMessage("Both fields are required.");
-        return;
-      }
-
-      // Show loading indicator and hide error message
-      loadingIndicator.style.display = "block";
-      clearErrorStyles();
-
-      try {
-        const response = await fetch(
-          "https://script.google.com/macros/s/AKfycbwqV-kCvRonl9MXdSOP7l7LsMh4ZA-Ro0eLsDvrruF228OI4UT1-AW5JFuijnNqsg5V/exec",
-          {
-            method: "POST",
-            body: new FormData(form),
-          }
-        );
-
-        if (response.ok) {
-          addWord(wordValue, replacementValue);
-          closeDialog();
-        } else {
-          showErrorMessage("Submission failed. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        showErrorMessage("Submission failed. Please try again.");
-      } finally {
-        // Hide loading indicator
-        loadingIndicator.style.display = "none";
-      }
-    });
-
-
     document
-      .querySelector(".dialog-close")
-      .addEventListener("click", closeDialog);
+      .getElementById("safari-onboarding-dismiss")
+      ?.addEventListener("click", () => {
+        banner.style.display = "none";
+        chrome.storage.sync.set({ safariHintDismissed: true });
+      });
+  }
 
-    // Validation logic for enabling/disabling Save button
-    function validateInputs() {
-      const wordValue = wordInput.value.trim();
-      const replacementValue = replacementInput.value.trim();
-
-      if (!wordValue || !replacementValue) {
-        // Disable Save button if either input is empty
-        submitButton.disabled = true;
-        clearErrorStyles();
-      } else {
-        // Enable Save button if inputs are valid
-        submitButton.disabled = false;
-        clearErrorStyles();
+  // ---------- i18n ----------
+  async function loadTranslations() {
+    for (const lang of ["en", "ar"]) {
+      try {
+        const res = await fetch(chrome.runtime.getURL(`translations/${lang}.json`));
+        translations[lang] = await res.json();
+      } catch (e) {
+        translations[lang] = {};
       }
-    }
-
-
-    function showErrorMessage(message) {
-      errorMessage.style.display = "flex";
-      errorText.textContent = message;
-    }
-
-
-    function clearErrorStyles() {
-      wordInput.classList.remove("input-error");
-      replacementInput.classList.remove("input-error");
-      errorMessage.style.display = "none";
-      errorText.textContent = "";
-    }
-
-    // Handle focus and blur events to animate placeholder as a label
-    function handleFocus(event) {
-      const label = event.target.previousElementSibling;
-      if (label) label.classList.add("label-focused");
-    }
-
-    function handleBlur(event) {
-      const label = event.target.previousElementSibling;
-      if (label && !event.target.value.trim()) label.classList.remove("label-focused");
     }
   }
 
   function initLanguage() {
-    const languageSelect = document.getElementById("language-select");
-    languageSelect.addEventListener("change", changeLanguage);
-
-    chrome.storage.sync.get(["selectedLanguage"], function (result) {
-      const selectedLanguage = result.selectedLanguage || "en"; // Default to English if no language is saved
-      languageSelect.value = selectedLanguage;
-      updateLanguage(selectedLanguage);
+    const select = document.getElementById("language-select");
+    chrome.storage.sync.get(["selectedLanguage"], ({ selectedLanguage }) => {
+      const lang = selectedLanguage || "en";
+      if (select) select.value = lang;
+      applyLanguage(lang);
+    });
+    select?.addEventListener("change", () => {
+      const lang = select.value;
+      applyLanguage(lang);
+      chrome.storage.sync.set({ selectedLanguage: lang });
+      sendTrack("language_changed", { language: lang });
     });
   }
 
-  function populateReplacedWords() {
-    chrome.storage.local.get("replacedWords", function (data) {
-      if (data.replacedWords && data.replacedWords.length > 0) {
-        data.replacedWords.forEach((word) => {
-          const tableBody = document.getElementById("table-body");
-          const row = document.createElement("tr");
+  function applyLanguage(lang) {
+    applyTranslations(document, translations[lang]);
+    const rtl = lang === "ar";
+    document.body.setAttribute("dir", rtl ? "rtl" : "ltr");
+    document.querySelector(".header")?.setAttribute("dir", rtl ? "rtl" : "ltr");
+    // Font follows language via CSS (body / body[dir="rtl"] in styles.css):
+    // Space Mono for LTR, Thmanyah Sans for RTL. No inline override here — the
+    // old unconditional override forced one font for both languages.
+    updateToggleLabel();
+  }
 
-          const wordCell = document.createElement("td");
-          const wordLink = document.createElement("a");
-          wordLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
-            word.word
-          )}`;
-          wordLink.target = "_blank"; // Open link in new tab
-          wordLink.textContent = word.word;
-          wordLink.style.color = "#97700B";
-          wordLink.style.textDecoration = "none";
-          wordCell.appendChild(wordLink);
-          // wordCell.innerHTML = wordLink;
+  function t(key) {
+    const lang = document.getElementById("language-select")?.value || "en";
+    return (translations[lang] || {})[key] || "";
+  }
 
-          const replacementCell = document.createElement("td");
-          const replacementLink = document.createElement("a");
-          replacementLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
-            word.replacement
-          )}`;
-          replacementLink.target = "_blank";
-          replacementLink.textContent = word.replacement;
-          replacementLink.style.color = "#000000";
-          replacementLink.style.textDecoration = "none";
-          replacementCell.appendChild(replacementLink);
-          // replacementCell.innerHTML = replacementLink;
-
-          // const wordCell = document.createElement("td");
-          // const replacementCell = document.createElement("td");
-          // wordCell.textContent = word.original;
-          // replacementCell.textContent = word.replacement;
-
-          row.appendChild(wordCell);
-          row.appendChild(replacementCell);
-          tableBody.appendChild(row);
-        });
+  // ---------- replaced-words table ----------
+  // Ask the active tab's top frame for the words it replaced. Scoping the query
+  // to a single tab (not a shared storage key) is what makes the list correct
+  // when several tabs have matches. No content script (chrome://, store pages,
+  // etc.) → lastError → empty table → empty state.
+  function renderReplacedWords() {
+    const tbody = document.getElementById("table-body");
+    if (!tbody) return;
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tabId = tabs && tabs[0] && tabs[0].id;
+      if (tabId == null) {
+        state.hasRows = false;
+        if (state.view === "main") render();
+        return;
       }
+      chrome.tabs.sendMessage(
+        tabId,
+        { type: "sardiya:getReplacedWords" },
+        { frameId: 0 },
+        (resp) => {
+          const words =
+            chrome.runtime.lastError || !resp ? [] : resp.replacedWords || [];
+          tbody.replaceChildren();
+          words.forEach(({ word, replacement }) =>
+            tbody.appendChild(buildRow(document, word, replacement))
+          );
+          state.hasRows = words.length > 0;
+          if (state.view === "main") render();
+        }
+      );
     });
   }
 
-  function addWordToTable(word, replacement) {
-      const tableBody = document.getElementById("table-body");
-      const row = document.createElement("tr");
-
-      const wordCell = document.createElement("td");
-      const wordLink = document.createElement("a");
-      wordLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
-          word
-      )}`;
-      wordLink.target = "_blank"; // Open link in new tab
-      wordLink.textContent = word;
-      wordLink.style.color = "#97700B";
-      wordLink.style.textDecoration = "none";
-      wordCell.appendChild(wordLink);
-
-      const replacementCell = document.createElement("td");
-      const replacementLink = document.createElement("a");
-      replacementLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
-          replacement
-      )}`;
-      replacementLink.target = "_blank";
-      replacementLink.textContent = replacement;
-      replacementLink.style.color = "#000000";
-      replacementLink.style.textDecoration = "none";
-      replacementCell.appendChild(replacementLink);
-
-      row.appendChild(wordCell);
-      row.appendChild(replacementCell);
-      tableBody.appendChild(row);
+  // ---------- on/off toggle ----------
+  // No reload: the content script applies (on) or reverts in place (off) live
+  // through chrome.storage.onChanged. Toggling here updates the off-banner live
+  // via render() — the popup is its own view, so it must re-render, not wait.
+  function initToggle() {
+    const toggle = document.getElementById("toggleSwitch");
+    if (!toggle) return;
+    toggle.checked = state.extOn;
+    toggle.addEventListener("change", () => {
+      state.extOn = toggle.checked;
+      chrome.storage.sync.set({ ext_on: toggle.checked });
+      sendTrack("extension_toggled", { enabled: toggle.checked });
+      if (state.view === "main") render();
+      else updateToggleLabel();
+    });
   }
 
-  async function getReplacedWordsFromStorage() {
-      return new Promise((resolve) => {
-          chrome.storage.local.get(["replacedWords"], (data) => {
-              resolve(data.replacedWords || []);
-          });
-      });
+  // ---------- welcome onboarding (first run only) ----------
+  function initWelcome() {
+    document.getElementById("welcome-continue")?.addEventListener("click", () => {
+      chrome.storage.sync.set({ welcomeSeen: true });
+      state.view = "main";
+      render();
+    });
   }
 
-
-  function addWord(word, replacement) {
-    if (word && replacement) {
-      const tableBody = document.getElementById("table-body");
-
-      const row = document.createElement("tr");
-
-      const wordCell = document.createElement("td");
-      const wordLink = document.createElement("a");
-      wordLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
-        word
-      )}`;
-      wordLink.target = "_blank"; // Open link in new tab
-      wordLink.textContent = word;
-      wordCell.appendChild(wordLink);
-
-      const replacementCell = document.createElement("td");
-      const replacementLink = document.createElement("a");
-      replacementLink.href = `https://www.palestineremembered.com/Search.html#gsc.tab=0&gsc.sort=&gsc.q=${encodeURIComponent(
-        replacement
-      )}`;
-      replacementLink.target = "_blank";
-      replacementLink.textContent = replacement;
-      replacementCell.appendChild(replacementLink);
-
-      row.appendChild(wordCell);
-      row.appendChild(replacementCell);
-      tableBody.appendChild(row);
-      
-    }
+  // ---------- suggest-a-name dialog ----------
+  function initDialog() {
+    document.getElementById("edit-button")?.addEventListener("click", openDialog);
+    document.getElementById("empty-suggest")?.addEventListener("click", openDialog);
+    document.getElementById("dialog-close")?.addEventListener("click", closeDialog);
+    document
+      .getElementById("suggest-confirm-close")
+      ?.addEventListener("click", closeDialog);
+    initForm();
   }
-
-  const sheetUrl =
-    "https://script.google.com/macros/s/AKfycbwqV-kCvRonl9MXdSOP7l7LsMh4ZA-Ro0eLsDvrruF228OI4UT1-AW5JFuijnNqsg5V/exec";
-
-  async function postSuggestion(params) {
-    const url =
-      "https://z4kly0zbd9.execute-api.us-east-1.amazonaws.com/prod/suggestion";
-
-    try {
-      const response = await fetch(url, {
-        method: "POST", // HTTP method
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(params),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      console.log("Success:", data);
-      return data;
-    } catch (error) {
-      console.error("Error:", error);
-    }
-    
-  }
-
-  async function submitForm() {
-    const wordInput = document.getElementById("word-input").value;
-    const replacementInput = document.getElementById("replacement-input").value;
-    const errorMessage = document.getElementById("error-message");
-
-    if (!wordInput || !replacementInput) {
-      errorMessage.textContent = getLocalizedString("errorEmptyFields");
-      return;
-    }
-
-    errorMessage.textContent = "";
-
-
-    try {
-      const response = await fetch(sheetUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          word: wordInput,
-          replacement: replacementInput,
-        }),
-      });
-
-      if (response.ok) {
-          await closeDialog();
-        addWord(wordInput, replacementInput);
-      } else {
-        errorMessage.textContent = getLocalizedString("errorSubmissionFailed");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      errorMessage.textContent = getLocalizedString("errorSubmissionFailed");
-    }
-  }
-
-
-  function changeLanguage() {
-    const languageSelect = document.getElementById("language-select");
-    const selectedLanguage = languageSelect.value;
-
-    updateLanguage(selectedLanguage);
-
-    // Save the selected language
-    chrome.storage.sync.set({ selectedLanguage: selectedLanguage });
-  }
-
-  function updateLanguage(language) {
-    if (language === "en") {
-      loadLanguage(en);
-      document.body.setAttribute("dir", "ltr");
-      document.querySelector(".header").setAttribute("dir", "ltr");
-      document.body.style.fontFamily = "'Montserrat', sans-serif";
-    } else if (language === "ar") {
-      loadLanguage(ar);
-      document.body.setAttribute("dir", "rtl");
-      document.querySelector(".header").setAttribute("dir", "rtl");
-      document.body.style.fontFamily = "'Beiruti', sans-serif";
-    }
-  }
-
-  function loadLanguage(lang) {
-
-    // Update titles and headers
-    document.getElementById("replaced-words-title").textContent = lang.replacedWords;
-    document.getElementById("word-header").textContent = lang.word;
-    document.getElementById("replacement-header").textContent = lang.replacement;
-
-    // Update buttons
-    document.getElementById("dialog-submit").textContent = lang.submitButton;
-    document.getElementById("dialog-close").textContent = lang.cancelButton;
-
-    // Update form labels
-    document.getElementById("word-label").textContent = lang.wordLabel;
-    document.getElementById("replacement-label").textContent = lang.replacementLabel;
-
-    // Update error messages
-    document.getElementById("error-message").textContent = lang.errorSubmissionFailed;
-
-
-    // Update input placeholders
-    document.getElementById("word-input").placeholder = lang.wordInput;
-    document.getElementById("replacement-input").placeholder = lang.replacementInput;
-
-  }
-
-  function getLocalizedString(key) {
-    const language = document.getElementById("language-select").value;
-    const lang = language === "en" ? en : ar;
-    return lang[key];
-  }
-
 
   function openDialog() {
-    const inputDialog = document.getElementById("input-dialog");
-    const content = document.getElementById("content");
-
-    if (inputDialog && content) {
-      inputDialog.style.display = "block"; // Show the input dialog
-      content.style.display = "none"; // Hide the main content
-    }
+    resetDialog();
+    state.view = "dialog";
+    render();
   }
 
   function closeDialog() {
-    const inputDialog = document.getElementById("input-dialog");
-    const content = document.getElementById("content");
+    state.view = "main";
+    render();
+    resetDialog();
+  }
 
-    inputDialog.style.display = "none";
-    content.style.display = "block";
-
+  // Reset the dialog back to the form (hide the confirmation, clear inputs).
+  function resetDialog() {
+    document.getElementById("input-form")?.reset();
     const form = document.getElementById("input-form");
-    form.reset(); // Reset the form inputs
-  //  document.getElementById("error-message").textContent = ""; // Clear error message
-  } 
+    const confirm = document.getElementById("suggest-confirm");
+    if (form) form.style.display = "";
+    if (confirm) confirm.style.display = "none";
+    const submit = document.getElementById("dialog-submit");
+    if (submit) submit.disabled = true;
+  }
 
+  function initForm() {
+    const form = document.getElementById("input-form");
+    if (!form) return;
+    const wordInput = document.getElementById("word-input");
+    const replacementInput = document.getElementById("replacement-input");
+    const errorText = document.getElementById("error-text");
+    const errorMessage = document.getElementById("error-message");
+    const loading = document.getElementById("loading-indicator");
+    const submit = document.getElementById("dialog-submit");
+
+    const showError = (msg) => {
+      if (errorMessage) errorMessage.style.display = "flex";
+      if (errorText) errorText.textContent = msg;
+    };
+    const clearError = () => {
+      wordInput?.classList.remove("input-error");
+      replacementInput?.classList.remove("input-error");
+      if (errorMessage) errorMessage.style.display = "none";
+      if (errorText) errorText.textContent = "";
+    };
+
+    if (submit) submit.disabled = true;
+    [wordInput, replacementInput].forEach((input) =>
+      input?.addEventListener("input", () => {
+        const filled = wordInput.value.trim() && replacementInput.value.trim();
+        if (submit) submit.disabled = !filled;
+        clearError();
+      })
+    );
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const word = wordInput.value.trim();
+      const replacement = replacementInput.value.trim();
+
+      if (!word || !replacement) return showError(t("errorEmptyFields") || "Both fields are required.");
+      if (word.toLowerCase() === replacement.toLowerCase()) {
+        wordInput.classList.add("input-error");
+        replacementInput.classList.add("input-error");
+        return showError(
+          t("errorSameWord") || "The two names cannot be the same."
+        );
+      }
+
+      if (loading) loading.style.display = "block";
+      clearError();
+      try {
+        // Firestore REST expects typed field values, not raw JSON.
+        const res = await fetch(SUGGEST_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fields: {
+              word: { stringValue: word },
+              replacement: { stringValue: replacement },
+              createdAt: { timestampValue: new Date().toISOString() },
+            },
+          }),
+        });
+        if (res.ok) {
+          sendTrack("suggestion_submitted", { status: "success" });
+          // Honest confirmation: this was a community suggestion, not a local
+          // replacement, so we do NOT fake a row in the table.
+          showConfirmation();
+        } else {
+          sendTrack("suggestion_submitted", { status: "error" });
+          showError(t("errorSubmissionFailed") || "Submission failed. Please try again.");
+        }
+      } catch (e) {
+        sendTrack("suggestion_submitted", { status: "error" });
+        showError(t("errorSubmissionFailed") || "Submission failed. Please try again.");
+      } finally {
+        if (loading) loading.style.display = "none";
+      }
+    });
+  }
+
+  function showConfirmation() {
+    const form = document.getElementById("input-form");
+    const confirm = document.getElementById("suggest-confirm");
+    if (form) form.style.display = "none";
+    if (confirm) confirm.style.display = "block";
+  }
+})();

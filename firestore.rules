@@ -1,0 +1,53 @@
+rules_version = '2';
+
+// The `words` collection is the dictionary the extension reads.
+//   - Public read: the extension ships to everyone and holds no credentials, so
+//     the read path is unauthenticated (the data is public anyway).
+//   - Writes are restricted to an explicit admin email allowlist. This matters
+//     because the Email/Password provider allows self-registration through the
+//     public apiKey, so "any signed-in user" would NOT be safe — only these
+//     addresses may write. Add/remove admins by editing this list and
+//     redeploying (`firebase deploy --only firestore:rules`).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in [
+          'm@elmokhtbr.com',
+          'asalhab94@gmail.com',
+          'sader@basel.ps'
+        ];
+    }
+
+    // A suggested word must carry exactly a word/replacement pair (plus an
+    // optional createdAt), each a non-empty, length-capped string. This bounds
+    // what an anonymous writer can store so the create-only rule below can't be
+    // used as free public storage.
+    function isValidSuggestion() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['word', 'replacement', 'createdAt'])
+        && d.keys().hasAll(['word', 'replacement'])
+        && d.word is string && d.word.size() > 0 && d.word.size() <= 200
+        && d.replacement is string && d.replacement.size() > 0 && d.replacement.size() <= 200;
+    }
+
+    match /words/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Crowdsourced word suggestions from the extension popup. Anyone may create
+    // one (the popup is unauthenticated), but only admins may read or triage
+    // them, so the queue can't be scraped or tampered with. Promotion to the
+    // live `words` collection is a manual admin step.
+    match /suggestions/{doc} {
+      allow create: if isValidSuggestion();
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Everything else is locked down by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
