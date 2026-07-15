@@ -1,0 +1,17 @@
+# Secrets
+/secrets
+.env
+
+# Dependencies
+node_modules
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+
+# Build output (Chrome Web Store zip)
+/dist
+.gstack/

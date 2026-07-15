@@ -1,0 +1,595 @@
+/* styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+/*  font-family: "Space Mono", serif; */
+body {
+  font-family: 'Space Mono', sans-serif;
+  background-color: #FAFAFA;
+  border-radius: 12px;
+  padding: 0px;
+  margin: 0px;
+  font-size: 16px;
+}
+
+body[dir="rtl"] {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 16px; 
+}
+
+
+.plugin-window {
+  width: 360px;
+  /* height: 400px; */
+  max-height: 100vh;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  flex-direction: row; /* Default for LTR */
+  justify-content: space-between;
+  align-items: center; /* Ensure items align vertically */
+  background-color: #004D23;
+  color: white;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: flex-direction 0.3s ease;
+  gap: 10px;
+}
+
+
+.header[dir="rtl"] {
+  flex-direction: row-reverse;
+}
+
+.header-text {
+  padding-left: 20px;
+  text-align: start;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 56px;
+  height: 32px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #D3A93C;
+  transition: .4s;
+  border-radius: 20px;
+  border: 1px solid white;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  top: 10px;
+  left: 10px;
+  /* right: 10px;
+  bottom: 10px; */
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.replaced-word {
+  text-decoration: underline;
+  text-decoration-color: #D3A93C; /* Custom color for visibility */
+  text-decoration-thickness: 2px; /* Makes underline thicker */
+  cursor: pointer; /* Optional: Indicates interaction */
+  color: inherit; /* Keeps original text color */
+}
+
+
+
+input:checked+.slider {
+  background-color: white;
+}
+
+input:checked+.slider:before {
+  transform: translateX(24px);
+  background-color: #004D23;
+}
+
+.content {
+  padding: 10px;
+  align-items: center;
+}
+
+.content[dir="rtl"] {
+  flex-flow: row-reverse;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 12px;
+}
+
+
+.add-button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.add-button img {
+  width: 24px;
+  height: 24px;
+  color: #1C1B1F;
+}
+
+.add-button:hover {
+  background-color: #004D231A;
+}
+
+.lang-select {
+  border-radius: 12px;
+  border: 2px solid #1C1B1F;
+  padding: 4px 12px;
+  background-color: white; /* Ensure consistent background */
+  color: black; /* Uniform text color */
+}
+
+.replaced-words-title {
+  flex-grow: 1;
+  font-size: 18px;
+}
+
+.replaced-words-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  /* Ensure table layout is fixed */
+}
+
+.replaced-words-table th,
+.replaced-words-table td {
+  padding: 8px;
+  text-align: left;
+
+}
+
+.replaced-words-table thead {
+  background-color: #E5E5E5;
+  color: black;
+  position: sticky;
+  /* Make header sticky */
+  top: 0;
+  /* Stick to the top */
+  z-index: 1;
+  /* Ensure header is above the rows */
+}
+
+/* .replaced-words-table tbody tr:nth-child(odd) {
+  background-color: lightgrey;
+} */
+
+.replaced-words-table tbody td:first-child {
+  color: #97700B;
+}
+
+.replaced-words-table tbody td:last-child {
+  color: black;
+}
+
+
+.input-dialog {
+  display: none;
+  /* position: absolute; */
+  /* top: 0;
+  left: 0;
+  right: 0; */
+  margin-top: 30px;
+  width: 100%;
+  height: 350px;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+  margin:15px auto;
+  position: relative;
+  color: #004D23;
+  left: -100px;
+  box-sizing: border-box;
+  animation: shadowRolling 2s linear infinite;
+}
+@keyframes shadowRolling {
+  0% {
+    box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+  12% {
+    box-shadow: 100px 0 #004D23, 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+  25% {
+    box-shadow: 110px 0 #004D23, 100px 0 #004D23, 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+  36% {
+    box-shadow: 120px 0 #004D23, 110px 0 #004D23, 100px 0 #004D23, 0px 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    box-shadow: 130px 0 #004D23, 120px 0 #004D23, 110px 0 #004D23, 100px 0 #004D23;
+  }
+  62% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 #004D23, 120px 0 #004D23, 110px 0 #004D23;
+  }
+  75% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 #004D23, 120px 0 #004D23;
+  }
+  87% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 #004D23;
+  }
+  100% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.dialog-content {
+  background-color: #004D232E;
+  padding: 20px;
+  border-radius: 10px;
+  width: 272px;
+  height: 342px;
+  max-width: 280px;
+  margin: auto;
+  text-align: center;
+}
+
+.dialog-content input.replacement {
+  border: 1px solid red;
+  color: red;
+}
+
+.dialog-content label.label-focused {
+  opacity: 1;
+  font-size: 0.875rem;
+  color: #004d23;
+}
+
+.dialog-submit:disabled {
+  background-color: #84B599;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+
+
+#loading-indicator{
+  display: none;
+}
+
+
+.dialog-content .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.dialog-content label {
+  display: block;
+  margin: auto;
+  font-weight: bold;
+}
+
+.dialog-content input {
+  width: 224px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #000;
+}
+
+
+
+
+#word-input::placeholder,
+#replacement-input::placeholder{
+  font-size: 12px;
+}
+
+#word-input,
+#replacement-input{
+  width: 100%;
+  /* padding: 10px 15px; */
+  margin-bottom: 20px;
+  border: 1px solid #004d00; /* Default border color */
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #004d00;
+  background-color: #fff; /* Light green background */
+  transition: all 0.3s ease;
+}
+.dialog-buttons {
+  display: flex;
+  justify-content: stretch;
+  margin-top: 38px;
+}
+
+.formStyle{
+  margin-top: 20px;
+}
+
+
+.dialog-buttons button {
+  padding: 10px 20px;
+  border: none;
+  width: 102px;
+  height: 38px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.dialog-submit {
+  background-color: #004D23;
+  /* Green */
+  color: white;
+  margin: auto;
+}
+
+.dialog-close {
+  background-color: white;
+  /* Red */
+  color: black;
+  margin: auto;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: red;
+  font-size: 0.875rem; /* Smaller text size */
+  font-weight: 400;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.error-message.error-visible {
+  visibility: visible; /* Show when error occurs */
+}
+.error-icon {
+  font-size: 1rem;
+  color: red;
+}
+
+
+
+/* Additional styles for RTL support */
+body[dir="rtl"] .header .icon {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+body[dir="rtl"] .header {
+  flex-direction: row-reverse;
+}
+
+body[dir="rtl"] .title-row {
+  flex-direction: row;
+}
+
+body[dir="rtl"] .replaced-words-table th,
+body[dir="rtl"] .replaced-words-table td {
+  text-align: right;
+}
+
+.welcome {
+  /* display: none; */
+  width: 100%;
+  background: #004D23;
+  height: 350px;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+hr:not([size]) {
+  height: 8px;
+}
+hr{
+  width: 50%;
+  height: 50px;
+  color: #D3A93C;
+  opacity: 2.5;
+}
+
+
+.table-container {
+  height: 300px;
+  max-height: 300px;
+  min-height: 300px;
+  /* Set a maximum height for the scrollable area */
+  overflow-y: auto;
+  /* Enable vertical scrolling */
+  margin-top: 15px;
+  /* Increased margin */
+  background-color: #fff;
+
+  border-radius: 12px;
+}
+
+#footer{
+  text-align: center;
+  margin-top: 9px;
+}
+
+
+body[dir="rtl"] #footer {
+  direction: rtl; /* Proper alignment for RTL */
+}
+
+
+/*Error message style*/
+.error-message {
+  color: rgb(223, 0, 0);
+  display: none;
+  margin-top: 1.2px;
+}
+
+/* Style for the alert overlay */
+#customAlertOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Style for the alert box */
+#customAlertBox {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(0, 77, 35, 0.6); 
+  width: 55%;
+}
+
+/* Style for the alert title */
+#customAlertBox h1 {
+  text-align: center;
+  padding-bottom: 15px;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 16.29px;
+  font-family: "Space Mono", serif;
+}
+
+/* Style for the alert message */
+#customAlertBox p {
+  color: #004d23;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 16px;
+  font-family: "Space Mono", serif;
+}
+
+/* General button styles */
+.alert-buttons {
+  gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-top: 20px; */
+  font-family: "Space Mono", serif;
+}
+
+.alert-buttons button {
+  padding: 6px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 14.81px;
+  text-align: center;
+  transition: all 0.3s ease;
+  width: 130px;
+  height: 26px;
+}
+
+/* Style for the Refresh button */
+.alert-buttons .refresh-button {
+  background-color: #004D23;
+  color: white;
+  border: none;
+}
+
+.alert-buttons .refresh-button:hover {
+  background-color: #D3A93C;
+}
+
+/* Style for the Cancel button */
+.alert-buttons .cancel-button {
+  background-color: white;
+  color: #004D23;
+  border: none;
+}
+
+.alert-buttons .cancel-button:hover {
+  border: 1px solid #004d23;
+}
+
+/* Safari host-permission onboarding banner (shown by popup.js on Safari only) */
+.safari-onboarding {
+  margin: 16px 20px 0;
+  padding: 14px 16px;
+  border: 1px solid #004D23;
+  border-inline-start: 4px solid #D3A93C;
+  border-radius: 8px;
+  background-color: #004D231A;
+}
+
+.safari-onboarding-title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #004D23;
+}
+
+.safari-onboarding-body {
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #1C1B1F;
+}
+
+.safari-onboarding-dismiss {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #004D23;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.safari-onboarding-dismiss:hover {
+  background-color: #006330;
+}
+

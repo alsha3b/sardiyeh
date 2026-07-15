@@ -1,0 +1,38 @@
+name: Publish to Chrome Web Store
+
+# Runs when you push a version tag, e.g.  git tag v1.1.0 && git push --tags
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      # Guard: don't ship a broken build.
+      - run: npm test
+
+      # Produces dist/sardiya-<version>.zip
+      - run: npm run pack
+
+      # Upload + publish. The extension ID is public; the three OAuth values
+      # come from repo secrets (see .env.example for how to generate them).
+      - name: Upload to Chrome Web Store
+        run: |
+          npx --yes chrome-webstore-upload-cli@3 upload \
+            --source dist/sardiya-*.zip \
+            --auto-publish
+        env:
+          EXTENSION_ID: mhojjemphcgfbjikablofecafbbkjafp
+          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}

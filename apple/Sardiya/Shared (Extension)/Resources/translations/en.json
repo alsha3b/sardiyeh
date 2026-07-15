@@ -1,0 +1,20 @@
+{
+  "pluginName": "Sardiya",
+  "replacedWords": "Replaced words",
+  "word": "Word",
+  "replacement": "Replacement",
+  "wordLabel": "Word",
+  "replacementLabel": "Replacement",
+  "submitButton": "Save",
+  "errorEmptyFields": "Both fields are required.",
+  "errorSameWord": "The word and its replacement cannot be the same.",
+  "errorSubmissionFailed": "Failed to submit the data. Please try again.",
+  "turnOffMessage": "If you want to turn off the extension, please reload the page.",
+  "reloadButton": "Reload",
+  "cancelButton": "Cancel",
+  "wordInput": "The word you want to replace",
+  "replacementInput": "The replacement for the word",
+  "safariOnboardingTitle": "Enable on every site",
+  "safariOnboardingBody": "In Safari, click the سرديّة button in the toolbar and choose “Allow on Every Website” — otherwise names won’t be replaced.",
+  "safariOnboardingDismiss": "Got it"
+}

@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>سرديّة — Dictionary Admin</title>
+    <style>
+      :root {
+        --bg: #0f1115;
+        --panel: #171a21;
+        --line: #262b36;
+        --text: #e6e9ef;
+        --muted: #9aa4b2;
+        --accent: #2f9e6b;
+        --danger: #c14b4b;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--line);
+        background: var(--panel);
+      }
+      header h1 { font-size: 17px; margin: 0; font-weight: 600; }
+      header .spacer { flex: 1; }
+      .muted { color: var(--muted); }
+      main { max-width: 900px; margin: 0 auto; padding: 20px; }
+      input, button {
+        font: inherit;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: #0d0f14;
+        color: var(--text);
+        padding: 8px 10px;
+      }
+      input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+      button { cursor: pointer; background: var(--panel); }
+      button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+      button.danger { color: var(--danger); border-color: #3a2a2a; }
+      button:disabled { opacity: 0.5; cursor: default; }
+      .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+      .toolbar .grow { flex: 1; min-width: 160px; }
+      nav.tabs { display: flex; gap: 6px; }
+      nav.tabs button { background: transparent; border: 1px solid transparent; color: var(--muted); padding: 6px 12px; }
+      nav.tabs button.active { color: var(--text); border-color: var(--line); background: #0d0f14; }
+      .badge { display: inline-block; min-width: 18px; text-align: center; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 600; }
+      .badge.zero { background: var(--line); color: var(--muted); }
+      .empty { color: var(--muted); padding: 24px 8px; text-align: center; }
+      td.when { color: var(--muted); font-size: 13px; white-space: nowrap; width: 1%; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+      th { color: var(--muted); font-weight: 500; font-size: 13px; }
+      td input { width: 100%; }
+      td.actions { white-space: nowrap; width: 1%; }
+      td.actions button { padding: 6px 10px; }
+      .row-dirty td input { border-color: var(--accent); }
+      #login { max-width: 360px; margin: 12vh auto; padding: 28px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+      #login h1 { margin: 0 0 4px; font-size: 20px; }
+      #login form { display: grid; gap: 10px; margin-top: 18px; }
+      .error { color: var(--danger); font-size: 13px; min-height: 18px; }
+      .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 10px 16px; border-radius: 999px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+      .toast.show { opacity: 1; }
+      .hidden { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <!-- Login gate ------------------------------------------------------- -->
+    <section id="login">
+      <h1>سرديّة</h1>
+      <div class="muted">Dictionary admin — sign in</div>
+      <form id="login-form">
+        <input id="email" type="email" placeholder="Email" autocomplete="username" required />
+        <input id="password" type="password" placeholder="Password" autocomplete="current-password" required />
+        <button class="primary" type="submit">Sign in</button>
+        <div class="error" id="login-error"></div>
+      </form>
+    </section>
+
+    <!-- App -------------------------------------------------------------- -->
+    <div id="app" class="hidden">
+      <header>
+        <h1>سرديّة · Dictionary</h1>
+        <nav class="tabs">
+          <button id="tab-words" class="active">Words <span class="badge zero" id="count-badge">0</span></button>
+          <button id="tab-suggestions">Suggestions <span class="badge zero" id="suggest-badge">0</span></button>
+        </nav>
+        <span class="spacer"></span>
+        <span class="muted" id="who"></span>
+        <button id="signout">Sign out</button>
+      </header>
+      <main>
+        <!-- Words view -------------------------------------------------- -->
+        <section id="words-view">
+          <div class="toolbar">
+            <input class="grow" id="search" placeholder="Filter words…" />
+            <input id="new-value" placeholder="Native name (value)" />
+            <input id="new-translation" placeholder="Colonial name (translation)" />
+            <button class="primary" id="add">Add word</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Native name (value)</th>
+                <th>Colonial name (translation)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </section>
+
+        <!-- Suggestions review view ------------------------------------ -->
+        <section id="suggestions-view" class="hidden">
+          <div class="toolbar">
+            <span class="muted grow">Crowdsourced suggestions from the extension popup. Approve promotes a pair into the live dictionary; reject discards it.</span>
+            <button id="suggest-refresh">Refresh</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Colonial name (word)</th>
+                <th>Native name (replacement)</th>
+                <th>Submitted</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="suggest-rows"></tbody>
+          </table>
+          <div class="empty hidden" id="suggest-empty">No pending suggestions.</div>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import {
+        getFirestore, collection, getDocs, query, orderBy,
+        doc, setDoc, updateDoc, deleteDoc,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyC6xq90h7EF6a0bP1Fsbd8qDWwqpQG08SE",
+        authDomain: "sardiyeh-elmokhtbr.firebaseapp.com",
+        projectId: "sardiyeh-elmokhtbr",
+        storageBucket: "sardiyeh-elmokhtbr.firebasestorage.app",
+        messagingSenderId: "470980761893",
+        appId: "1:470980761893:web:37717a9f5eb976372522cc",
+        measurementId: "G-DCQ93BN4SE",
+      };
+
+      const fbApp = initializeApp(firebaseConfig);
+      const auth = getAuth(fbApp);
+      const db = getFirestore(fbApp);
+      let analytics = null;
+      try { analytics = getAnalytics(fbApp); } catch (_) {}
+
+      const $ = (id) => document.getElementById(id);
+      const COLLECTION = "words";
+      const docIdFor = (t) => t.trim().replace(/\//g, "_").slice(0, 1500);
+
+      let cache = []; // [{ id, value, translation }]
+
+      function toast(msg) {
+        const t = $("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 1600);
+      }
+
+      // --- Auth -------------------------------------------------------------
+      $("login-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        $("login-error").textContent = "";
+        try {
+          await signInWithEmailAndPassword(auth, $("email").value, $("password").value);
+        } catch (err) {
+          $("login-error").textContent = err.code === "auth/invalid-credential"
+            ? "Wrong email or password." : err.message;
+        }
+      });
+      $("signout").addEventListener("click", () => signOut(auth));
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          $("login").classList.add("hidden");
+          $("app").classList.remove("hidden");
+          $("who").textContent = user.email;
+          if (analytics) logEvent(analytics, "admin_signed_in");
+          load();
+          loadSuggestions();
+        } else {
+          $("app").classList.add("hidden");
+          $("login").classList.remove("hidden");
+        }
+      });
+
+      // --- Data -------------------------------------------------------------
+      async function load() {
+        const snap = await getDocs(query(collection(db, COLLECTION), orderBy("translation")));
+        cache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        render();
+      }
+
+      function render() {
+        const term = $("search").value.trim().toLowerCase();
+        const rows = cache.filter(
+          (w) =>
+            !term ||
+            (w.value || "").toLowerCase().includes(term) ||
+            (w.translation || "").toLowerCase().includes(term)
+        );
+        $("count-badge").textContent = String(cache.length);
+        $("count-badge").classList.toggle("zero", cache.length === 0);
+        const tbody = $("rows");
+        tbody.innerHTML = "";
+        for (const w of rows) tbody.appendChild(rowEl(w));
+      }
+
+      function rowEl(w) {
+        const tr = document.createElement("tr");
+        const val = Object.assign(document.createElement("input"), { value: w.value || "" });
+        const trans = Object.assign(document.createElement("input"), { value: w.translation || "" });
+        const markDirty = () => tr.classList.add("row-dirty");
+        val.addEventListener("input", markDirty);
+        trans.addEventListener("input", markDirty);
+
+        const save = Object.assign(document.createElement("button"), { textContent: "Save", className: "primary" });
+        const del = Object.assign(document.createElement("button"), { textContent: "Delete", className: "danger" });
+
+        save.addEventListener("click", async () => {
+          save.disabled = true;
+          try {
+            await updateDoc(doc(db, COLLECTION, w.id), {
+              value: val.value.trim(),
+              translation: trans.value.trim(),
+            });
+            w.value = val.value.trim();
+            w.translation = trans.value.trim();
+            tr.classList.remove("row-dirty");
+            toast("Saved");
+          } catch (err) { toast(err.message); } finally { save.disabled = false; }
+        });
+
+        del.addEventListener("click", async () => {
+          if (!confirm(`Delete "${w.translation}" → "${w.value}"?`)) return;
+          del.disabled = true;
+          try {
+            await deleteDoc(doc(db, COLLECTION, w.id));
+            cache = cache.filter((x) => x.id !== w.id);
+            render();
+            toast("Deleted");
+          } catch (err) { toast(err.message); del.disabled = false; }
+        });
+
+        const td1 = document.createElement("td"); td1.appendChild(val);
+        const td2 = document.createElement("td"); td2.appendChild(trans);
+        const td3 = document.createElement("td"); td3.className = "actions";
+        td3.append(save, " ", del);
+        tr.append(td1, td2, td3);
+        return tr;
+      }
+
+      $("search").addEventListener("input", render);
+
+      $("add").addEventListener("click", async () => {
+        const value = $("new-value").value.trim();
+        const translation = $("new-translation").value.trim();
+        if (!value || !translation) return toast("Both fields are required");
+        const id = docIdFor(translation);
+        if (cache.some((w) => w.id === id)) return toast("That translation already exists");
+        $("add").disabled = true;
+        try {
+          await setDoc(doc(db, COLLECTION, id), { value, translation });
+          cache.push({ id, value, translation });
+          cache.sort((a, b) => (a.translation || "").localeCompare(b.translation || ""));
+          $("new-value").value = "";
+          $("new-translation").value = "";
+          render();
+          if (analytics) logEvent(analytics, "word_added");
+          toast("Added");
+        } catch (err) { toast(err.message); } finally { $("add").disabled = false; }
+      });
+
+      // --- View tabs --------------------------------------------------------
+      function showView(name) {
+        const words = name === "words";
+        $("words-view").classList.toggle("hidden", !words);
+        $("suggestions-view").classList.toggle("hidden", words);
+        $("tab-words").classList.toggle("active", words);
+        $("tab-suggestions").classList.toggle("active", !words);
+      }
+      $("tab-words").addEventListener("click", () => showView("words"));
+      $("tab-suggestions").addEventListener("click", () => showView("suggestions"));
+
+      // --- Suggestions review ----------------------------------------------
+      // The `suggestions` collection is written by the extension popup (see
+      // popup.js): { word, replacement, createdAt? }. `word` is the colonial
+      // name a user wants replaced (→ `translation`) and `replacement` is the
+      // native name (→ `value`). Approving promotes the pair into `words` and
+      // deletes the suggestion; rejecting just deletes it.
+      const SUGGESTIONS = "suggestions";
+      let suggestions = []; // [{ id, word, replacement, createdAt }]
+
+      function fmtWhen(createdAt) {
+        // Firestore SDK returns a Timestamp (has toDate); tolerate strings too.
+        try {
+          const d = createdAt && typeof createdAt.toDate === "function"
+            ? createdAt.toDate()
+            : createdAt ? new Date(createdAt) : null;
+          if (!d || isNaN(d.getTime())) return "—";
+          return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+        } catch (_) { return "—"; }
+      }
+
+      async function loadSuggestions() {
+        try {
+          const snap = await getDocs(collection(db, SUGGESTIONS));
+          suggestions = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          // Newest first; missing createdAt sinks to the bottom.
+          const ms = (c) => {
+            if (c && typeof c.toDate === "function") return c.toDate().getTime();
+            const t = c ? new Date(c).getTime() : NaN;
+            return isNaN(t) ? -Infinity : t;
+          };
+          suggestions.sort((a, b) => ms(b.createdAt) - ms(a.createdAt));
+        } catch (err) {
+          toast(err.message);
+          suggestions = [];
+        }
+        renderSuggestions();
+      }
+
+      function renderSuggestions() {
+        const badge = $("suggest-badge");
+        badge.textContent = String(suggestions.length);
+        badge.classList.toggle("zero", suggestions.length === 0);
+        const tbody = $("suggest-rows");
+        tbody.innerHTML = "";
+        $("suggest-empty").classList.toggle("hidden", suggestions.length > 0);
+        for (const s of suggestions) tbody.appendChild(suggestionRowEl(s));
+      }
+
+      function suggestionRowEl(s) {
+        const tr = document.createElement("tr");
+        // Editable so an admin can clean up a suggestion before promoting it.
+        const word = Object.assign(document.createElement("input"), { value: s.word || "" });
+        const repl = Object.assign(document.createElement("input"), { value: s.replacement || "" });
+
+        const approve = Object.assign(document.createElement("button"), { textContent: "Approve", className: "primary" });
+        const reject = Object.assign(document.createElement("button"), { textContent: "Reject", className: "danger" });
+
+        approve.addEventListener("click", async () => {
+          const translation = word.value.trim();
+          const value = repl.value.trim();
+          if (!value || !translation) return toast("Both fields are required");
+          const id = docIdFor(translation);
+          if (cache.some((w) => w.id === id) &&
+              !confirm(`"${translation}" is already in the dictionary. Overwrite it?`)) return;
+          approve.disabled = reject.disabled = true;
+          try {
+            // Promote into `words`, then drop the suggestion.
+            await setDoc(doc(db, COLLECTION, id), { value, translation });
+            await deleteDoc(doc(db, SUGGESTIONS, s.id));
+            const existing = cache.find((w) => w.id === id);
+            if (existing) { existing.value = value; existing.translation = translation; }
+            else {
+              cache.push({ id, value, translation });
+              cache.sort((a, b) => (a.translation || "").localeCompare(b.translation || ""));
+            }
+            render();
+            suggestions = suggestions.filter((x) => x.id !== s.id);
+            renderSuggestions();
+            if (analytics) logEvent(analytics, "suggestion_approved");
+            toast("Approved");
+          } catch (err) { toast(err.message); approve.disabled = reject.disabled = false; }
+        });
+
+        reject.addEventListener("click", async () => {
+          if (!confirm(`Reject suggestion "${s.word}" → "${s.replacement}"?`)) return;
+          approve.disabled = reject.disabled = true;
+          try {
+            await deleteDoc(doc(db, SUGGESTIONS, s.id));
+            suggestions = suggestions.filter((x) => x.id !== s.id);
+            renderSuggestions();
+            if (analytics) logEvent(analytics, "suggestion_rejected");
+            toast("Rejected");
+          } catch (err) { toast(err.message); approve.disabled = reject.disabled = false; }
+        });
+
+        const td1 = document.createElement("td"); td1.appendChild(word);
+        const td2 = document.createElement("td"); td2.appendChild(repl);
+        const td3 = document.createElement("td"); td3.className = "when"; td3.textContent = fmtWhen(s.createdAt);
+        const td4 = document.createElement("td"); td4.className = "actions";
+        td4.append(approve, " ", reject);
+        tr.append(td1, td2, td3, td4);
+        return tr;
+      }
+
+      $("suggest-refresh").addEventListener("click", () => {
+        $("suggest-refresh").disabled = true;
+        loadSuggestions().finally(() => { $("suggest-refresh").disabled = false; });
+      });
+    </script>
+  </body>
+</html>

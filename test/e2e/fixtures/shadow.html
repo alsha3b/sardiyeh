@@ -1,0 +1,10 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>shadow</title>
+<body>
+  <x-card id="host"></x-card>
+  <script>
+    const sr = document.getElementById("host").attachShadow({ mode: "open" });
+    sr.innerHTML = '<span id="sh">Israel</span>';
+  </script>
+</body>

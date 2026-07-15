@@ -1,0 +1,14 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": "site",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "**/seed.words.json"],
+    "rewrites": [
+      { "source": "/admin", "destination": "/admin/index.html" },
+      { "source": "/privacy", "destination": "/privacy.html" },
+      { "source": "/uninstall", "destination": "/uninstall.html" }
+    ]
+  }
+}
