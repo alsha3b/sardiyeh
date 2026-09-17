@@ -116,16 +116,16 @@ describe("wireWorker", () => {
   function harness() {
     const chrome = createChromeMock();
     const refresher = { refresh: jest.fn(), ensureFresh: jest.fn() };
-    wireWorker(chrome, refresher, { alarmName: "sardiya-refresh", periodInMinutes: 10080 });
+    wireWorker(chrome, refresher, { alarmName: "sardiya-refresh", periodInMinutes: 1440 });
     return { chrome, refresher };
   }
 
-  test("onInstalled refreshes and creates the weekly alarm", () => {
+  test("onInstalled refreshes and creates the refresh alarm at the given period", () => {
     const { chrome, refresher } = harness();
     chrome.runtime.onInstalled._emit({});
     expect(refresher.refresh).toHaveBeenCalledTimes(1);
     expect(chrome.alarms.create).toHaveBeenCalledWith("sardiya-refresh", {
-      periodInMinutes: 10080,
+      periodInMinutes: 1440,
     });
   });
 

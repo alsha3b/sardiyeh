@@ -26,6 +26,7 @@ export const RUNTIME_FILES = [
   "src/popup-core.js",
   "icons",
   "images",
+  "fonts",
   "translations",
   "LICENSE",
 ];
