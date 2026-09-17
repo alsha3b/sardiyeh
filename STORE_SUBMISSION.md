@@ -163,3 +163,128 @@ Steps:
 
 Always edit `privacy.md`, never `site/privacy.html` — re-run
 `npm run build:privacy` and redeploy so the hosted copy never drifts.
+
+## 5. Apple App Store (Safari extension — macOS + iOS)
+
+Sardiya ships to Safari as a **Safari Web Extension** wrapped in a container app,
+one Xcode project targeting both macOS and iOS. The project under `apple/` is
+**generated, not hand-maintained** — treat it as a build artifact.
+
+### Identifiers
+
+- **App bundle id:** `com.elmokhtbr.sardiya` (matches the App Store Connect record).
+- **Extension bundle id:** `com.elmokhtbr.sardiya.Extension` (derived automatically).
+- **Team id:** `4LCWA596X7` — supplied to the build via `APPLE_TEAM_ID` (see
+  `.env.example`); injected into every target for automatic signing.
+
+### Regenerating the project (do this, don't edit Xcode by hand)
+
+```bash
+node tools/build-safari.mjs
+```
+
+`tools/build-safari.mjs` wipes and regenerates `apple/` from the same runtime
+allowlist as the Chrome zip (`tools/runtime-files.mjs`), then stamps, in the
+generated `project.pbxproj`:
+
+- **Marketing version** ← `manifest.json` `"version"` (single source of truth —
+  bump the manifest, not Xcode).
+- **Build number** ← auto monotonic UTC timestamp (`yyyymmddHHMM`), or
+  `APPLE_BUILD` if you need to force one. Always increases, so App Store Connect
+  never rejects a re-upload for a stale build number.
+- **Signing team** ← `APPLE_TEAM_ID`, with `CODE_SIGN_STYLE = Automatic`.
+
+Because the project is regenerated each run, **any manual signing/version edit in
+Xcode is discarded** — change the manifest version or the env vars instead. The
+container-app landing page is also re-patched each run with the bilingual "Allow
+on Every Website" hint (Safari needs per-site host permission, unlike Chrome).
+
+### Build & upload
+
+**One command → TestFlight (both platforms):**
+
+```bash
+npm run release:apple   # both iOS and macOS   (tools/release-apple.mjs)
+npm run release:ios     # iOS only
+npm run release:mac     # macOS only
+```
+
+It regenerates the project once (so both platforms share the same version +
+build number), then per platform archives and uploads straight to App Store
+Connect (TestFlight) — non-interactively, via an App Store Connect API key. Both
+platforms use the same App Store upload path, so macOS needs **no** separate
+notarization (that's only for distribution outside the store).
+
+One-time setup: create the key (App Store Connect → Users and Access →
+Integrations → App Store Connect API, role **App Manager**), drop the `.p8` in
+`secrets/`, and set `ASC_KEY_ID` / `ASC_ISSUER_ID` in `.env` (see `.env.example`).
+Builds appear under TestFlight after a few minutes of processing; the first
+upload of a version needs the one-time export-compliance answer in the UI.
+
+**Manual/Xcode archive** (alternative):
+
+Open `apple/Sardiya/Sardiya.xcodeproj` in Xcode and Archive each platform, or
+archive headless:
+
+```bash
+# macOS
+xcodebuild -project "apple/Sardiya/Sardiya.xcodeproj" -scheme "Sardiya (macOS)" \
+  -configuration Release archive -archivePath dist/Sardiya-macOS.xcarchive
+# iOS
+xcodebuild -project "apple/Sardiya/Sardiya.xcodeproj" -scheme "Sardiya (iOS)" \
+  -configuration Release archive -archivePath dist/Sardiya-iOS.xcarchive
+```
+
+Then upload each `.xcarchive` via Xcode Organizer (Distribute App → App Store
+Connect) or Transporter. One App Store Connect app record carries both the macOS
+and iOS builds.
+
+### App Store Connect listing
+
+- **Name / subtitle / description:** reuse the diplomatic copy from §1 and §3 —
+  it is platform-agnostic. Keep the same factual, non-inflammatory tone.
+- **Privacy policy URL:** the same hosted URL as Chrome —
+  `https://sardiyeh-elmokhtbr.web.app/privacy` (see §4).
+- **Support URL / marketing URL:** reuse the project/site URL.
+- **Category:** Utilities (or Reference).
+
+### App Privacy ("nutrition label")
+
+Mirror the Chrome data-use answers in §2 → *Data use form*:
+
+- Declare **one** type: *Usage Data → Product Interaction*, collected for
+  **Analytics** only (GA4 Measurement Protocol via `src/analytics.js`).
+- **Not linked to identity** (the client id is random/pseudonymous), **not used
+  for tracking**, and **no** other categories (no contacts, location, browsing
+  history, identifiers, content, financial, etc.).
+- The content script reads/rewrites visible page text only; nothing about the
+  pages visited is collected or transmitted.
+
+### Assets & questionnaires
+
+- **App icon:** 1024×1024 already in the asset catalog (`universal-icon-1024`).
+- **Screenshots (required, per platform):**
+  - iPhone 6.9" and 6.5"
+  - iPad 13"
+  - macOS
+  Show the popup (on/off + replaced-words list) and a page before/after. The
+  `app-store-screenshots` skill can generate these.
+- **Age rating:** answer the questionnaire — no objectionable content → 4+.
+- **Export compliance:** uses only standard HTTPS → *"uses standard encryption,
+  exempt"* (no custom cryptography).
+
+### Review notes for Apple (App Review → Notes)
+
+> Sardiya is a Safari Web Extension that substitutes place-names in the visible
+> text of web pages, using a community-maintained reference list fetched as data
+> (not code) from Firestore. To test: enable Sardiya in Safari settings, open any
+> website, tap/click the Sardiya toolbar button, and choose **Allow on Every
+> Website** — without host permission the extension intentionally does nothing.
+> It reads and rewrites only visible text nodes; it does not read form input,
+> collect page contents, or record browsing history.
+
+### GA4 note
+
+Analytics only fires when the Measurement Protocol **API secret** is present in
+`background.js`. It degrades to a no-op when blank — not a submission blocker, but
+set it if you want Safari installs/usage to show up in GA4.

@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  Shared (App)
 //
-//  Created by Basel Sader on 15/07/2026.
+//  Created by Basel Sader on 17/09/2026.
 //
 
 import WebKit
@@ -16,7 +16,7 @@ import SafariServices
 typealias PlatformViewController = NSViewController
 #endif
 
-let extensionBundleIdentifier = "org.elmokhtbr.sardiya.Extension"
+let extensionBundleIdentifier = "com.elmokhtbr.sardiya.Extension"
 
 class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMessageHandler {
 

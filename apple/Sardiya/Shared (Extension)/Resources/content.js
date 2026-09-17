@@ -28,6 +28,16 @@
 
   const replacedWords = [];
   const replacedSeen = new Set();
+  let replacementsReported = false;
+
+  // Activation KPI: report once per page (top frame) that the extension actually
+  // rewrote names here, with how many distinct words. count-only — no URL/host
+  // leaves the browser. Skips pages with no matches to keep event volume sane.
+  function reportReplacements() {
+    if (!isTopFrame || replacementsReported || replacedWords.length === 0) return;
+    replacementsReported = true;
+    S.sendTrack && S.sendTrack("replacements_made", { count: replacedWords.length });
+  }
 
   function recordReplacement(word, replacement) {
     if (!isTopFrame || replacedSeen.has(word)) return;
@@ -90,6 +100,7 @@
         S.reprocessTextNode(node, matcher, store, recordReplacement);
       }
       replaceFlagOnce();
+      reportReplacements(); // catches SPAs whose matches arrive after load
       if (running) startObserving();
     }, 300);
   }
@@ -155,6 +166,7 @@
     running = true;
     replaceIn(document.body);
     replaceFlagOnce();
+    reportReplacements();
     startObserving();
   }
 

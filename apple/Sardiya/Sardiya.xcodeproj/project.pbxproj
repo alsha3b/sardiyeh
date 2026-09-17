@@ -7,88 +7,62 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FB184F703007A619007FEEA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F6F3007A619007FEEA8 /* AppDelegate.swift */; };
-		FB184F723007A619007FEEA8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F713007A619007FEEA8 /* SceneDelegate.swift */; };
-		FB184F753007A619007FEEA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB184F733007A619007FEEA8 /* LaunchScreen.storyboard */; };
-		FB184F783007A619007FEEA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB184F763007A619007FEEA8 /* Main.storyboard */; };
-		FB184F813007A619007FEEA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F803007A619007FEEA8 /* AppDelegate.swift */; };
-		FB184F843007A619007FEEA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB184F823007A619007FEEA8 /* Main.storyboard */; };
-		FB184F8B3007A619007FEEA8 /* Sardiya Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FB184F8A3007A619007FEEA8 /* Sardiya Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		FB184F953007A619007FEEA8 /* Sardiya Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FB184F943007A619007FEEA8 /* Sardiya Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		FB184F9A3007A619007FEEA8 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = FB184F5F3007A618007FEEA8 /* Main.html */; };
-		FB184F9B3007A619007FEEA8 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = FB184F5F3007A618007FEEA8 /* Main.html */; };
-		FB184F9C3007A619007FEEA8 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FB184F613007A618007FEEA8 /* Icon.png */; };
-		FB184F9D3007A619007FEEA8 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FB184F613007A618007FEEA8 /* Icon.png */; };
-		FB184F9E3007A619007FEEA8 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = FB184F623007A618007FEEA8 /* Style.css */; };
-		FB184F9F3007A619007FEEA8 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = FB184F623007A618007FEEA8 /* Style.css */; };
-		FB184FA03007A619007FEEA8 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184F633007A618007FEEA8 /* Script.js */; };
-		FB184FA13007A619007FEEA8 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184F633007A618007FEEA8 /* Script.js */; };
-		FB184FA23007A619007FEEA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F643007A618007FEEA8 /* ViewController.swift */; };
-		FB184FA33007A619007FEEA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F643007A618007FEEA8 /* ViewController.swift */; };
-		FB184FA43007A619007FEEA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FB184F653007A619007FEEA8 /* Assets.xcassets */; };
-		FB184FA53007A619007FEEA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FB184F653007A619007FEEA8 /* Assets.xcassets */; };
-		FB184FA63007A619007FEEA8 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F673007A619007FEEA8 /* SafariWebExtensionHandler.swift */; };
-		FB184FA73007A619007FEEA8 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB184F673007A619007FEEA8 /* SafariWebExtensionHandler.swift */; };
-		FB184FC43007A619007FEEA8 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FB93007A619007FEEA8 /* popup.js */; };
-		FB184FC53007A619007FEEA8 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBA3007A619007FEEA8 /* index.html */; };
-		FB184FC63007A619007FEEA8 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBB3007A619007FEEA8 /* LICENSE */; };
-		FB184FC73007A619007FEEA8 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBC3007A619007FEEA8 /* styles.css */; };
-		FB184FC83007A619007FEEA8 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBD3007A619007FEEA8 /* background.js */; };
-		FB184FC93007A619007FEEA8 /* images in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBE3007A619007FEEA8 /* images */; };
-		FB184FCA3007A619007FEEA8 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBF3007A619007FEEA8 /* icons */; };
-		FB184FCB3007A619007FEEA8 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC03007A619007FEEA8 /* manifest.json */; };
-		FB184FCC3007A619007FEEA8 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC13007A619007FEEA8 /* content.js */; };
-		FB184FCD3007A619007FEEA8 /* translations in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC23007A619007FEEA8 /* translations */; };
-		FB184FCE3007A619007FEEA8 /* src in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC33007A619007FEEA8 /* src */; };
-		FB184FCF3007A619007FEEA8 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FB93007A619007FEEA8 /* popup.js */; };
-		FB184FD03007A619007FEEA8 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBA3007A619007FEEA8 /* index.html */; };
-		FB184FD13007A619007FEEA8 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBB3007A619007FEEA8 /* LICENSE */; };
-		FB184FD23007A619007FEEA8 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBC3007A619007FEEA8 /* styles.css */; };
-		FB184FD33007A619007FEEA8 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBD3007A619007FEEA8 /* background.js */; };
-		FB184FD43007A619007FEEA8 /* images in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBE3007A619007FEEA8 /* images */; };
-		FB184FD53007A619007FEEA8 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = FB184FBF3007A619007FEEA8 /* icons */; };
-		FB184FD63007A619007FEEA8 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC03007A619007FEEA8 /* manifest.json */; };
-		FB184FD73007A619007FEEA8 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC13007A619007FEEA8 /* content.js */; };
-		FB184FD83007A619007FEEA8 /* translations in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC23007A619007FEEA8 /* translations */; };
-		FB184FD93007A619007FEEA8 /* src in Resources */ = {isa = PBXBuildFile; fileRef = FB184FC33007A619007FEEA8 /* src */; };
+		FB559342305C12A200560A0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB559341305C12A200560A0F /* AppDelegate.swift */; };
+		FB559344305C12A200560A0F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB559343305C12A200560A0F /* SceneDelegate.swift */; };
+		FB559347305C12A200560A0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB559345305C12A200560A0F /* LaunchScreen.storyboard */; };
+		FB55934A305C12A200560A0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB559348305C12A200560A0F /* Main.storyboard */; };
+		FB559353305C12A200560A0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB559352305C12A200560A0F /* AppDelegate.swift */; };
+		FB559356305C12A200560A0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB559354305C12A200560A0F /* Main.storyboard */; };
+		FB55935D305C12A200560A0F /* Sardiya Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FB55935C305C12A200560A0F /* Sardiya Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FB559367305C12A200560A0F /* Sardiya Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FB559366305C12A200560A0F /* Sardiya Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FB55936C305C12A200560A0F /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = FB559333305C12A100560A0F /* Main.html */; };
+		FB55936D305C12A200560A0F /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = FB559333305C12A100560A0F /* Main.html */; };
+		FB55936E305C12A200560A0F /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = FB559335305C12A100560A0F /* Style.css */; };
+		FB55936F305C12A200560A0F /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = FB559335305C12A100560A0F /* Style.css */; };
+		FB559370305C12A200560A0F /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = FB559336305C12A100560A0F /* Script.js */; };
+		FB559371305C12A200560A0F /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = FB559336305C12A100560A0F /* Script.js */; };
+		FB559372305C12A200560A0F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB559337305C12A100560A0F /* ViewController.swift */; };
+		FB559373305C12A200560A0F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB559337305C12A100560A0F /* ViewController.swift */; };
+		FB559374305C12A200560A0F /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB559339305C12A200560A0F /* SafariWebExtensionHandler.swift */; };
+		FB559375305C12A200560A0F /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB559339305C12A200560A0F /* SafariWebExtensionHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		FB184F8C3007A619007FEEA8 /* PBXContainerItemProxy */ = {
+		FB55935E305C12A200560A0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FB184F593007A618007FEEA8 /* Project object */;
+			containerPortal = FB55932D305C12A100560A0F /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = FB184F893007A619007FEEA8;
+			remoteGlobalIDString = FB55935B305C12A200560A0F;
 			remoteInfo = "Sardiya Extension (iOS)";
 		};
-		FB184F963007A619007FEEA8 /* PBXContainerItemProxy */ = {
+		FB559368305C12A200560A0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FB184F593007A618007FEEA8 /* Project object */;
+			containerPortal = FB55932D305C12A100560A0F /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = FB184F933007A619007FEEA8;
+			remoteGlobalIDString = FB559365305C12A200560A0F;
 			remoteInfo = "Sardiya Extension (macOS)";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		FB184FAD3007A619007FEEA8 /* Embed Foundation Extensions */ = {
+		FB55937B305C12A200560A0F /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				FB184F8B3007A619007FEEA8 /* Sardiya Extension.appex in Embed Foundation Extensions */,
+				FB55935D305C12A200560A0F /* Sardiya Extension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB184FB43007A619007FEEA8 /* Embed Foundation Extensions */ = {
+		FB559382305C12A200560A0F /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				FB184F953007A619007FEEA8 /* Sardiya Extension.appex in Embed Foundation Extensions */,
+				FB559367305C12A200560A0F /* Sardiya Extension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -96,63 +70,50 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FB184F603007A618007FEEA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
-		FB184F613007A618007FEEA8 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		FB184F623007A618007FEEA8 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
-		FB184F633007A618007FEEA8 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
-		FB184F643007A618007FEEA8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		FB184F653007A619007FEEA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FB184F673007A619007FEEA8 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
-		FB184F6C3007A619007FEEA8 /* Sardiya.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sardiya.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FB184F6F3007A619007FEEA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FB184F713007A619007FEEA8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		FB184F743007A619007FEEA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		FB184F773007A619007FEEA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		FB184F793007A619007FEEA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FB184F7E3007A619007FEEA8 /* Sardiya.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sardiya.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FB184F803007A619007FEEA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FB184F833007A619007FEEA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		FB184F853007A619007FEEA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FB184F8A3007A619007FEEA8 /* Sardiya Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Sardiya Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FB184F8F3007A619007FEEA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FB184F943007A619007FEEA8 /* Sardiya Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Sardiya Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FB184F993007A619007FEEA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FB184FB93007A619007FEEA8 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = Resources/popup.js; sourceTree = "<group>"; };
-		FB184FBA3007A619007FEEA8 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = Resources/index.html; sourceTree = "<group>"; };
-		FB184FBB3007A619007FEEA8 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = Resources/LICENSE; sourceTree = "<group>"; };
-		FB184FBC3007A619007FEEA8 /* styles.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = styles.css; path = Resources/styles.css; sourceTree = "<group>"; };
-		FB184FBD3007A619007FEEA8 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = Resources/background.js; sourceTree = "<group>"; };
-		FB184FBE3007A619007FEEA8 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = Resources/images; sourceTree = "<group>"; };
-		FB184FBF3007A619007FEEA8 /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = icons; path = Resources/icons; sourceTree = "<group>"; };
-		FB184FC03007A619007FEEA8 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = Resources/manifest.json; sourceTree = "<group>"; };
-		FB184FC13007A619007FEEA8 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = Resources/content.js; sourceTree = "<group>"; };
-		FB184FC23007A619007FEEA8 /* translations */ = {isa = PBXFileReference; lastKnownFileType = folder; name = translations; path = Resources/translations; sourceTree = "<group>"; };
-		FB184FC33007A619007FEEA8 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; name = src; path = Resources/src; sourceTree = "<group>"; };
+		FB559334305C12A100560A0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
+		FB559335305C12A100560A0F /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		FB559336305C12A100560A0F /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		FB559337305C12A100560A0F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FB559339305C12A200560A0F /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		FB55933E305C12A200560A0F /* Sardiya.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sardiya.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB559341305C12A200560A0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FB559343305C12A200560A0F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		FB559346305C12A200560A0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		FB559349305C12A200560A0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FB55934B305C12A200560A0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FB559350305C12A200560A0F /* Sardiya.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sardiya.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB559352305C12A200560A0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FB559355305C12A200560A0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FB559357305C12A200560A0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FB55935C305C12A200560A0F /* Sardiya Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Sardiya Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB559361305C12A200560A0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FB559366305C12A200560A0F /* Sardiya Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Sardiya Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB55936B305C12A200560A0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		FB184F693007A619007FEEA8 /* Frameworks */ = {
+		FB55933B305C12A200560A0F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB184F7B3007A619007FEEA8 /* Frameworks */ = {
+		FB55934D305C12A200560A0F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB184F873007A619007FEEA8 /* Frameworks */ = {
+		FB559359305C12A200560A0F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB184F913007A619007FEEA8 /* Frameworks */ = {
+		FB559363305C12A200560A0F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -162,112 +123,99 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		FB184F583007A618007FEEA8 = {
+		FB55932C305C12A100560A0F = {
 			isa = PBXGroup;
 			children = (
-				FB184F5D3007A618007FEEA8 /* Shared (App) */,
-				FB184F663007A619007FEEA8 /* Shared (Extension) */,
-				FB184F6E3007A619007FEEA8 /* iOS (App) */,
-				FB184F7F3007A619007FEEA8 /* macOS (App) */,
-				FB184F8E3007A619007FEEA8 /* iOS (Extension) */,
-				FB184F983007A619007FEEA8 /* macOS (Extension) */,
-				FB184F6D3007A619007FEEA8 /* Products */,
+				FB559331305C12A100560A0F /* Shared (App) */,
+				FB559338305C12A200560A0F /* Shared (Extension) */,
+				FB559340305C12A200560A0F /* iOS (App) */,
+				FB559351305C12A200560A0F /* macOS (App) */,
+				FB559360305C12A200560A0F /* iOS (Extension) */,
+				FB55936A305C12A200560A0F /* macOS (Extension) */,
+				FB55933F305C12A200560A0F /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		FB184F5D3007A618007FEEA8 /* Shared (App) */ = {
+		FB559331305C12A100560A0F /* Shared (App) */ = {
 			isa = PBXGroup;
 			children = (
-				FB184F643007A618007FEEA8 /* ViewController.swift */,
-				FB184F653007A619007FEEA8 /* Assets.xcassets */,
-				FB184F5E3007A618007FEEA8 /* Resources */,
+				FB559337305C12A100560A0F /* ViewController.swift */,
+				FB559332305C12A100560A0F /* Resources */,
 			);
 			path = "Shared (App)";
 			sourceTree = "<group>";
 		};
-		FB184F5E3007A618007FEEA8 /* Resources */ = {
+		FB559332305C12A100560A0F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				FB184F5F3007A618007FEEA8 /* Main.html */,
-				FB184F613007A618007FEEA8 /* Icon.png */,
-				FB184F623007A618007FEEA8 /* Style.css */,
-				FB184F633007A618007FEEA8 /* Script.js */,
+				FB559333305C12A100560A0F /* Main.html */,
+				FB559335305C12A100560A0F /* Style.css */,
+				FB559336305C12A100560A0F /* Script.js */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		FB184F663007A619007FEEA8 /* Shared (Extension) */ = {
+		FB559338305C12A200560A0F /* Shared (Extension) */ = {
 			isa = PBXGroup;
 			children = (
-				FB184FB83007A619007FEEA8 /* Resources */,
-				FB184F673007A619007FEEA8 /* SafariWebExtensionHandler.swift */,
+				FB559386305C12A300560A0F /* Resources */,
+				FB559339305C12A200560A0F /* SafariWebExtensionHandler.swift */,
 			);
 			path = "Shared (Extension)";
 			sourceTree = "<group>";
 		};
-		FB184F6D3007A619007FEEA8 /* Products */ = {
+		FB55933F305C12A200560A0F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FB184F6C3007A619007FEEA8 /* Sardiya.app */,
-				FB184F7E3007A619007FEEA8 /* Sardiya.app */,
-				FB184F8A3007A619007FEEA8 /* Sardiya Extension.appex */,
-				FB184F943007A619007FEEA8 /* Sardiya Extension.appex */,
+				FB55933E305C12A200560A0F /* Sardiya.app */,
+				FB559350305C12A200560A0F /* Sardiya.app */,
+				FB55935C305C12A200560A0F /* Sardiya Extension.appex */,
+				FB559366305C12A200560A0F /* Sardiya Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FB184F6E3007A619007FEEA8 /* iOS (App) */ = {
+		FB559340305C12A200560A0F /* iOS (App) */ = {
 			isa = PBXGroup;
 			children = (
-				FB184F6F3007A619007FEEA8 /* AppDelegate.swift */,
-				FB184F713007A619007FEEA8 /* SceneDelegate.swift */,
-				FB184F733007A619007FEEA8 /* LaunchScreen.storyboard */,
-				FB184F763007A619007FEEA8 /* Main.storyboard */,
-				FB184F793007A619007FEEA8 /* Info.plist */,
+				FB559341305C12A200560A0F /* AppDelegate.swift */,
+				FB559343305C12A200560A0F /* SceneDelegate.swift */,
+				FB559345305C12A200560A0F /* LaunchScreen.storyboard */,
+				FB559348305C12A200560A0F /* Main.storyboard */,
+				FB55934B305C12A200560A0F /* Info.plist */,
 			);
 			path = "iOS (App)";
 			sourceTree = "<group>";
 		};
-		FB184F7F3007A619007FEEA8 /* macOS (App) */ = {
+		FB559351305C12A200560A0F /* macOS (App) */ = {
 			isa = PBXGroup;
 			children = (
-				FB184F803007A619007FEEA8 /* AppDelegate.swift */,
-				FB184F823007A619007FEEA8 /* Main.storyboard */,
-				FB184F853007A619007FEEA8 /* Info.plist */,
+				FB559352305C12A200560A0F /* AppDelegate.swift */,
+				FB559354305C12A200560A0F /* Main.storyboard */,
+				FB559357305C12A200560A0F /* Info.plist */,
 			);
 			path = "macOS (App)";
 			sourceTree = "<group>";
 		};
-		FB184F8E3007A619007FEEA8 /* iOS (Extension) */ = {
+		FB559360305C12A200560A0F /* iOS (Extension) */ = {
 			isa = PBXGroup;
 			children = (
-				FB184F8F3007A619007FEEA8 /* Info.plist */,
+				FB559361305C12A200560A0F /* Info.plist */,
 			);
 			path = "iOS (Extension)";
 			sourceTree = "<group>";
 		};
-		FB184F983007A619007FEEA8 /* macOS (Extension) */ = {
+		FB55936A305C12A200560A0F /* macOS (Extension) */ = {
 			isa = PBXGroup;
 			children = (
-				FB184F993007A619007FEEA8 /* Info.plist */,
+				FB55936B305C12A200560A0F /* Info.plist */,
 			);
 			path = "macOS (Extension)";
 			sourceTree = "<group>";
 		};
-		FB184FB83007A619007FEEA8 /* Resources */ = {
+		FB559386305C12A300560A0F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				FB184FB93007A619007FEEA8 /* popup.js */,
-				FB184FBA3007A619007FEEA8 /* index.html */,
-				FB184FBB3007A619007FEEA8 /* LICENSE */,
-				FB184FBC3007A619007FEEA8 /* styles.css */,
-				FB184FBD3007A619007FEEA8 /* background.js */,
-				FB184FBE3007A619007FEEA8 /* images */,
-				FB184FBF3007A619007FEEA8 /* icons */,
-				FB184FC03007A619007FEEA8 /* manifest.json */,
-				FB184FC13007A619007FEEA8 /* content.js */,
-				FB184FC23007A619007FEEA8 /* translations */,
-				FB184FC33007A619007FEEA8 /* src */,
 			);
 			name = Resources;
 			path = "Shared (Extension)";
@@ -276,55 +224,55 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FB184F6B3007A619007FEEA8 /* Sardiya (iOS) */ = {
+		FB55933D305C12A200560A0F /* Sardiya (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FB184FAE3007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya (iOS)" */;
+			buildConfigurationList = FB55937C305C12A200560A0F /* Build configuration list for PBXNativeTarget "Sardiya (iOS)" */;
 			buildPhases = (
-				FB184F683007A619007FEEA8 /* Sources */,
-				FB184F693007A619007FEEA8 /* Frameworks */,
-				FB184F6A3007A619007FEEA8 /* Resources */,
-				FB184FAD3007A619007FEEA8 /* Embed Foundation Extensions */,
+				FB55933A305C12A200560A0F /* Sources */,
+				FB55933B305C12A200560A0F /* Frameworks */,
+				FB55933C305C12A200560A0F /* Resources */,
+				FB55937B305C12A200560A0F /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				FB184F8D3007A619007FEEA8 /* PBXTargetDependency */,
+				FB55935F305C12A200560A0F /* PBXTargetDependency */,
 			);
 			name = "Sardiya (iOS)";
 			packageProductDependencies = (
 			);
 			productName = "Sardiya (iOS)";
-			productReference = FB184F6C3007A619007FEEA8 /* Sardiya.app */;
+			productReference = FB55933E305C12A200560A0F /* Sardiya.app */;
 			productType = "com.apple.product-type.application";
 		};
-		FB184F7D3007A619007FEEA8 /* Sardiya (macOS) */ = {
+		FB55934F305C12A200560A0F /* Sardiya (macOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FB184FB53007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya (macOS)" */;
+			buildConfigurationList = FB559383305C12A200560A0F /* Build configuration list for PBXNativeTarget "Sardiya (macOS)" */;
 			buildPhases = (
-				FB184F7A3007A619007FEEA8 /* Sources */,
-				FB184F7B3007A619007FEEA8 /* Frameworks */,
-				FB184F7C3007A619007FEEA8 /* Resources */,
-				FB184FB43007A619007FEEA8 /* Embed Foundation Extensions */,
+				FB55934C305C12A200560A0F /* Sources */,
+				FB55934D305C12A200560A0F /* Frameworks */,
+				FB55934E305C12A200560A0F /* Resources */,
+				FB559382305C12A200560A0F /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				FB184F973007A619007FEEA8 /* PBXTargetDependency */,
+				FB559369305C12A200560A0F /* PBXTargetDependency */,
 			);
 			name = "Sardiya (macOS)";
 			packageProductDependencies = (
 			);
 			productName = "Sardiya (macOS)";
-			productReference = FB184F7E3007A619007FEEA8 /* Sardiya.app */;
+			productReference = FB559350305C12A200560A0F /* Sardiya.app */;
 			productType = "com.apple.product-type.application";
 		};
-		FB184F893007A619007FEEA8 /* Sardiya Extension (iOS) */ = {
+		FB55935B305C12A200560A0F /* Sardiya Extension (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FB184FAA3007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya Extension (iOS)" */;
+			buildConfigurationList = FB559378305C12A200560A0F /* Build configuration list for PBXNativeTarget "Sardiya Extension (iOS)" */;
 			buildPhases = (
-				FB184F863007A619007FEEA8 /* Sources */,
-				FB184F873007A619007FEEA8 /* Frameworks */,
-				FB184F883007A619007FEEA8 /* Resources */,
+				FB559358305C12A200560A0F /* Sources */,
+				FB559359305C12A200560A0F /* Frameworks */,
+				FB55935A305C12A200560A0F /* Resources */,
 			);
 			buildRules = (
 			);
@@ -334,16 +282,16 @@
 			packageProductDependencies = (
 			);
 			productName = "Sardiya Extension (iOS)";
-			productReference = FB184F8A3007A619007FEEA8 /* Sardiya Extension.appex */;
+			productReference = FB55935C305C12A200560A0F /* Sardiya Extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		FB184F933007A619007FEEA8 /* Sardiya Extension (macOS) */ = {
+		FB559365305C12A200560A0F /* Sardiya Extension (macOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FB184FB13007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya Extension (macOS)" */;
+			buildConfigurationList = FB55937F305C12A200560A0F /* Build configuration list for PBXNativeTarget "Sardiya Extension (macOS)" */;
 			buildPhases = (
-				FB184F903007A619007FEEA8 /* Sources */,
-				FB184F913007A619007FEEA8 /* Frameworks */,
-				FB184F923007A619007FEEA8 /* Resources */,
+				FB559362305C12A200560A0F /* Sources */,
+				FB559363305C12A200560A0F /* Frameworks */,
+				FB559364305C12A200560A0F /* Resources */,
 			);
 			buildRules = (
 			);
@@ -353,201 +301,175 @@
 			packageProductDependencies = (
 			);
 			productName = "Sardiya Extension (macOS)";
-			productReference = FB184F943007A619007FEEA8 /* Sardiya Extension.appex */;
+			productReference = FB559366305C12A200560A0F /* Sardiya Extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		FB184F593007A618007FEEA8 /* Project object */ = {
+		FB55932D305C12A100560A0F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
-					FB184F6B3007A619007FEEA8 = {
+					FB55933D305C12A200560A0F = {
 						CreatedOnToolsVersion = 26.2;
 					};
-					FB184F7D3007A619007FEEA8 = {
+					FB55934F305C12A200560A0F = {
 						CreatedOnToolsVersion = 26.2;
 					};
-					FB184F893007A619007FEEA8 = {
+					FB55935B305C12A200560A0F = {
 						CreatedOnToolsVersion = 26.2;
 					};
-					FB184F933007A619007FEEA8 = {
+					FB559365305C12A200560A0F = {
 						CreatedOnToolsVersion = 26.2;
 					};
 				};
 			};
-			buildConfigurationList = FB184F5C3007A618007FEEA8 /* Build configuration list for PBXProject "Sardiya" */;
+			buildConfigurationList = FB559330305C12A100560A0F /* Build configuration list for PBXProject "Sardiya" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = FB184F583007A618007FEEA8;
+			mainGroup = FB55932C305C12A100560A0F;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = FB184F6D3007A619007FEEA8 /* Products */;
+			productRefGroup = FB55933F305C12A200560A0F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FB184F6B3007A619007FEEA8 /* Sardiya (iOS) */,
-				FB184F7D3007A619007FEEA8 /* Sardiya (macOS) */,
-				FB184F893007A619007FEEA8 /* Sardiya Extension (iOS) */,
-				FB184F933007A619007FEEA8 /* Sardiya Extension (macOS) */,
+				FB55933D305C12A200560A0F /* Sardiya (iOS) */,
+				FB55934F305C12A200560A0F /* Sardiya (macOS) */,
+				FB55935B305C12A200560A0F /* Sardiya Extension (iOS) */,
+				FB559365305C12A200560A0F /* Sardiya Extension (macOS) */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		FB184F6A3007A619007FEEA8 /* Resources */ = {
+		FB55933C305C12A200560A0F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB184F9C3007A619007FEEA8 /* Icon.png in Resources */,
-				FB184F753007A619007FEEA8 /* LaunchScreen.storyboard in Resources */,
-				FB184F9A3007A619007FEEA8 /* Main.html in Resources */,
-				FB184FA03007A619007FEEA8 /* Script.js in Resources */,
-				FB184FA43007A619007FEEA8 /* Assets.xcassets in Resources */,
-				FB184F783007A619007FEEA8 /* Main.storyboard in Resources */,
-				FB184F9E3007A619007FEEA8 /* Style.css in Resources */,
+				FB559347305C12A200560A0F /* LaunchScreen.storyboard in Resources */,
+				FB55936E305C12A200560A0F /* Style.css in Resources */,
+				FB55936C305C12A200560A0F /* Main.html in Resources */,
+				FB559370305C12A200560A0F /* Script.js in Resources */,
+				FB55934A305C12A200560A0F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB184F7C3007A619007FEEA8 /* Resources */ = {
+		FB55934E305C12A200560A0F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB184F9D3007A619007FEEA8 /* Icon.png in Resources */,
-				FB184F9F3007A619007FEEA8 /* Style.css in Resources */,
-				FB184F843007A619007FEEA8 /* Main.storyboard in Resources */,
-				FB184FA13007A619007FEEA8 /* Script.js in Resources */,
-				FB184FA53007A619007FEEA8 /* Assets.xcassets in Resources */,
-				FB184F9B3007A619007FEEA8 /* Main.html in Resources */,
+				FB559356305C12A200560A0F /* Main.storyboard in Resources */,
+				FB559371305C12A200560A0F /* Script.js in Resources */,
+				FB55936D305C12A200560A0F /* Main.html in Resources */,
+				FB55936F305C12A200560A0F /* Style.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB184F883007A619007FEEA8 /* Resources */ = {
+		FB55935A305C12A200560A0F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB184FD43007A619007FEEA8 /* images in Resources */,
-				FB184FD13007A619007FEEA8 /* LICENSE in Resources */,
-				FB184FD23007A619007FEEA8 /* styles.css in Resources */,
-				FB184FCF3007A619007FEEA8 /* popup.js in Resources */,
-				FB184FD63007A619007FEEA8 /* manifest.json in Resources */,
-				FB184FD03007A619007FEEA8 /* index.html in Resources */,
-				FB184FD73007A619007FEEA8 /* content.js in Resources */,
-				FB184FD93007A619007FEEA8 /* src in Resources */,
-				FB184FD53007A619007FEEA8 /* icons in Resources */,
-				FB184FD83007A619007FEEA8 /* translations in Resources */,
-				FB184FD33007A619007FEEA8 /* background.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB184F923007A619007FEEA8 /* Resources */ = {
+		FB559364305C12A200560A0F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB184FC93007A619007FEEA8 /* images in Resources */,
-				FB184FC63007A619007FEEA8 /* LICENSE in Resources */,
-				FB184FC73007A619007FEEA8 /* styles.css in Resources */,
-				FB184FC43007A619007FEEA8 /* popup.js in Resources */,
-				FB184FCB3007A619007FEEA8 /* manifest.json in Resources */,
-				FB184FC53007A619007FEEA8 /* index.html in Resources */,
-				FB184FCC3007A619007FEEA8 /* content.js in Resources */,
-				FB184FCE3007A619007FEEA8 /* src in Resources */,
-				FB184FCA3007A619007FEEA8 /* icons in Resources */,
-				FB184FCD3007A619007FEEA8 /* translations in Resources */,
-				FB184FC83007A619007FEEA8 /* background.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		FB184F683007A619007FEEA8 /* Sources */ = {
+		FB55933A305C12A200560A0F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB184FA23007A619007FEEA8 /* ViewController.swift in Sources */,
-				FB184F703007A619007FEEA8 /* AppDelegate.swift in Sources */,
-				FB184F723007A619007FEEA8 /* SceneDelegate.swift in Sources */,
+				FB559372305C12A200560A0F /* ViewController.swift in Sources */,
+				FB559342305C12A200560A0F /* AppDelegate.swift in Sources */,
+				FB559344305C12A200560A0F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB184F7A3007A619007FEEA8 /* Sources */ = {
+		FB55934C305C12A200560A0F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB184FA33007A619007FEEA8 /* ViewController.swift in Sources */,
-				FB184F813007A619007FEEA8 /* AppDelegate.swift in Sources */,
+				FB559373305C12A200560A0F /* ViewController.swift in Sources */,
+				FB559353305C12A200560A0F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB184F863007A619007FEEA8 /* Sources */ = {
+		FB559358305C12A200560A0F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB184FA63007A619007FEEA8 /* SafariWebExtensionHandler.swift in Sources */,
+				FB559374305C12A200560A0F /* SafariWebExtensionHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB184F903007A619007FEEA8 /* Sources */ = {
+		FB559362305C12A200560A0F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB184FA73007A619007FEEA8 /* SafariWebExtensionHandler.swift in Sources */,
+				FB559375305C12A200560A0F /* SafariWebExtensionHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FB184F8D3007A619007FEEA8 /* PBXTargetDependency */ = {
+		FB55935F305C12A200560A0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FB184F893007A619007FEEA8 /* Sardiya Extension (iOS) */;
-			targetProxy = FB184F8C3007A619007FEEA8 /* PBXContainerItemProxy */;
+			target = FB55935B305C12A200560A0F /* Sardiya Extension (iOS) */;
+			targetProxy = FB55935E305C12A200560A0F /* PBXContainerItemProxy */;
 		};
-		FB184F973007A619007FEEA8 /* PBXTargetDependency */ = {
+		FB559369305C12A200560A0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FB184F933007A619007FEEA8 /* Sardiya Extension (macOS) */;
-			targetProxy = FB184F963007A619007FEEA8 /* PBXContainerItemProxy */;
+			target = FB559365305C12A200560A0F /* Sardiya Extension (macOS) */;
+			targetProxy = FB559368305C12A200560A0F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		FB184F5F3007A618007FEEA8 /* Main.html */ = {
+		FB559333305C12A100560A0F /* Main.html */ = {
 			isa = PBXVariantGroup;
 			children = (
-				FB184F603007A618007FEEA8 /* Base */,
+				FB559334305C12A100560A0F /* Base */,
 			);
 			name = Main.html;
 			sourceTree = "<group>";
 		};
-		FB184F733007A619007FEEA8 /* LaunchScreen.storyboard */ = {
+		FB559345305C12A200560A0F /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				FB184F743007A619007FEEA8 /* Base */,
+				FB559346305C12A200560A0F /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		FB184F763007A619007FEEA8 /* Main.storyboard */ = {
+		FB559348305C12A200560A0F /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				FB184F773007A619007FEEA8 /* Base */,
+				FB559349305C12A200560A0F /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		FB184F823007A619007FEEA8 /* Main.storyboard */ = {
+		FB559354305C12A200560A0F /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				FB184F833007A619007FEEA8 /* Base */,
+				FB559355305C12A200560A0F /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -555,7 +477,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		FB184FA83007A619007FEEA8 /* Debug */ = {
+		FB559376305C12A200560A0F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -616,7 +538,7 @@
 			};
 			name = Debug;
 		};
-		FB184FA93007A619007FEEA8 /* Release */ = {
+		FB559377305C12A200560A0F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -669,11 +591,12 @@
 			};
 			name = Release;
 		};
-		FB184FAB3007A619007FEEA8 /* Debug */ = {
+		FB559379305C12A200560A0F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4LCWA596X7;
+				CURRENT_PROJECT_VERSION = 202609171220;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Sardiya Extension";
@@ -684,12 +607,12 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya.Extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.elmokhtbr.sardiya.Extension;
 				PRODUCT_NAME = "Sardiya Extension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -702,11 +625,12 @@
 			};
 			name = Debug;
 		};
-		FB184FAC3007A619007FEEA8 /* Release */ = {
+		FB55937A305C12A200560A0F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4LCWA596X7;
+				CURRENT_PROJECT_VERSION = 202609171220;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Sardiya Extension";
@@ -717,12 +641,12 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya.Extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.elmokhtbr.sardiya.Extension;
 				PRODUCT_NAME = "Sardiya Extension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -736,13 +660,14 @@
 			};
 			name = Release;
 		};
-		FB184FAF3007A619007FEEA8 /* Debug */ = {
+		FB55937D305C12A200560A0F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4LCWA596X7;
+				CURRENT_PROJECT_VERSION = 202609171220;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Sardiya;
@@ -756,14 +681,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya;
+				PRODUCT_BUNDLE_IDENTIFIER = com.elmokhtbr.sardiya;
 				PRODUCT_NAME = Sardiya;
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -776,13 +701,14 @@
 			};
 			name = Debug;
 		};
-		FB184FB03007A619007FEEA8 /* Release */ = {
+		FB55937E305C12A200560A0F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4LCWA596X7;
+				CURRENT_PROJECT_VERSION = 202609171220;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Sardiya;
@@ -796,14 +722,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya;
+				PRODUCT_BUNDLE_IDENTIFIER = com.elmokhtbr.sardiya;
 				PRODUCT_NAME = Sardiya;
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -817,11 +743,12 @@
 			};
 			name = Release;
 		};
-		FB184FB23007A619007FEEA8 /* Debug */ = {
+		FB559380305C12A200560A0F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4LCWA596X7;
+				CURRENT_PROJECT_VERSION = 202609171220;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -835,12 +762,12 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya.Extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.elmokhtbr.sardiya.Extension;
 				PRODUCT_NAME = "Sardiya Extension";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -852,11 +779,12 @@
 			};
 			name = Debug;
 		};
-		FB184FB33007A619007FEEA8 /* Release */ = {
+		FB559381305C12A200560A0F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4LCWA596X7;
+				CURRENT_PROJECT_VERSION = 202609171220;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -870,12 +798,12 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya.Extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.elmokhtbr.sardiya.Extension;
 				PRODUCT_NAME = "Sardiya Extension";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -887,13 +815,14 @@
 			};
 			name = Release;
 		};
-		FB184FB63007A619007FEEA8 /* Debug */ = {
+		FB559384305C12A200560A0F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4LCWA596X7;
+				CURRENT_PROJECT_VERSION = 202609171220;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -908,14 +837,14 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya;
+				PRODUCT_BUNDLE_IDENTIFIER = com.elmokhtbr.sardiya;
 				PRODUCT_NAME = Sardiya;
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
@@ -928,13 +857,14 @@
 			};
 			name = Debug;
 		};
-		FB184FB73007A619007FEEA8 /* Release */ = {
+		FB559385305C12A200560A0F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4LCWA596X7;
+				CURRENT_PROJECT_VERSION = 202609171220;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -949,14 +879,14 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.elmokhtbr.sardiya;
+				PRODUCT_BUNDLE_IDENTIFIER = com.elmokhtbr.sardiya;
 				PRODUCT_NAME = Sardiya;
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
@@ -972,52 +902,52 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FB184F5C3007A618007FEEA8 /* Build configuration list for PBXProject "Sardiya" */ = {
+		FB559330305C12A100560A0F /* Build configuration list for PBXProject "Sardiya" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FB184FA83007A619007FEEA8 /* Debug */,
-				FB184FA93007A619007FEEA8 /* Release */,
+				FB559376305C12A200560A0F /* Debug */,
+				FB559377305C12A200560A0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FB184FAA3007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya Extension (iOS)" */ = {
+		FB559378305C12A200560A0F /* Build configuration list for PBXNativeTarget "Sardiya Extension (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FB184FAB3007A619007FEEA8 /* Debug */,
-				FB184FAC3007A619007FEEA8 /* Release */,
+				FB559379305C12A200560A0F /* Debug */,
+				FB55937A305C12A200560A0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FB184FAE3007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya (iOS)" */ = {
+		FB55937C305C12A200560A0F /* Build configuration list for PBXNativeTarget "Sardiya (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FB184FAF3007A619007FEEA8 /* Debug */,
-				FB184FB03007A619007FEEA8 /* Release */,
+				FB55937D305C12A200560A0F /* Debug */,
+				FB55937E305C12A200560A0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FB184FB13007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya Extension (macOS)" */ = {
+		FB55937F305C12A200560A0F /* Build configuration list for PBXNativeTarget "Sardiya Extension (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FB184FB23007A619007FEEA8 /* Debug */,
-				FB184FB33007A619007FEEA8 /* Release */,
+				FB559380305C12A200560A0F /* Debug */,
+				FB559381305C12A200560A0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FB184FB53007A619007FEEA8 /* Build configuration list for PBXNativeTarget "Sardiya (macOS)" */ = {
+		FB559383305C12A200560A0F /* Build configuration list for PBXNativeTarget "Sardiya (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FB184FB63007A619007FEEA8 /* Debug */,
-				FB184FB73007A619007FEEA8 /* Release */,
+				FB559384305C12A200560A0F /* Debug */,
+				FB559385305C12A200560A0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = FB184F593007A618007FEEA8 /* Project object */;
+	rootObject = FB55932D305C12A100560A0F /* Project object */;
 }

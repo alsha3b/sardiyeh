@@ -4,14 +4,11 @@
 <head>
     <title>سرديّة</title>
     <meta charset="utf-8" />
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; object-src 'self'" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSP is defined in manifest.json (content_security_policy.extension_pages),
+         the MV3-canonical location. Fonts are self-hosted (see styles.css @font-face);
+         no CDN / remote resources are loaded. -->
     <link rel="stylesheet" href="styles.css" />
-
 </head>
 
 <body>
@@ -23,10 +20,13 @@
             <div class="header-text" id="header-text">
                 <img src="images/logo.svg" alt="logo for sardiyah" width="auto" height="27">
             </div>
-            <label class="switch">
-                <input type="checkbox" id="toggleSwitch">
-                <span class="slider round"></span>
-            </label>
+            <div class="toggle">
+                <span class="toggle-label" id="toggle-label"></span>
+                <label class="switch" for="toggleSwitch">
+                    <input type="checkbox" id="toggleSwitch">
+                    <span class="slider round"></span>
+                </label>
+            </div>
         </header>
         <!-- end header section -->
 
@@ -42,51 +42,64 @@
         <!-- start content section -->
         <section class="content" id="content">
 
-            <div class="title-row">
-                <h1 class="replaced-words-title" id="replaced-words-title">Replaced words</h1>
-                <button class="add-button" id="edit-button">
-                    <img src="images/add.svg" alt="add button icon">
-                </button>
-
-                <select class="lang-select" id="language-select">
-                    <option value="en">English</option>
-                    <option value="ar">Arabic</option>
-                </select>
+            <!-- Off-state banner: shown live (renderState) when ext_on === false.
+                 Replacement reverts in place with no reload, so the copy does NOT
+                 tell the user to reload. -->
+            <div class="off-banner" id="off-banner" style="display:none">
+                <span class="off-banner-icon" aria-hidden="true">⏸</span>
+                <span id="off-banner-text"></span>
             </div>
 
-            <div class="table-container">
+            <div class="title-row">
+                <h1 class="replaced-words-title" id="replaced-words-title">Names on this page</h1>
+                <button class="add-button" id="edit-button" type="button">
+                    <img src="images/add.svg" alt="suggest a name">
+                </button>
+
+                <select class="lang-select" id="language-select" aria-label="Language">
+                    <option value="en">English</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+            <p class="replaced-words-subtitle" id="replaced-words-subtitle"></p>
+
+            <!-- Empty / first-open state: shown (renderState) when the active tab
+                 replaced no names — the default on pages with no matches or pages
+                 Sardiya can't read (chrome://, store pages). -->
+            <div class="empty-state" id="empty-state" style="display:none">
+                <div class="empty-mark" aria-hidden="true">◈</div>
+                <h2 class="empty-title" id="empty-title"></h2>
+                <p class="empty-body" id="empty-body"></p>
+                <button class="empty-suggest" id="empty-suggest" type="button"></button>
+            </div>
+
+            <div class="table-container" id="table-container">
                 <table class="replaced-words-table">
-                    <thead>
-                        <tr>
-                            <th id="word-header">Word</th>
-                            <th id="replacement-header">Replacement</th>
-                        </tr>
-                    </thead>
                     <tbody id="table-body">
-                        <!-- Rows will be added here programmatically -->
+                        <!-- Rows added programmatically: occupier name → original name -->
                     </tbody>
                 </table>
             </div>
-            
-        <!-- start footer section -->
-        <footer id="footer">
-            <p>© <time datetime="2024">2024</time> Sardiya</p>
-        </footer>
 
-        <!-- end footer section -->
+            <!-- start footer section -->
+            <footer id="footer">
+                <p>© <time id="footer-year">2026</time> <span dir="rtl">سرديّة</span></p>
+            </footer>
+            <!-- end footer section -->
         </section>
-        <!-- end contecnt section -->
+        <!-- end content section -->
 
-        <!-- start welcome section -->
-        <section class="welcome" id="welcome">
-            <hr>
-            <img src="images/welcome.svg" alt="welcome page" width="100%" height="auto">
+        <!-- start welcome section: first-run onboarding only (welcomeSeen flag) -->
+        <section class="welcome" id="welcome" style="display:none">
+            <img src="images/welcome.svg" alt="welcome to Sardiya" width="100%" height="auto">
+            <button class="welcome-continue" id="welcome-continue" type="button"></button>
         </section>
         <!-- end welcome section -->
 
-        <!-- start replacment-word section -->
-        <section id="input-dialog" class="input-dialog">
+        <!-- start suggest-a-name dialog -->
+        <section id="input-dialog" class="input-dialog" style="display:none">
             <div class="dialog-content">
+                <h2 class="dialog-title" id="dialog-title"></h2>
                 <form id="input-form">
 
                     <div class="formStyle">
@@ -99,12 +112,10 @@
                          required>
                     </div>
 
-
                     <div class="error-message" id="error-message">
                         <span class="error-icon"></span>
                         <span id="error-text"></span>
                     </div>
-
 
                     <div class="dialog-buttons">
                         <button class="dialog-submit" id="dialog-submit" type="submit">Save</button>
@@ -112,16 +123,25 @@
                     </div>
                 </form>
 
+                <!-- Suggestion confirmation: replaces the old optimistic table row.
+                     The "+" submits a community suggestion, it does not create a
+                     local replacement, so we confirm honestly instead of faking a row. -->
+                <div class="suggest-confirm" id="suggest-confirm" style="display:none">
+                    <span class="suggest-confirm-icon" aria-hidden="true">✓</span>
+                    <p id="suggest-confirm-text"></p>
+                    <button class="suggest-confirm-close" id="suggest-confirm-close" type="button"></button>
+                </div>
+
                 <div id="loading-indicator" style="display: none;">
                     <span class="loader"></span>
                 </div>
             </div>
         </section>
-        <!-- end replacment-word section -->
-
+        <!-- end suggest-a-name dialog -->
 
     </div>
 
+    <script src="src/track-client.js"></script>
     <script src="src/popup-core.js"></script>
     <script src="popup.js"></script>
 

@@ -1,5 +1,5 @@
 // Background service worker. The only place that touches the network. Fetches
-// the dictionary on install and on a weekly alarm, writing it to
+// the dictionary on install and on a daily alarm, writing it to
 // chrome.storage.local (the single source of truth the content script reads).
 // Fetching here (not in the content script) bypasses page CSP on strict sites.
 //
@@ -31,7 +31,13 @@ const API_SECRET = "yAqC0kSGRV-7GXIt64PM2Q";
 const UNINSTALL_URL = "https://sardiyeh-elmokhtbr.web.app/uninstall";
 
 const ALARM = "sardiya-refresh";
-const WEEK_MINUTES = 7 * 24 * 60;
+// Daily, not weekly: `words` is still being actively seeded from the workbook,
+// so a week-long tail between an accepted name and users seeing it is too long.
+// One request per client per day against a public Firestore read is negligible.
+// The alarm is only (re)created in onInstalled, which also fires on extension
+// update — so shipping this is what migrates existing installs off the old
+// weekly period.
+const DAY_MINUTES = 24 * 60;
 
 // Fetch every page of the collection and merge into one { documents: [...] }
 // body so the refresher stays a single fetch → parse step. Firestore caps a
@@ -67,7 +73,7 @@ const refresher = self.Sardiya.createDictRefresher({
 
 self.Sardiya.wireWorker(chrome, refresher, {
   alarmName: ALARM,
-  periodInMinutes: WEEK_MINUTES,
+  periodInMinutes: DAY_MINUTES,
 });
 
 // --- Analytics -------------------------------------------------------------
@@ -94,7 +100,7 @@ chrome.runtime.onInstalled.addListener((details) => {
   service.installed(details.reason);
 });
 
-// One signal covers both the install fetch and the weekly refresh: whenever the
+// One signal covers both the install fetch and the daily refresh: whenever the
 // stored dictionary changes, report how many words it now holds.
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === "local" && changes.dictionary && changes.dictionary.newValue) {
@@ -112,6 +118,23 @@ chrome.runtime.onMessage.addListener((msg) => {
     service.track(msg.name, msg.params);
   }
 });
+
+// Forced dictionary refresh. Without this the dictionary only reloads on
+// install and on the daily alarm, so a word added in Firestore stays invisible
+// to an already-installed client for up to a day. Any context can pull now
+// by sending { type: "sardiya:refreshDictionary" }; the reply is { ok } where ok
+// mirrors refresh()'s success flag. On success the write to storage.local fires
+// storage.onChanged, which is what makes open tabs re-run replacement — so no
+// separate broadcast is needed here.
+chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+  if (!msg || msg.type !== "sardiya:refreshDictionary") return;
+  refresher.refresh().then((ok) => sendResponse({ ok }));
+  return true; // keep the message channel open for the async reply
+});
+
+// The same refresh, reachable by name from the service-worker DevTools console
+// (chrome://extensions → Sardiya → "service worker"):  await sardiyaRefresh()
+self.sardiyaRefresh = () => refresher.refresh();
 
 // Point Chrome's uninstall URL at the churn page, threaded to this install's
 // client_id so the removal attributes to the same GA4 user.

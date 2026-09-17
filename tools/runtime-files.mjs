@@ -21,11 +21,13 @@ export const RUNTIME_FILES = [
   "styles.css",
   "src/matcher.js",
   "src/dom.js",
+  "src/track-client.js",
   "src/analytics.js",
   "src/worker-core.js",
   "src/popup-core.js",
   "icons",
   "images",
+  "fonts",
   "translations",
   "LICENSE",
 ];

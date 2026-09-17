@@ -1,8 +1,19 @@
 // Single popup controller. Rendering + i18n helpers live in src/popup-core.js
-// (loaded before this file, attaches to window.Sardiya). This file owns storage,
-// the toggle lifecycle, the add-word dialog, and language loading.
+// (loaded before this file, attaches to window.Sardiya). Analytics relay
+// (sendTrack) lives in src/track-client.js (also on window.Sardiya). This file
+// owns storage, the toggle lifecycle, the suggest-a-name dialog, view-state
+// wiring, and language loading.
+//
+// View state is a single source of truth (S.renderState). Three top-level views:
+//   welcome  — first-run onboarding, shown until welcomeSeen is set
+//   main     — the names list; within it, the off-banner (ext_on) and the
+//              empty-state (no rows) are driven by renderState too
+//   dialog   — the suggest-a-name form
+// Anything that used to poke element.style.display directly now goes through
+// render() so the states never fight each other (and so toggling on/off updates
+// the off-banner live, while the popup is open).
 (() => {
-  const { buildRow, applyTranslations } = window.Sardiya;
+  const { buildRow, applyTranslations, renderState, sendTrack } = window.Sardiya;
 
   // Suggestion submission endpoint (crowdsourced; does not create a local
   // replacement). Suggestions land in the Firestore `suggestions` collection
@@ -17,16 +28,46 @@
     "/databases/(default)/documents/suggestions";
 
   const translations = {}; // { en: {...}, ar: {...} }
+  const state = { view: "main", extOn: true, hasRows: false };
 
   document.addEventListener("DOMContentLoaded", async () => {
+    sendTrack("popup_opened"); // engagement / DAU-WAU signal
     await loadTranslations();
     initLanguage();
+    setFooterYear();
+    await initState(); // reads ext_on + welcomeSeen, picks the first view
     renderReplacedWords();
     initToggle();
-    initAddButton();
-    initForm();
+    initDialog();
+    initWelcome();
     initSafariHint();
   });
+
+  // ---------- view rendering ----------
+  function render() {
+    renderState(document, state);
+    updateToggleLabel();
+  }
+
+  function updateToggleLabel() {
+    const label = document.getElementById("toggle-label");
+    if (label) label.textContent = state.extOn ? t("toggleOn") : t("toggleOff");
+  }
+
+  function setFooterYear() {
+    const el = document.getElementById("footer-year");
+    if (el) el.textContent = String(new Date().getFullYear());
+  }
+
+  async function initState() {
+    const { ext_on, welcomeSeen } = await chrome.storage.sync.get([
+      "ext_on",
+      "welcomeSeen",
+    ]);
+    state.extOn = ext_on !== false; // default on
+    state.view = welcomeSeen ? "main" : "welcome";
+    render();
+  }
 
   // ---------- Safari host-permission onboarding ----------
   // Safari (unlike Chrome) does not silently honor host_permissions: content
@@ -75,6 +116,7 @@
       const lang = select.value;
       applyLanguage(lang);
       chrome.storage.sync.set({ selectedLanguage: lang });
+      sendTrack("language_changed", { language: lang });
     });
   }
 
@@ -83,8 +125,10 @@
     const rtl = lang === "ar";
     document.body.setAttribute("dir", rtl ? "rtl" : "ltr");
     document.querySelector(".header")?.setAttribute("dir", rtl ? "rtl" : "ltr");
-    // Use the fonts index.html actually loads (IBM Plex Sans Arabic).
-    document.body.style.fontFamily = "'IBM Plex Sans Arabic', sans-serif";
+    // Font follows language via CSS (body / body[dir="rtl"] in styles.css):
+    // Space Mono for LTR, Thmanyah Sans for RTL. No inline override here — the
+    // old unconditional override forced one font for both languages.
+    updateToggleLabel();
   }
 
   function t(key) {
@@ -96,22 +140,30 @@
   // Ask the active tab's top frame for the words it replaced. Scoping the query
   // to a single tab (not a shared storage key) is what makes the list correct
   // when several tabs have matches. No content script (chrome://, store pages,
-  // etc.) → lastError → empty table.
+  // etc.) → lastError → empty table → empty state.
   function renderReplacedWords() {
     const tbody = document.getElementById("table-body");
     if (!tbody) return;
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const tabId = tabs && tabs[0] && tabs[0].id;
-      if (tabId == null) return;
+      if (tabId == null) {
+        state.hasRows = false;
+        if (state.view === "main") render();
+        return;
+      }
       chrome.tabs.sendMessage(
         tabId,
         { type: "sardiya:getReplacedWords" },
         { frameId: 0 },
         (resp) => {
-          if (chrome.runtime.lastError || !resp) return;
-          (resp.replacedWords || []).forEach(({ word, replacement }) =>
+          const words =
+            chrome.runtime.lastError || !resp ? [] : resp.replacedWords || [];
+          tbody.replaceChildren();
+          words.forEach(({ word, replacement }) =>
             tbody.appendChild(buildRow(document, word, replacement))
           );
+          state.hasRows = words.length > 0;
+          if (state.view === "main") render();
         }
       );
     });
@@ -119,36 +171,62 @@
 
   // ---------- on/off toggle ----------
   // No reload: the content script applies (on) or reverts in place (off) live
-  // through chrome.storage.onChanged. This is the D1 in-place revert path.
+  // through chrome.storage.onChanged. Toggling here updates the off-banner live
+  // via render() — the popup is its own view, so it must re-render, not wait.
   function initToggle() {
     const toggle = document.getElementById("toggleSwitch");
     if (!toggle) return;
-    chrome.storage.sync.get(["ext_on"], ({ ext_on }) => {
-      toggle.checked = ext_on !== false; // default on
-    });
+    toggle.checked = state.extOn;
     toggle.addEventListener("change", () => {
+      state.extOn = toggle.checked;
       chrome.storage.sync.set({ ext_on: toggle.checked });
+      sendTrack("extension_toggled", { enabled: toggle.checked });
+      if (state.view === "main") render();
+      else updateToggleLabel();
     });
   }
 
-  // ---------- add-word dialog ----------
-  function initAddButton() {
+  // ---------- welcome onboarding (first run only) ----------
+  function initWelcome() {
+    document.getElementById("welcome-continue")?.addEventListener("click", () => {
+      chrome.storage.sync.set({ welcomeSeen: true });
+      state.view = "main";
+      render();
+    });
+  }
+
+  // ---------- suggest-a-name dialog ----------
+  function initDialog() {
     document.getElementById("edit-button")?.addEventListener("click", openDialog);
+    document.getElementById("empty-suggest")?.addEventListener("click", openDialog);
+    document.getElementById("dialog-close")?.addEventListener("click", closeDialog);
+    document
+      .getElementById("suggest-confirm-close")
+      ?.addEventListener("click", closeDialog);
+    initForm();
   }
 
   function openDialog() {
-    const dialog = document.getElementById("input-dialog");
-    const content = document.getElementById("content");
-    if (dialog) dialog.style.display = "block";
-    if (content) content.style.display = "none";
+    resetDialog();
+    state.view = "dialog";
+    render();
   }
 
   function closeDialog() {
-    const dialog = document.getElementById("input-dialog");
-    const content = document.getElementById("content");
-    if (dialog) dialog.style.display = "none";
-    if (content) content.style.display = "block";
+    state.view = "main";
+    render();
+    resetDialog();
+  }
+
+  // Reset the dialog back to the form (hide the confirmation, clear inputs).
+  function resetDialog() {
     document.getElementById("input-form")?.reset();
+    const form = document.getElementById("input-form");
+    const confirm = document.getElementById("suggest-confirm");
+    if (form) form.style.display = "";
+    if (confirm) confirm.style.display = "none";
+    const submit = document.getElementById("dialog-submit");
+    if (submit) submit.disabled = true;
   }
 
   function initForm() {
@@ -181,8 +259,6 @@
       })
     );
 
-    document.getElementById("dialog-close")?.addEventListener("click", closeDialog);
-
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const word = wordInput.value.trim();
@@ -193,7 +269,7 @@
         wordInput.classList.add("input-error");
         replacementInput.classList.add("input-error");
         return showError(
-          t("errorSameWord") || "The word and its replacement cannot be the same."
+          t("errorSameWord") || "The two names cannot be the same."
         );
       }
 
@@ -213,18 +289,27 @@
           }),
         });
         if (res.ok) {
-          document
-            .getElementById("table-body")
-            ?.appendChild(buildRow(document, word, replacement));
-          closeDialog();
+          sendTrack("suggestion_submitted", { status: "success" });
+          // Honest confirmation: this was a community suggestion, not a local
+          // replacement, so we do NOT fake a row in the table.
+          showConfirmation();
         } else {
+          sendTrack("suggestion_submitted", { status: "error" });
           showError(t("errorSubmissionFailed") || "Submission failed. Please try again.");
         }
       } catch (e) {
+        sendTrack("suggestion_submitted", { status: "error" });
         showError(t("errorSubmissionFailed") || "Submission failed. Please try again.");
       } finally {
         if (loading) loading.style.display = "none";
       }
     });
+  }
+
+  function showConfirmation() {
+    const form = document.getElementById("input-form");
+    const confirm = document.getElementById("suggest-confirm");
+    if (form) form.style.display = "none";
+    if (confirm) confirm.style.display = "block";
   }
 })();

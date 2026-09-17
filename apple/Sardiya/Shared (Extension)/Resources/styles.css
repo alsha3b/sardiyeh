@@ -1,8 +1,40 @@
 /* styles.css */
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-/*  font-family: "Space Mono", serif; */
+
+/* Self-hosted fonts (no CDN). Latin/LTR = Space Mono; Arabic/RTL = Thmanyah Sans.
+   Files live in fonts/. The popup is an extension page, so a relative url() is
+   enough — no web_accessible_resources entry is needed (that's only for assets
+   injected into web pages by the content script). */
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/SpaceMono-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/SpaceMono-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Thmanyah Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/thmanyahsans-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Thmanyah Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/thmanyahsans-Bold.woff2') format('woff2');
+}
+
 body {
-  font-family: 'Space Mono', sans-serif;
+  font-family: 'Space Mono', monospace;
   background-color: #FAFAFA;
   border-radius: 12px;
   padding: 0px;
@@ -11,8 +43,8 @@ body {
 }
 
 body[dir="rtl"] {
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
-  font-size: 16px; 
+  font-family: 'Thmanyah Sans', sans-serif;
+  font-size: 16px;
 }
 
 
@@ -52,6 +84,21 @@ body[dir="rtl"] {
   text-align: start;
 }
 
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: white;
+  min-width: 26px;
+  text-align: end;
+}
+
 .switch {
   position: relative;
   display: inline-block;
@@ -72,7 +119,7 @@ body[dir="rtl"] {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #D3A93C;
+  background-color: #9AA0A6; /* OFF = muted grey */
   transition: .4s;
   border-radius: 20px;
   border: 1px solid white;
@@ -103,12 +150,12 @@ body[dir="rtl"] {
 
 
 input:checked+.slider {
-  background-color: white;
+  background-color: #004D23; /* ON = green / active */
 }
 
 input:checked+.slider:before {
   transform: translateX(24px);
-  background-color: #004D23;
+  background-color: white;
 }
 
 .content {
@@ -166,6 +213,25 @@ input:checked+.slider:before {
   font-size: 18px;
 }
 
+.replaced-words-subtitle {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #666;
+}
+
+/* Minimal implicit mapping: occupier name → original name. The arrow is a
+   pseudo-element so it can be bidi-mirrored for RTL (a literal U+2192 would keep
+   pointing right even when the columns swap). */
+.replaced-words-table tbody td:first-child::after {
+  content: "→";
+  color: #b8b8b8;
+  margin: 0 8px;
+}
+
+body[dir="rtl"] .replaced-words-table tbody td:first-child::after {
+  content: "←";
+}
+
 .replaced-words-table {
   width: 100%;
   border-collapse: collapse;
@@ -173,34 +239,23 @@ input:checked+.slider:before {
   /* Ensure table layout is fixed */
 }
 
-.replaced-words-table th,
 .replaced-words-table td {
   padding: 8px;
   text-align: left;
-
-}
-
-.replaced-words-table thead {
-  background-color: #E5E5E5;
-  color: black;
-  position: sticky;
-  /* Make header sticky */
-  top: 0;
-  /* Stick to the top */
-  z-index: 1;
-  /* Ensure header is above the rows */
 }
 
 /* .replaced-words-table tbody tr:nth-child(odd) {
   background-color: lightgrey;
 } */
 
-.replaced-words-table tbody td:first-child {
+/* Link colors owned here (buildRow no longer sets them inline). Target the
+   anchors directly — an <a> keeps its own color and won't inherit the td's. */
+.replaced-words-table tbody td:first-child a {
   color: #97700B;
 }
 
-.replaced-words-table tbody td:last-child {
-  color: black;
+.replaced-words-table tbody td:last-child a {
+  color: #000;
 }
 
 
@@ -406,20 +461,36 @@ body[dir="rtl"] .title-row {
   flex-direction: row;
 }
 
-body[dir="rtl"] .replaced-words-table th,
 body[dir="rtl"] .replaced-words-table td {
   text-align: right;
 }
 
+/* Welcome onboarding — first run only (renderState sets display:flex when the
+   welcomeSeen flag is unset; default hidden via inline style in index.html). */
 .welcome {
-  /* display: none; */
   width: 100%;
   background: #004D23;
-  height: 350px;
+  padding: 24px 20px;
   align-items: center;
-  justify-items: center;
   justify-content: center;
   flex-direction: column;
+  gap: 18px;
+}
+
+.welcome-continue {
+  padding: 9px 22px;
+  border: none;
+  border-radius: 9px;
+  background-color: #D3A93C;
+  color: #1C1B1F;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.welcome-continue:hover {
+  background-color: #e0b957;
 }
 
 hr:not([size]) {
@@ -465,93 +536,111 @@ body[dir="rtl"] #footer {
   margin-top: 1.2px;
 }
 
-/* Style for the alert overlay */
-#customAlertOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* background-color: rgba(0, 0, 0, 0.5); */
+/* Off-state banner: shown live when ext_on === false. Copy says "paused", NOT
+   "reload" — the content script reverts in place with no reload needed. */
+.off-banner {
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid #D3A93C;
+  border-radius: 8px;
+  background-color: #FFF7E3;
+  color: #6B5200;
+  font-size: 12px;
 }
 
-/* Style for the alert box */
-#customAlertBox {
+.off-banner-icon {
+  font-size: 13px;
+}
+
+/* Empty / first-open state: warmth + context + a primary action. */
+.empty-state {
+  text-align: center;
+  padding: 28px 20px;
   background-color: #fff;
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border: 2px solid rgba(0, 77, 35, 0.6); 
-  width: 55%;
-}
-
-/* Style for the alert title */
-#customAlertBox h1 {
-  text-align: center;
-  padding-bottom: 15px;
-  font-weight: 700;
-  font-size: 11px;
-  line-height: 16.29px;
-  font-family: "Space Mono", serif;
-}
-
-/* Style for the alert message */
-#customAlertBox p {
-  color: #004d23;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 16px;
-  font-family: "Space Mono", serif;
-}
-
-/* General button styles */
-.alert-buttons {
-  gap: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* margin-top: 20px; */
-  font-family: "Space Mono", serif;
-}
-
-.alert-buttons button {
-  padding: 6px;
   border-radius: 12px;
-  cursor: pointer;
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 14.81px;
-  text-align: center;
-  transition: all 0.3s ease;
-  width: 130px;
-  height: 26px;
+  margin-top: 15px;
 }
 
-/* Style for the Refresh button */
-.alert-buttons .refresh-button {
-  background-color: #004D23;
-  color: white;
-  border: none;
+.empty-mark {
+  font-size: 30px;
+  color: #D3A93C;
 }
 
-.alert-buttons .refresh-button:hover {
-  background-color: #D3A93C;
-}
-
-/* Style for the Cancel button */
-.alert-buttons .cancel-button {
-  background-color: white;
+.empty-title {
+  margin: 10px 0 6px;
+  font-size: 15px;
   color: #004D23;
-  border: none;
 }
 
-.alert-buttons .cancel-button:hover {
-  border: 1px solid #004d23;
+.empty-body {
+  margin: 0 0 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #666;
+}
+
+.empty-suggest {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 9px;
+  background-color: #004D23;
+  color: #fff;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.empty-suggest:hover {
+  background-color: #006330;
+}
+
+/* Suggest dialog title + honest confirmation (replaces the old fake table row). */
+.dialog-title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #004D23;
+}
+
+.suggest-confirm {
+  text-align: center;
+  padding: 16px 6px;
+}
+
+.suggest-confirm-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #004D23;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.suggest-confirm p {
+  margin: 12px 0 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #004d23;
+}
+
+.suggest-confirm-close {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 9px;
+  background-color: #004D23;
+  color: #fff;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 /* Safari host-permission onboarding banner (shown by popup.js on Safari only) */
