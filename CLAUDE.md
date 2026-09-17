@@ -35,7 +35,39 @@ Three contexts, coordinated only through `chrome.storage`:
 
 The dictionary source is the **Firestore REST API** (`words` collection in project `sardiyeh-elmokhtbr`), read unauthenticated via public read rules (`firestore.rules`). `background.js` pages through `documents.list` and merges the pages; `src/matcher.js` `parseFirestoreDocuments` (the `extract` step injected into the refresher) flattens Firestore's verbose docs into the `[{value, translation}]` shape `parseTranslationData` already consumed. Analytics is GA4 via the **Measurement Protocol** (`src/analytics.js`, MV3-safe — no gtag/remote code); it needs a Measurement Protocol API secret set in `background.js` (and `site/uninstall.html`) to activate — blank secret degrades to a no-op. `createAnalytics` is the low-level POST transport; `createAnalyticsService` is the single KPI layer the whole extension emits through. The service owns the event taxonomy as named methods (`installed`, `dictionaryRefreshed`, `replacementsMade`, `toggled`, `popupOpened`, `languageChanged`, `suggestionSubmitted`), gates a generic `track(name, params)` behind an event allowlist, and stamps every event with a rolling `session_id` + `engagement_time_msec` (required or GA4's engagement/active-user/retention reports stay empty). Only the worker holds the secret + stable client_id, so the content script and popup emit via `src/track-client.js` `sendTrack`, which posts a `sardiya:track` message that `background.js`'s `onMessage` relay validates and forwards. Churn is tracked with `chrome.runtime.setUninstallURL` pointing at `site/uninstall.html` (Firebase Hosting, `/uninstall` rewrite), threaded with `?cid=<client_id>` so a removal attributes to the same GA4 user.
 
-**Backend & admin** — the `words` collection is populated/updated two ways: a one-time local seeder (`tools/seed-firestore.mjs`, uses `firebase-admin`, pulls from the legacy AWS endpoint or `admin/seed.words.json`) and a login-gated CRUD page (`admin/index.html`, deployed to Firebase Hosting, uses the full Firebase JS SDK since it's a normal web page, not the extension). Firestore rules + hosting config live in `firestore.rules` / `firebase.json` / `.firebaserc`.
+**Backend & admin** — the `words` collection is populated/updated three ways: a one-time local seeder (`tools/seed-firestore.mjs`, uses `firebase-admin`, pulls from the legacy AWS endpoint or `admin/seed.words.json`), the workbook seeder below, and a login-gated CRUD page (`admin/index.html`, deployed to Firebase Hosting, uses the full Firebase JS SDK since it's a normal web page, not the extension). Firestore rules + hosting config live in `firestore.rules` / `firebase.json` / `.firebaserc`.
+
+**Workbook seeder (`tools/seed-from-xlsx.mjs` + `tools/lib/*.js`)** — bulk-loads the 52-sheet place-name workbook in `.data/data.xlsx` (gitignored) into `words`. `npm run seed:xlsx` is a **dry run**; `-- --commit` writes and then re-reads Firestore to verify every planned doc landed.
+
+Replacement is **script-preserving** — a name is replaced with the native name in the *same* script, so the reader always gets something they can read. That gives three channels:
+
+| channel | key → value | source |
+| --- | --- | --- |
+| `ar` | `افرهام` → `إبراهيم` | both real workbook columns — **seeded** |
+| `he` | `אברהם` → `אבראהים` | value transliterated from `arabic_name` — **held for review** |
+| `la` | `Beit She'an` → `Bisan` | key from Wikidata, value from the workbook — **seeded** |
+
+**Where each name form comes from is the whole ballgame, because the workbook was scanned and its `english_translit` column is OCR-damaged** — "Zakariya" arrived as "Zakarlya", "Deir Yasin" as "Deir Yast". So each form is taken from whichever source actually knows it:
+
+| form | source |
+| --- | --- |
+| native name, Arabic | `arabic_name` — clean, the authority |
+| native name, Latin | `english_translit`, but only on rows where `latinLooksCorrupt` finds it agrees with the Arabic |
+| native name, Hebrew | 1:1 abjad mapping of `arabic_name` (`arabicToHebrew`) — never via the Latin, which would carry the scanner's errors through |
+| Israeli name, Latin | absent from the workbook; supplied by `tools/enrich-wikidata.mjs` |
+
+**Wikidata is never asked for the native name.** It labels a place by its current official name, so it answers بيسان with "Beit She'an" — the Israeli name. Taking that as the native form would invert the entire point of the extension. Wikidata supplies keys; the workbook supplies values.
+
+`enrich-wikidata.mjs` joins `hebrew_name` against Wikidata labels in batches and gates every hit three ways: it must lie in historic Palestine, the workbook's own Palestine Grid reference must place it within 5 km (`tools/lib/palgrid.js` — this is what separates باب الخليل, a gate in Jerusalem, from الخليل, the city 30 km off), and the label must *render* the matched name rather than rename it (أرسوف is labelled אפולוניה). Keys are only trusted on `SETTLEMENT_SHEETS` rows, because Wikidata knows villages, not wells — match a well named בענה and you get the village next to it. Results cache in `.data/wikidata.cache.json`.
+
+Two classes of row are rejected before any gating, because they are not a rename at all: `SHEETS_WITHOUT_NATIVE_NAME` (الشوارع is a list of Israeli street names with two Arabic spellings of the *same* name — no Palestinian counterpart), and rows where both columns hold one name (`isSameName`, which deliberately still treats بلعام → بلعمة as a real restoration).
+
+Nothing reaches users unreviewed. `tools/lib/dataset.js` gates every key and routes failures into one bucket each under `.data/`:
+- `review.ambiguous.json` — the workbook gives the name several places (אברהם is a well, a hill *and* a village); each candidate is labelled with its category, page and coordinates so a human can pick one.
+- `review.risky.json` — real names that are also everyday words (`ים` "sea", `שדה` "field"). Seeding these would rewrite ordinary prose. Extend the list via `.data/stopwords.json`.
+- `review.derived-he.json` / `review.derived-la.json` — machine transliterations; spot-check, then `-- --approve=he` bulk-moves the clean ones into `.data/allowlist.json`.
+
+`.data/allowlist.json` (`[{translation, value}]`) overrides every gate, so approving a key is just an entry in that file. `tools/lib/xlsx.js` is a zero-dependency xlsx reader (ZIP + inflate + regex XML) so the repo still ships no bundler; it auto-detects each sheet's columns, including the springs sheet (العيون) which has no header row and runs right-to-left.
 
 **Content script (`src/matcher.js` + `src/dom.js` + `content.js`, injected in that order, `all_frames`)** —
 - `src/matcher.js`: `buildMatcher(dict)` compiles one regex from all keys — escaped, sorted longest-first (so "Tel Aviv" beats "Tel"), lowercased lookup, `(?<!\p{L})…(?!\p{L})` Unicode boundaries (works for Arabic). `apply(text, onMatch)` does the string transform; `matches(text)` is a stateless guard.

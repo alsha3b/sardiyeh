@@ -12,6 +12,15 @@ npm-debug.log*
 # OS files
 .DS_Store
 
+# Firebase deploy cache
+.firebase/
+
+# Xcode per-user state
+xcuserdata/
+*.xcuserstate
+
 # Build output (Chrome Web Store zip)
 /dist
 .gstack/
+
+.data/

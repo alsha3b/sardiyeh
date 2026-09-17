@@ -1,6 +1,6 @@
 {
   "name": "sardiya",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Chrome extension that restores native place-names in page text.",
   "scripts": {
@@ -8,10 +8,15 @@
     "test:watch": "jest --watch",
     "test:e2e": "jest --config jest.e2e.config.js",
     "seed:firestore": "node tools/seed-firestore.mjs",
+    "seed:xlsx": "node tools/seed-from-xlsx.mjs",
+    "enrich:wikidata": "node tools/enrich-wikidata.mjs",
     "pack": "node tools/pack.mjs",
     "build:privacy": "node tools/render-privacy.mjs",
     "stage": "node tools/stage.mjs",
-    "build:safari": "node tools/build-safari.mjs"
+    "build:safari": "node tools/build-safari.mjs",
+    "release:apple": "node tools/release-apple.mjs",
+    "release:ios": "node tools/release-apple.mjs ios",
+    "release:mac": "node tools/release-apple.mjs macos"
   },
   "dependencies": {
     "puppeteer": "^21.1.1"

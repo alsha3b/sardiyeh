@@ -35,7 +35,7 @@
 
     // Used on startup / when a tab finds storage empty: fetch only if we have
     // nothing cached, so a failed install fetch self-heals on next launch
-    // instead of leaving the extension dead until the weekly alarm.
+    // instead of leaving the extension dead until the next alarm tick.
     async function ensureFresh() {
       const got = await storage.get("dictionary");
       if (got && got.dictionary) return true;
