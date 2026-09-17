@@ -267,15 +267,41 @@
         border-color: var(--line);
       }
       .btn-ghost:hover { border-color: var(--gold); color: var(--limestone); }
-      .soon {
+      .btn .chrome { width: 1.15em; height: 1.15em; flex: none; }
+      .live {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
         font-family: var(--serif-en);
         font-size: 0.72rem;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: var(--faint);
-        border: 1px solid var(--line-soft);
+        color: var(--olive);
+        border: 1px solid rgba(147, 162, 89, 0.35);
         border-radius: 999px;
-        padding: 0.15rem 0.6rem;
+        padding: 0.15rem 0.7rem;
+      }
+      :root[lang="ar"] .live {
+        font-family: var(--serif-ar);
+        font-size: 0.85rem;
+        letter-spacing: 0.02em;
+        text-transform: none;
+      }
+      .live::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--olive);
+        box-shadow: 0 0 0 0 rgba(147, 162, 89, 0.55);
+        animation: pulse 2.4s ease-out infinite;
+      }
+      @keyframes pulse {
+        70% { box-shadow: 0 0 0 7px rgba(147, 162, 89, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(147, 162, 89, 0); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .live::before { animation: none; }
       }
       .hero-note {
         margin-top: 1.4rem;
@@ -589,14 +615,19 @@
           </p>
 
           <div class="cta-row">
-            <a class="btn btn-primary" href="#get">
-              <span lang="ar">أضِفها إلى المتصفّح</span><span lang="en">Add to your browser</span>
+            <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/%D8%B3%D8%B1%D8%AF%D9%8A%D9%91%D8%A9/mhojjemphcgfbjikablofecafbbkjafp" target="_blank" rel="noopener">
+              <svg class="chrome" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M12 3v11" />
+                <path d="m7.5 10 4.5 4.5 4.5-4.5" />
+                <path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" />
+              </svg>
+              <span lang="ar">أضِفها إلى Chrome</span><span lang="en">Add to Chrome</span>
             </a>
             <a class="btn btn-ghost" href="https://github.com/alsha3b/sardiyeh" target="_blank" rel="noopener">
               <span lang="ar">المصدر على GitHub</span><span lang="en">Source on GitHub</span>
             </a>
-            <span class="soon">
-              <span lang="ar">قريباً على Chrome</span><span lang="en">Coming to Chrome</span>
+            <span class="live">
+              <span lang="ar">متوفّرة الآن على Chrome</span><span lang="en">Now live on Chrome</span>
             </span>
           </div>
         </div>
@@ -844,25 +875,30 @@
           </h2>
           <p class="prose" style="margin-inline:auto; text-align:center;">
             <span lang="ar">
-              الإضافةُ في طريقها إلى متجر Chrome. حتى ذلك الحين، يمكنك تحميلها من GitHub
-              وتثبيتها يدويّاً.
+              سرديّة الآن على متجر Chrome. ثبّتها بنقرةٍ واحدة، وستبدأ الأسماءُ بالعودة
+              إلى الصفحات التي تقرأها.
             </span>
             <span lang="en">
-              The extension is on its way to the Chrome Web Store. Until then, you can
-              download it from GitHub and load it yourself.
+              Sardiya is now on the Chrome Web Store. Install it in one click, and the
+              names begin returning to the pages you read.
             </span>
           </p>
           <div class="cta-row" style="margin-top:2rem;">
-            <a class="btn btn-primary" href="https://github.com/alsha3b/sardiyeh" target="_blank" rel="noopener">
-              <span lang="ar">حمّلها من GitHub</span><span lang="en">Get it on GitHub</span>
+            <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/%D8%B3%D8%B1%D8%AF%D9%8A%D9%91%D8%A9/mhojjemphcgfbjikablofecafbbkjafp" target="_blank" rel="noopener">
+              <svg class="chrome" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M12 3v11" />
+                <path d="m7.5 10 4.5 4.5 4.5-4.5" />
+                <path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" />
+              </svg>
+              <span lang="ar">أضِفها إلى Chrome</span><span lang="en">Add to Chrome</span>
             </a>
-            <a class="btn btn-ghost" href="https://github.com/alsha3b/sardiyeh#readme" target="_blank" rel="noopener">
-              <span lang="ar">طريقة التثبيت</span><span lang="en">How to install</span>
+            <a class="btn btn-ghost" href="https://github.com/alsha3b/sardiyeh" target="_blank" rel="noopener">
+              <span lang="ar">المصدر على GitHub</span><span lang="en">Source on GitHub</span>
             </a>
           </div>
           <p class="hero-note" style="margin-top:1.6rem;">
-            <span lang="ar">قريباً: تثبيتٌ بنقرةٍ واحدة من متجر Chrome.</span>
-            <span lang="en">Coming soon: one-click install from the Chrome Web Store.</span>
+            <span lang="ar">مجّانيّة ومفتوحة المصدر — وتعمل على كلّ متصفّحٍ مبنيٍّ على Chromium.</span>
+            <span lang="en">Free and open source — and it works on any Chromium-based browser.</span>
           </p>
         </div>
       </section>
